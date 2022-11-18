@@ -1,0 +1,83 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Istances from '../components/Instances.astro';
+import Instances from '../components/Instances.astro';
+---
+
+<Layout title="Welcome">
+	<div class="p-2 md:p-5 lg:px-60 2xl:px-80">
+		<center><p class="text-4xl text-gray-300 dark:text-gray-200">The Furry Fediverse</p></center>
+		<br />
+		<div class="flex flex-col space-y-4">
+			<div class="bg-gray-200 text-slate-800 rounded-md p-3">
+				<p class="text-2xl">What is the Furry Fediverse?</p>
+				<p>
+					We are a collection of furry instances on the Fediverse, which is just a fancy way of saying
+					we are a bunch of servers that federate together allowing furries to join the wider Fediverse.
+					To ease the confusion, Fediverse just means a collection of servers that all communicate with 
+					each other.
+				</p>
+				<p>
+					There is no ownership of the wider Fediverse, just instances. All instances are operated by 
+					real people and not faceless companies(or at least the ones listed on this site). Which means 
+					you are moderated by other real furries and server costs are managed by your instance admins. 
+					Or if you are nerdy enough, you can host your own and federate with the rest of us!
+				</p>
+			</div>
+			<div class="bg-gray-200 text-slate-800 rounded-md p-3">
+				<p class="text-2xl">Getting Started</p>
+				<p>
+					Joining is really simple and easy, just pick a server from below to get started. Or if you are 
+					nerdy like stated before setup your own server... but I still think it is best to start out on 
+					an existing instance first. You will be able to move easily with all your followers if you want.
+				</p>
+				<p>
+					<strong>Note:</strong> You may feel like you should join a LARGE instance, but you should keep in 
+					mind the larger the instance, the most costly it is on your instance owner. Also it doens't matter 
+					what instance you are on, as you can follow and people can follow you no matter which instance you 
+					join. We are all interconnected!
+				</p>
+			</div>
+			<div class="bg-gray-200 text-slate-800 rounded-md p-3">
+				<p class="text-2xl">Tools To Get You Going!</p>
+				<p class="font-bold">Find Your Friends on the Fediverse</p>
+				<ul>
+					<li><a href="https://fedifinder.glitch.me" target="_blank">Fedifinder</a></li>
+					<li><a href="https://twitodon.com" target="_blank">Twitodon</a></li>
+				</ul>
+				<p class="font-bold">Recomended Apps</p>
+				<ul>
+					<li><a href="https://apps.apple.com/us/app/toot/id1229021451" target="_blank">Toot! (Paid iOS)</a></li>
+					<li><a href="https://apps.apple.com/us/app/metatext/id1523996615?mt=8" target="_blank">Metatext (iOS Free)</a></li>
+					<li><a href="https://tusky.app" target="_blank">Tusky (Free Android)</a></li>
+				</ul>
+			</div>
+			<div class="bg-gray-200 text-slate-800 rounded-md p-3">
+				<p class="text-2xl">Instances</p>
+				<p class="italic text-sm">To Opt-In To Being Displayed Here, please reach out to <a href="https://cyberfurz.social/@hack13" target="_blank" rel="noreferrer nofollow" class="underline">@hack13@cyberfurz.social</a></p>
+				<br />
+				<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+					<Instances
+						instance="Pokétopia City"
+						thumbnail="https://poketopia.city/system/site_uploads/files/000/000/003/original/pokemon-mystery-dungeon_1581275836-850832401.jpg"
+						href="https://poketopia.city"
+						desciption="Welcome to Pokétopia City, a city for anthromorphic Pokémon! If you're not a Pokémon, you'll likely soon be one -- please visit your local Transformation Department to be assigned a new species. A server for Pokéfurs who're into TF, especially inanimate TF."
+					/>
+					<Instances
+						instance="CyberFurz"
+						thumbnail="https://cdn.cyberfurz.social/site_uploads/files/000/000/002/@1x/ab55b42f3781d79a.png"
+						href="https://cyberfurz.social"
+						desciption="A Mastodon Instance with a focus on VR/Metaverse Furs, and by Metaverse we are talking about VRChat, Neos, ChillOut, SecondLife, etc... Come chill with other CyberFurz!"
+					/>
+					<Instances
+						instance="Tailswish Industries!"
+						thumbnail="https://us-east-1.linodeobjects.com/tailswish-media/bb3b731ba107f26f9992a6e6a735b9b69dace948339e2749e47bbbc0aaa98222.jpg"
+						href="https://tailswish.industries"
+						desciption="The fluffiest, most fun Pleroma emanation ever!"
+					/>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</Layout>
