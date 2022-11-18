@@ -3,17 +3,22 @@ export interface Props {
 	instance: string;
 	desciption: string;
 	thumbnail: string;
+	resgistrations: boolean;
+	approval: boolean;
+	usercount: number;
 	href: string;
 }
 
-const { href, instance, body, thumbnail, desciption } = Astro.props;
+const { href, instance, body, thumbnail, desciption, resgistrations, approval, usercount } = Astro.props;
 ---
 
 <div class="bg-indigo-800 text-cyan-300 p-1 flex flex-col rounded-md border-2 border-solid border-stone-500 space-y-2">
 	<div><img src={thumbnail} class="rounded-md" height="630" style="height: 200px; width: 100%; object-fit: cover;"/></div>
 	<div class="flex flex-col justify-between h-full">
-		<p class="font-bold text-lg mx-4">{instance}</p>
+		<p class="font-bold text-2xl mx-4">{instance}</p>
 		<p class="mx-4">{desciption}</p>
+		<p class="mx-4 py-1 text-lg italic"><i class="fa-solid fa-key"></i> {(resgistrations) ? 'Registrations Open' : 'Registrations Closed' } {(approval) ? 'With Approval Required' : ''}</p>
+		<p class="mx-4 py-1 text-lg"><i class="fa-solid fa-users"></i> {usercount}</p>
 		<a href={href} class="p-3 mt-5 bg-sky-400 text-gray-100 rounded-md font-bold" target="_blank">Visit Instance</a>
 	</div>
 </div>
