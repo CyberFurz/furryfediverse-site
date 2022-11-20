@@ -1,4 +1,3 @@
-import { render } from 'astro/dist/runtime/server'
 import { getRuntime } from "@astrojs/cloudflare/runtime";
 
 getRuntime(Astro.request);
@@ -13,7 +12,7 @@ async function getInstanceData(instance) {
 
 const InstanceData = async (props) =>  {
   const data = await getInstanceData(props.uri)
-  return render(<div class="bg-slate-600 text-zinc-200 p-1 flex flex-col rounded-md border-4 border-solid border-slate-600 space-y-2">
+  return (<div class="bg-slate-600 text-zinc-200 p-1 flex flex-col rounded-md border-4 border-solid border-slate-600 space-y-2">
     <div><img src={data.thumbnail} class="rounded-md" height="630" style="height: 200px; width: 100%; object-fit: cover;"/></div>
     <div class="flex flex-col justify-between space-y-4 h-full">
       <div class="flex flex-col space-y-2">
