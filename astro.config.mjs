@@ -7,8 +7,13 @@ import tailwind from "@astrojs/tailwind";
 import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
+import preact from "@astrojs/preact";
+
+// https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind()],
+  integrations: [tailwind(), preact()],
   output: "server",
-  adapter: cloudflare()
+  adapter: cloudflare({
+    mode: "directory"
+  })
 });
