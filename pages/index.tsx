@@ -74,7 +74,7 @@ const Home: NextPage = ({ servers }: any) => {
                 <div className="flex flex-col">
                   <p className="mx-4 py-1 text-lg italic"><i className="fa-solid fa-key"></i> {(data.registrations) ? 'Registrations Open' : 'Registrations Closed' } {(data.approval_required) ? 'With Approval Required' : ''}</p>
                   <p className="mx-4 py-1 text-lg"><i className="fa-solid fa-users"></i> {(data.user_count)}</p>
-                  <a href={'https://'+data.uri} className="p-3 mt-3 bg-sky-500 text-gray-100 rounded-md font-bold" target="_blank" rel="noreferrer">Visit Instance</a>
+                  <a href={(data.uri.includes('https') ? data.uri : 'https://'+data.uri)} className="p-3 mt-3 bg-sky-500 text-gray-100 rounded-md font-bold" target="_blank" rel="noreferrer">Visit Instance</a>
                 </div>
               </div>
             </div>)}
