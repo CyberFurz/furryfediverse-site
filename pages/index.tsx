@@ -53,7 +53,7 @@ const Home: NextPage = ({ servers }: any) => {
           <div className="px-2 space-x-2">
             <a href="https://apps.apple.com/us/app/toot/id1229021451" className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500" target="_blank" rel="noreferrer"><i className="fa-brands fa-apple"></i> Toot! (Paid)</a>
             <a href="https://apps.apple.com/us/app/metatext/id1523996615?mt=8" className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500" target="_blank" rel="noreferrer"><i className="fa-brands fa-apple"></i> Metatext</a>
-            <a href="https://play.google.com/store/apps/details?id=app.fedilab.android" className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500" target="_blank" rel="noreferrer"><i className="fa-brands fa-android"></i> Fedilab (Paid)</a>
+            <a href="https://fedilab.app" className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500" target="_blank" rel="noreferrer"><i className="fa-brands fa-android"></i> Fedilab (Paid)</a>
             <a href="https://tusky.app" className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500" target="_blank" rel="noreferrer"><i className="fa-brands fa-android"></i> Tusky</a>
           </div>
           <br />
