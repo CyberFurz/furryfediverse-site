@@ -63,13 +63,13 @@ const Home: NextPage = ({ servers }: any) => {
           <p className="italic text-sm">To Opt-In To Being Displayed Here, please fill out <a href="/add-instance" target="_blank" rel="noreferrer nofollow" className="underline">This Form</a></p>
           <br />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {servers?.map((data: { title: any; thumbnail: any; description: any; registrations: any; approval_required: any; uri: any; user_count: any }) => 
+            {servers?.map((data: { title: any; thumbnail: any; description: any; short_description: any; registrations: any; approval_required: any; uri: any; user_count: any }) => 
               <div className="bg-slate-600 text-zinc-200 p-1 flex flex-col rounded-md border-4 border-solid border-slate-600 space-y-2">
               <div><picture><img src={data.thumbnail} className="max-h-52 w-full object-cover rounded-md" height="630" alt={data.title}/></picture></div>
               <div className="flex flex-col justify-between space-y-4 h-full">
                 <div className="flex flex-col space-y-2">
                   <p className="font-bold text-2xl mx-4">{data.title}</p>
-                  <p className="mx-4">{(data.description.replace(/(<([^>]+)>)/gi, ""))}</p>
+                  <p className="mx-4">{(data.description.length !== 0 ? data.description.replace(/(<([^>]+)>)/gi, "") : data.short_description.replace(/(<([^>]+)>)/gi, ""))}</p>
                 </div>
                 <div className="flex flex-col">
                   <p className="mx-4 py-1 text-lg italic"><i className="fa-solid fa-key"></i> {(data.registrations) ? 'Registrations Open' : 'Registrations Closed' } {(data.approval_required) ? 'With Approval Required' : ''}</p>
@@ -86,7 +86,7 @@ const Home: NextPage = ({ servers }: any) => {
 }
 
 // This gets called on every request
-export async function getServerSideProps() {
+export async function getStaticProps() {
   // Fetch data from external API
   const res = await fetch('https://furryfediverse-worker.hack13.workers.dev/')
   const servers = await res.json()
@@ -99,6 +99,7 @@ export async function getServerSideProps() {
     buildup.push({
       "title": serverData.title,
       "thumbnail": serverData.thumbnail,
+      "short_description": (serverData.short_description !== undefined ? serverData.short_description : 'null'),
       "description": serverData.description,
       "registrations": serverData.registrations,
       "approval_required": serverData.approval_required,
@@ -111,7 +112,8 @@ export async function getServerSideProps() {
   return {
     props: {
       servers: buildup,
-    }
+    },
+    revalidate: 300,
   }
 }
 
