@@ -12,7 +12,7 @@ return(
     <div className="flex flex-col">
         <div className="py-4">
             <div className="bg-gray-400 text-slate-800 rounded-md p-3">
-            <form id="my-form" action="https://formspree.io/f/mvoyledz" method="POST">
+            <form id="my-form" action="https://formsubmit.co/submissions@hack13.one" method="POST">
                 <label className="text-2xl font-bold">Instance Name</label><br />
                 <input type="text" name="Instance Name" className="rounded-md" required/><br />
                 <label className="text-2xl font-bold">Instance URI</label><br />
