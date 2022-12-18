@@ -88,13 +88,13 @@ const Home: NextPage = ({ servers }: any) => {
 // This gets called on every request
 export async function getStaticProps() {
   // Fetch data from external API
-  const res = await fetch('https://furryfediverse-worker.hack13.workers.dev/')
+  const res = await fetch('https://api.hack13.dev/furryfediverseworker/')
   const servers = await res.json()
 
   // Build the array from the list of servers
   let buildup = []
   for (let i of servers) {
-    let serverQuery = await fetch(`https://furryfediverse-worker.hack13.workers.dev/instance/${i}`)
+    let serverQuery = await fetch(`https://api.hack13.dev/furryfediverseworker/instance/${i}`)
     let serverData = await serverQuery.json()
     buildup.push({
       "title": serverData.title,

@@ -24,6 +24,7 @@ return(
                 <input type="checkbox" name="notify" required/><br />
                 <p className="text-base">Your instance actively moderates against hate speech, racism, homophobia, and cultures a safe community.</p>
                 <input type="checkbox" name="safety" required/><br />
+                <input type="hidden" name="_next" value="https://furryfediverse.org"></input>
                 <button className="rounded-md bg-blue-300 p-3 font-bold text-gray-100" id="my-form-button">Submit</button>
                 <p id="my-form-status"></p>
             </form>
