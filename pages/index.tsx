@@ -93,20 +93,20 @@ export async function getStaticProps() {
 
   // Build the array from the list of servers
   let buildup = []
-  // for (let i of servers) {
-  //   let serverQuery = await fetch(`https://api.hack13.dev/furryfediverseworker/instance/${i}`)
-  //   let serverData = await serverQuery.json()
-  //   buildup.push({
-  //     "title": serverData.title,
-  //     "thumbnail": serverData.thumbnail,
-  //     "short_description": (serverData.short_description !== undefined ? serverData.short_description : 'null'),
-  //     "description": serverData.description,
-  //     "registrations": serverData.registrations,
-  //     "approval_required": serverData.approval_required,
-  //     "user_count": serverData.stats.user_count,
-  //     "uri": serverData.uri
-  //   })
-  // }
+  for (let i of servers) {
+    let serverQuery = await fetch(`https://api.hack13.dev/furryfediverseworker/instance/${i}`)
+    let serverData = await serverQuery.json()
+    buildup.push({
+      "title": serverData.title,
+      "thumbnail": serverData.thumbnail,
+      "short_description": (serverData.short_description !== undefined ? serverData.short_description : 'null'),
+      "description": serverData.description,
+      "registrations": serverData.registrations,
+      "approval_required": serverData.approval_required,
+      "user_count": serverData.stats.user_count,
+      "uri": serverData.uri
+    })
+  }
 
   // Pass data to the page via props
   return {
