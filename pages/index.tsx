@@ -69,7 +69,7 @@ const Home: NextPage = ({ servers }: any) => {
               <div className="flex flex-col justify-between space-y-4 h-full">
                 <div className="flex flex-col space-y-2">
                   <p className="font-bold text-2xl mx-4">{data.title}</p>
-                  <p className="mx-4">{(data.description.length !== 0 ? data.description.replace(/(<([^>]+)>)/gi, "") : data.short_description.replace(/(<([^>]+)>)/gi, ""))}</p>
+                  <p className="mx-4">{((data.short_description != 'null' && data.short_description.length > 0) ? data.short_description.replace(/(<([^>]+)>)/gi, "") : data.description.replace(/(<([^>]+)>)/gi, ""))}</p>
                 </div>
                 <div className="flex flex-col">
                   <p className="mx-4 py-1 text-lg italic"><i className="fa-solid fa-key"></i> {(data.registrations) ? 'Registrations Open' : 'Registrations Closed' } {(data.approval_required) ? 'With Approval Required' : ''}</p>
