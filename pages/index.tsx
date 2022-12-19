@@ -15,15 +15,15 @@ const Home: NextPage = ({ servers }: any) => {
         <div className="bg-gray-200 text-slate-800 rounded-md p-3">
           <p className="text-2xl">What is the Furry Fediverse?</p>
           <p>
-            We are a collection of furry instances on the Fediverse, which is just a fancy way of saying
-            we are a bunch of servers that federate together allowing furries to join the wider Fediverse.
+            We are a collection of furry instances on the Fediverse, which is just a fancy way of saying 
+            we are a bunch of servers that federate together, allowing furries to join the wider Fediverse. 
             To ease the confusion, Fediverse just means a collection of servers that all communicate with 
-            each other. Matodon, Pleroma, Pixelfed, and more are all software that speak Activity Pub which 
-            is the protocol the Fediverse runs on.
+            each other. Mastodon, Pleroma, Pixelfed, and more are all pieces of software that speak Activity Pub, 
+            which is the protocol the Fediverse runs on.
           </p>
           <p>
             There is no ownership of the wider Fediverse, just instances. All instances are operated by 
-            real people and not faceless companies(or at least the ones listed on this site). Which means 
+            real people and not faceless companies (or at least the ones listed on this site). Which means 
             you are moderated by other real furries and server costs are managed by your instance admins. 
             Or if you are nerdy enough, you can host your own and federate with the rest of us!
           </p>
@@ -31,14 +31,14 @@ const Home: NextPage = ({ servers }: any) => {
         <div className="bg-gray-200 text-slate-800 rounded-md p-3">
           <p className="text-2xl">Getting Started</p>
           <p>
-            Joining is really simple and easy, just pick a server from below to get started. Or if you are 
-            nerdy like stated before setup your own server... but I still think it is best to start out on 
+            Joining is simple and easy, just pick a server from below to get started. Or if you are 
+            nerdy like stated before set up your own server... but I still think it is best to start out on 
             an existing instance first. You will be able to move easily with all your followers if you want.
           </p>
           <p>
             <strong>Note:</strong> You may feel like you should join a LARGE instance, but you should keep in 
-            mind the larger the instance, the most costly it is on your instance owner. Also it doens&apos;t matter 
-            what instance you are on, as you can follow and people can follow you no matter which instance you 
+            mind the larger the instance, the most costly it is on your instance owner. Also, it doesn&apos;t matter 
+            what instance you are on, as you can follow and people can follow you, no matter which instance you 
             join. We are all interconnected!
           </p>
         </div>
