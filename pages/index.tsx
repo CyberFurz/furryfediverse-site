@@ -18,7 +18,7 @@ const Home: NextPage = ({ servers }: any) => {
             We are a collection of furry instances on the Fediverse, which is just a fancy way of saying 
             we are a bunch of servers that federate together, allowing furries to join the wider Fediverse. 
             To ease the confusion, Fediverse just means a collection of servers that all communicate with 
-            each other. Matodon, Pleroma, Pixelfed, and more are all pieces of software that speak Activity Pub, 
+            each other. Mastodon, Pleroma, Pixelfed, and more are all pieces of software that speak Activity Pub, 
             which is the protocol the Fediverse runs on.
           </p>
           <p>
@@ -93,20 +93,20 @@ export async function getStaticProps() {
 
   // Build the array from the list of servers
   let buildup = []
-  for (let i of servers) {
-    let serverQuery = await fetch(`https://api.hack13.dev/furryfediverseworker/instance/${i}`)
-    let serverData = await serverQuery.json()
-    buildup.push({
-      "title": serverData.title,
-      "thumbnail": serverData.thumbnail,
-      "short_description": (serverData.short_description !== undefined ? serverData.short_description : 'null'),
-      "description": serverData.description,
-      "registrations": serverData.registrations,
-      "approval_required": serverData.approval_required,
-      "user_count": serverData.stats.user_count,
-      "uri": serverData.uri
-    })
-  }
+  // for (let i of servers) {
+  //   let serverQuery = await fetch(`https://api.hack13.dev/furryfediverseworker/instance/${i}`)
+  //   let serverData = await serverQuery.json()
+  //   buildup.push({
+  //     "title": serverData.title,
+  //     "thumbnail": serverData.thumbnail,
+  //     "short_description": (serverData.short_description !== undefined ? serverData.short_description : 'null'),
+  //     "description": serverData.description,
+  //     "registrations": serverData.registrations,
+  //     "approval_required": serverData.approval_required,
+  //     "user_count": serverData.stats.user_count,
+  //     "uri": serverData.uri
+  //   })
+  // }
 
   // Pass data to the page via props
   return {
