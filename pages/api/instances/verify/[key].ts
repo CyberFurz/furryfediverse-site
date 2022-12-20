@@ -1,8 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Prisma, PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { Prisma } from '@prisma/client'
+import prismac from '../../../../lib/prisma'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const { key } = req.query
@@ -14,7 +13,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const instanceData = req.body
     
     async function checkKey(instanceKey: string) {
-        const instanceEntry = await prisma.instances.findFirst({ where: { api_key: instanceKey }, select: { uri: true } })
+        const instanceEntry = await prismac.instances.findFirst({ where: { api_key: instanceKey }, select: { uri: true } })
         if (instanceEntry) {
             return instanceEntry.uri
         } else {
@@ -27,7 +26,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     } else {
         try {
             let check = await checkKey(apikey)
-            const savedInstance = await prisma.instances.update({
+            const savedInstance = await prismac.instances.update({
                 where: { uri: check },
                 data: { verified: true }
             })

@@ -1,8 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Prisma, PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { Prisma } from '@prisma/client'
+import prismac from '../../../lib/prisma'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== 'GET') {
@@ -20,10 +19,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         }
     }
 
-    const allInstances = await prisma.instances.findMany()
+    const allInstances = await prismac.instances.findMany()
     for (let i = 0; i < allInstances.length; i++) {
         try {
-            await prisma.instanceData.update({
+            await prismac.instanceData.update({
                 where: { instance_id: allInstances[i].id },
                 data: { cache: JSON.stringify(await testURI(allInstances[i].uri)) }
             })
