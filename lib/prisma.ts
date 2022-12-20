@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-declare let global: { prisma: PrismaClient };
+declare let global: { prismac: PrismaClient };
 
 // PrismaClient is attached to the `global` object in development to prevent
 // exhausting your database connection limit.
@@ -12,9 +12,9 @@ let prisma: PrismaClient
 if (process.env.NODE_ENV === 'production') {
   prisma = new PrismaClient()
 } else {
-  if (!global.prisma) {
-    global.prisma = new PrismaClient()
+  if (!global.prismac) {
+    global.prismac = new PrismaClient()
   }
-  prisma = global.prisma
+  prisma = global.prismac
 }
 export default prisma

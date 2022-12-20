@@ -3,9 +3,8 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 const dotenv = require('dotenv');
 dotenv.config();
 import generator, { Entity, Response } from 'megalodon'
-import { Prisma, PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { Prisma } from '@prisma/client'
+import prismac from '../../../lib/prisma'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== 'POST') {
@@ -30,7 +29,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     } else {
         let cachedata = await testURI(instanceData.uri)
         try {
-            const savedInstance = await prisma.instances.create({
+            const savedInstance = await prismac.instances.create({
                 data: {
                     name: cachedata.title,
                     type: instanceData.type,
