@@ -1,12 +1,16 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import { isStringObject } from 'util/types'
+import prisma from '../lib/prisma'
 
-const Home: NextPage = ({ servers }: any) => {
+const Home: NextPage = ({ general, niche }: any) => {
+  console.log(niche)
   return (
     <div className="p-2 md:p-5 lg:px-6 2xl:px-80">
       <Head>
         <title>The Furry Fediverse</title>
         <link rel="icon" href="/favicon.ico" />
+        <a rel="me" href="https://cyberfurz.social/@FurryFediverse">Mastodon</a>
       </Head>
       
       <p className="text-4xl text-gray-200 place-self-center">The Furry Fediverse</p>
@@ -59,12 +63,14 @@ const Home: NextPage = ({ servers }: any) => {
           <br />
         </div>
         <div className="bg-gray-200 text-slate-800 rounded-md p-3">
-          <p className="text-2xl">Instances</p>
+          <p className="text-2xl">Fediverse Instances</p>
           <p className="italic text-sm">To Opt-In To Being Displayed Here, please fill out <a href="/add-instance" target="_blank" rel="noreferrer nofollow" className="underline">This Form</a></p>
           <br />
+          <p className="text-2xl">General Instances</p>
+          <br />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {servers?.map((data: { title: any; thumbnail: any; description: any; short_description: any; registrations: any; approval_required: any; uri: any; user_count: any }) => 
-              <div className="bg-slate-600 text-zinc-200 p-1 flex flex-col rounded-md border-4 border-solid border-slate-600 space-y-2">
+            {general.map((data: { id: string; title: any; thumbnail: any; description: any; short_description: any; registrations: any; approval_required: any; uri: any; user_count: any; nsfwflag: any; }) => 
+              <div key={data.id} className="bg-slate-600 text-zinc-200 p-1 flex flex-col rounded-md border-4 border-solid border-slate-600 space-y-2">
               <div><picture><img src={data.thumbnail} className="max-h-52 w-full object-cover rounded-md" height="630" alt={data.title}/></picture></div>
               <div className="flex flex-col justify-between space-y-4 h-full">
                 <div className="flex flex-col space-y-2">
@@ -74,6 +80,27 @@ const Home: NextPage = ({ servers }: any) => {
                 <div className="flex flex-col">
                   <p className="mx-4 py-1 text-lg italic"><i className="fa-solid fa-key"></i> {(data.registrations) ? 'Registrations Open' : 'Registrations Closed' } {(data.approval_required) ? 'With Approval Required' : ''}</p>
                   <p className="mx-4 py-1 text-lg"><i className="fa-solid fa-users"></i> {(data.user_count)}</p>
+                  <p className="mx-4 py-1 text-lg"><i className="fa-solid fa-user-shield"></i> {(data.nsfwflag)}</p>
+                  <a href={(data.uri.includes('https') ? data.uri : 'https://'+data.uri)} className="p-3 mt-3 bg-sky-500 text-gray-100 rounded-md font-bold" target="_blank" rel="noreferrer">Visit Instance</a>
+                </div>
+              </div>
+            </div>)}
+          </div>
+          <p className="text-2xl">Niche Instances</p>
+          <br />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {niche.map((data: { id: string; title: any; thumbnail: any; description: any; short_description: any; registrations: any; approval_required: any; uri: any; user_count: any; nsfwflag: any; }) => 
+              <div key={data.id} className="bg-slate-600 text-zinc-200 p-1 flex flex-col rounded-md border-4 border-solid border-slate-600 space-y-2">
+              <div><picture><img src={data.thumbnail} className="max-h-52 w-full object-cover rounded-md" height="630" alt={data.title}/></picture></div>
+              <div className="flex flex-col justify-between space-y-4 h-full">
+                <div className="flex flex-col space-y-2">
+                  <p className="font-bold text-2xl mx-4">{data.title}</p>
+                  <p className="mx-4">{((data.short_description != 'null' && data.short_description.length > 0) ? data.short_description.replace(/(<([^>]+)>)/gi, "") : data.description.replace(/(<([^>]+)>)/gi, ""))}</p>
+                </div>
+                <div className="flex flex-col">
+                  <p className="mx-4 py-1 text-lg italic"><i className="fa-solid fa-key"></i> {(data.registrations) ? 'Registrations Open' : 'Registrations Closed' } {(data.approval_required) ? 'With Approval Required' : ''}</p>
+                  <p className="mx-4 py-1 text-lg"><i className="fa-solid fa-users"></i> {(data.user_count)}</p>
+                  <p className="mx-4 py-1 text-lg"><i className="fa-solid fa-user-shield"></i> {(data.nsfwflag)}</p>
                   <a href={(data.uri.includes('https') ? data.uri : 'https://'+data.uri)} className="p-3 mt-3 bg-sky-500 text-gray-100 rounded-md font-bold" target="_blank" rel="noreferrer">Visit Instance</a>
                 </div>
               </div>
@@ -87,16 +114,22 @@ const Home: NextPage = ({ servers }: any) => {
 
 // This gets called on every request
 export async function getStaticProps() {
+  // Interface pre-requisites
+  interface ServerData {
+    cache: any
+  }
+
   // Fetch data from external API
-  const res = await fetch('https://api.hack13.dev/furryfediverseworker/')
-  const servers = await res.json()
+  const generalInstance = await prisma.instances.findMany({where: {type: 'general', verified: true}, orderBy: {name: 'asc'}})
+  const nicheInstance = await prisma.instances.findMany({where: {type: 'niche', verified: true}, orderBy: {name: 'asc'}})
 
   // Build the array from the list of servers
-  let buildup = []
-  for (let i of servers) {
-    let serverQuery = await fetch(`https://api.hack13.dev/furryfediverseworker/instance/${i}`)
-    let serverData = await serverQuery.json()
-    buildup.push({
+  let generalInstances = []
+  for (let i of generalInstance) {
+    let serverQuery = await prisma.instanceData.findFirst({where: {instance_id: i.id}})
+    let serverData = JSON.parse(serverQuery.cache)
+    generalInstances.push({
+      "id": i.id,
       "title": serverData.title,
       "thumbnail": serverData.thumbnail,
       "short_description": (serverData.short_description !== undefined ? serverData.short_description : 'null'),
@@ -104,14 +137,35 @@ export async function getStaticProps() {
       "registrations": serverData.registrations,
       "approval_required": serverData.approval_required,
       "user_count": serverData.stats.user_count,
-      "uri": serverData.uri
+      "nsfwflag": i.nsfwflag,
+      "uri": i.uri
     })
   }
+
+    // Build the array from the list of servers
+    let nichelInstances = []
+    for (let i of nicheInstance) {
+      let serverQuery: ServerData = await prisma.instanceData.findFirst({where: {instance_id: i.id}})
+      let serverData = JSON.parse(serverQuery.cache)
+      nichelInstances.push({
+        "id": i.id,
+        "title": serverData.title,
+        "thumbnail": serverData.thumbnail,
+        "short_description": (serverData.short_description !== undefined ? serverData.short_description : 'null'),
+        "description": serverData.description,
+        "registrations": serverData.registrations,
+        "approval_required": serverData.approval_required,
+        "user_count": serverData.stats.user_count,
+        "nsfwflag": i.nsfwflag,
+        "uri": i.uri
+      })
+    }
 
   // Pass data to the page via props
   return {
     props: {
-      servers: buildup,
+      general: generalInstances,
+      niche: nichelInstances
     },
     revalidate: 300,
   }
