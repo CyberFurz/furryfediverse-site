@@ -167,7 +167,7 @@ export async function getStaticProps() {
       general: generalInstances,
       niche: nichelInstances
     },
-    revalidate: 300,
+    revalidate: 60,
   }
 }
 
