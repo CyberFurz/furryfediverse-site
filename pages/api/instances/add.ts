@@ -1,5 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
+const dotenv = require('dotenv');
+dotenv.config();
+import generator, { Entity, Response } from 'megalodon'
 import { Prisma, PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
@@ -9,7 +12,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(405).json({ message: 'Invalid API Method'})
     }
 
-    const instanceData: { uri: string; name: string; type: string } = req.body
+    const instanceData: { uri: string; type: string; nsfwflag: string; } = req.body
     
     async function testURI(instanceURI: string) {
         const init = {headers: { 'Content-Type': 'application/json;charset=UTF-8' }}
@@ -27,18 +30,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     } else {
         let cachedata = await testURI(instanceData.uri)
         try {
-            console.log(cachedata)
             const savedInstance = await prisma.instances.create({
                 data: {
-                    name: instanceData.name,
+                    name: cachedata.title,
                     type: instanceData.type,
+                    nsfwflag: instanceData.nsfwflag,
                     uri: instanceData.uri,
                     InstanceData: {
                         create: { cache: JSON.stringify(cachedata) }
                     }
                 }
             })
-            res.status(200).json(savedInstance)
+            const BASE_URL: string = "https://cyberfurz.social"
+            const client = generator('mastodon', BASE_URL, process.env.ACCESS_TOKEN)
+            const toot = "@" + cachedata.contact_account.username + " Hi there someone is attempting to register your instance on FurryFediverse, if this is you. Please click this link to finish the registation: https://furryfediverse.org/api/instances/verify/" + savedInstance.api_key
+            res.status(200).json({"message": "Added instance successfully, your instance admin account needs to be verfied! Check your DMs!"})
+            client.postStatus(toot, {visibility: 'direct'}).then((res: Response<Entity.Status>) => {console.log(res.data)})
         } catch (err) {
             if (err instanceof Prisma.PrismaClientKnownRequestError){
                 if (err.code === 'P2002'){

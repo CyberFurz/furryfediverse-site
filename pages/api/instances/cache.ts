@@ -10,7 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
     
     async function testURI(instanceURI: string) {
-        const init = {headers: { 'Content-Type': 'application/json;charset=UTF-8' }}
+        const init = {headers: { 'Content-Type': 'application/json' }}
         const verifyURI = "https://" + instanceURI + "/api/v1/instance"
         try {
             const fetchingData = await fetch(verifyURI, init)
@@ -25,7 +25,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         try {
             await prisma.instanceData.update({
                 where: { instance_id: allInstances[i].id },
-                data: { cache: JSON.stringify(testURI(allInstances[i].uri)) }
+                data: { cache: JSON.stringify(await testURI(allInstances[i].uri)) }
             })
         } catch (err) {
             if (err instanceof Prisma.PrismaClientKnownRequestError){
@@ -34,6 +34,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 res.status(400).json({"message": err.message })
             }
         }
-        res.status(200).json({"message": "successfully updated instances"})
     }
+    res.status(200).json({"message": "successfully updated instances"})
 }

@@ -7,8 +7,10 @@
   },
   "dependencies": {
     "@prisma/client": "^4.7.1",
+    "dotenv": "^16.0.3",
+    "megalodon": "^5.0.1",
     "next": "latest",
-    "react": "18.2.0",
+    "react": "^18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {

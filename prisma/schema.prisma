@@ -7,15 +7,17 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:db.sql"
+  url      = env("DATABASE_URL")
 }
 
 model Instances {
   id           String        @id @default(cuid())
   name         String
   type         String
+  nsfwflag     String
   uri          String        @unique
   api_key      String        @default(uuid())
+  verified     Boolean       @default(false)
   InstanceData InstanceData?
 }
 
