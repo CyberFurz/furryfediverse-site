@@ -66,7 +66,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                     <p className="font-bold py-4">
                         Find Your Friends on the Fediverse
                     </p>
-                    <div className="px-2 space-x-2">
+                    <div className="px-2 flex flex-wrap gap-2">
                         <a
                             href="https://fedifinder-backup.glitch.me"
                             className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500"
@@ -89,7 +89,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                         </a>
                     </div>
                     <p className="font-bold py-4">Recomended Apps</p>
-                    <div className="px-2 space-x-2">
+                    <div className="px-2 flex flex-wrap gap-2">
                         <a
                             href="https://apps.apple.com/us/app/toot/id1229021451"
                             className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500"
