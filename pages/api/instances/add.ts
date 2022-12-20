@@ -35,6 +35,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     type: instanceData.type,
                     nsfwflag: instanceData.nsfwflag,
                     uri: instanceData.uri,
+                    verified: false,
                     InstanceData: {
                         create: { cache: JSON.stringify(cachedata) }
                     }
