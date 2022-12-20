@@ -1,7 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { isStringObject } from 'util/types'
-import prisma from '../lib/prisma'
+import prismac from '../lib/prisma'
 
 const Home: NextPage = ({ general, niche }: any) => {
   console.log(niche)
@@ -10,7 +9,6 @@ const Home: NextPage = ({ general, niche }: any) => {
       <Head>
         <title>The Furry Fediverse</title>
         <link rel="icon" href="/favicon.ico" />
-        <a rel="me" href="https://cyberfurz.social/@FurryFediverse">Mastodon</a>
       </Head>
       
       <p className="text-4xl text-gray-200 place-self-center">The Furry Fediverse</p>
@@ -108,7 +106,9 @@ const Home: NextPage = ({ general, niche }: any) => {
           </div>
         </div>
       </div>
+      <a rel="me" href="https://cyberfurz.social/@FurryFediverse" className="text-gray-400">Official Mastodon Account</a>
     </div>
+    
   )
 }
 
@@ -120,13 +120,13 @@ export async function getStaticProps() {
   }
 
   // Fetch data from external API
-  const generalInstance = await prisma.instances.findMany({where: {type: 'general', verified: true}, orderBy: {name: 'asc'}})
-  const nicheInstance = await prisma.instances.findMany({where: {type: 'niche', verified: true}, orderBy: {name: 'asc'}})
+  const generalInstance = await prismac.instances.findMany({where: {type: 'general', verified: true}, orderBy: {name: 'asc'}})
+  const nicheInstance = await prismac.instances.findMany({where: {type: 'niche', verified: true}, orderBy: {name: 'asc'}})
 
   // Build the array from the list of servers
   let generalInstances = []
   for (let i of generalInstance) {
-    let serverQuery = await prisma.instanceData.findFirst({where: {instance_id: i.id}})
+    let serverQuery = await prismac.instanceData.findFirst({where: {instance_id: i.id}})
     let serverData = JSON.parse(serverQuery.cache)
     generalInstances.push({
       "id": i.id,
@@ -145,7 +145,7 @@ export async function getStaticProps() {
     // Build the array from the list of servers
     let nichelInstances = []
     for (let i of nicheInstance) {
-      let serverQuery: ServerData = await prisma.instanceData.findFirst({where: {instance_id: i.id}})
+      let serverQuery: ServerData = await prismac.instanceData.findFirst({where: {instance_id: i.id}})
       let serverData = JSON.parse(serverQuery.cache)
       nichelInstances.push({
         "id": i.id,
