@@ -41,7 +41,7 @@ const AddInstance: NextPage = () => {
   const handleFormSubmit = async (data: FormData) => {
     try {
       data.uri = data.uri.replace(/^https?:\/\//, "")
-      console.log(data)
+      create(data)
     } catch (err) {
       console.error(err)
     }
