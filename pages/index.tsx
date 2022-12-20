@@ -335,11 +335,9 @@ export async function getStaticProps() {
     // Fetch data from external API
     const generalInstance = await prismac.instances.findMany({
         where: { type: 'general', verified: true },
-        orderBy: { name: 'asc' },
     })
     const nicheInstance = await prismac.instances.findMany({
         where: { type: 'niche', verified: true },
-        orderBy: { name: 'asc' },
     })
 
     // Build the array from the list of servers
