@@ -18,7 +18,7 @@ const AddInstance: NextPage = () => {
 
     async function create(data: FormData) {
         try {
-            fetch('http://localhost:3000/api/instances/add', {
+            fetch('/api/instances/add', {
                 body: JSON.stringify(data),
                 headers: {
                     'Content-Type': 'application/json'
