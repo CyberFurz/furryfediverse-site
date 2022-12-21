@@ -79,58 +79,62 @@ const Home: NextPage = ({ general, niche }: any) => {
                     <div className="px-2 flex flex-wrap gap-2">
                         <a
                             href="https://fedifinder-backup.glitch.me"
-                            className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500"
+                            className="btn btn-primary normal-case text-lg"
                             target="_blank"
                             rel="noreferrer"
                         >
                             <i className="fa-brands fa-twitter"></i>
-                            <i className="fa-solid fa-arrow-right"></i>{' '}
-                            <i className="fa-brands fa-mastodon"></i> Fedifinder
+                            <i className="ml-2 fa-solid fa-arrow-right"></i>{' '}
+                            <i className="ml-2 fa-brands fa-mastodon"></i>
+                            <span className="ml-2">Fedifinder</span>
                         </a>
                         <a
                             href="https://twitodon.com"
-                            className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500"
+                            className="btn btn-primary normal-case text-lg"
                             target="_blank"
                             rel="noreferrer"
                         >
                             <i className="fa-brands fa-twitter"></i>
-                            <i className="fa-solid fa-arrow-right"></i>{' '}
-                            <i className="fa-brands fa-mastodon"></i> Twitodon
+                            <i className="ml-2 fa-solid fa-arrow-right"></i>{' '}
+                            <i className="ml-2 fa-brands fa-mastodon"></i>
+                            <span className="ml-2">Twitodon</span>
                         </a>
                     </div>
                     <p className="font-bold py-4">Recomended Apps</p>
                     <div className="px-2 flex flex-wrap gap-2">
                         <a
                             href="https://apps.apple.com/us/app/toot/id1229021451"
-                            className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500"
+                            className="btn btn-primary normal-case text-lg"
                             target="_blank"
                             rel="noreferrer"
                         >
-                            <i className="fa-brands fa-apple"></i> Toot! (Paid)
+                            <i className="fa-brands fa-apple mr-2"></i> Toot!
+                            (Paid)
                         </a>
                         <a
                             href="https://apps.apple.com/us/app/metatext/id1523996615?mt=8"
-                            className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500"
+                            className="btn btn-primary normal-case text-lg"
                             target="_blank"
                             rel="noreferrer"
                         >
-                            <i className="fa-brands fa-apple"></i> Metatext
+                            <i className="fa-brands fa-apple mr-2"></i> Metatext
                         </a>
                         <a
                             href="https://fedilab.app"
-                            className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500"
+                            className="btn btn-primary normal-case text-lg"
                             target="_blank"
                             rel="noreferrer"
                         >
-                            <i className="fa-brands fa-android"></i> Fedilab
+                            <i className="fa-brands fa-android mr-2"></i>{' '}
+                            Fedilab
                         </a>
                         <a
                             href="https://tusky.app"
-                            className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500"
+                            className="btn btn-primary normal-case text-lg"
                             target="_blank"
                             rel="noreferrer"
                         >
-                            <i className="fa-brands fa-android"></i> Tusky
+                            <i className="fa-brands fa-android mr-2"></i> Tusky
                         </a>
                     </div>
                     <br />
@@ -255,7 +259,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                                                                 : 'https://' +
                                                                   data.uri
                                                         }
-                                                        className="p-3 mt-3 bg-sky-500 text-gray-100 rounded-md font-bold"
+                                                        className="btn btn-primary normal-case text-xl"
                                                         target="_blank"
                                                         rel="noreferrer"
                                                     >
@@ -344,7 +348,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                                                                 : 'https://' +
                                                                   data.uri
                                                         }
-                                                        className="p-3 mt-3 bg-sky-500 text-gray-100 rounded-md font-bold"
+                                                        className="btn btn-primary normal-case text-xl"
                                                         target="_blank"
                                                         rel="noreferrer"
                                                     >
