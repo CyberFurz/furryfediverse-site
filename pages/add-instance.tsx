@@ -195,50 +195,58 @@ const AddInstance: NextPage = () => {
                                     </span>
                                 </label>
                                 <div className="flex items-center gap-x-4">
-                                    <input
-                                        type="checkbox"
-                                        name="scraping"
-                                        className="checkbox checkbox-primary"
-                                        required
-                                    />
-                                    <span className="text-base">
-                                        You agree to allow FurryFediverse to
-                                        scape your instance's endpoint
-                                        "/api/v1/instance" for up to date
-                                        information on your instance. We will
-                                        not collect any other data from your
-                                        instance.
-                                    </span>
+                                    <label className="label cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            name="scraping"
+                                            className="checkbox checkbox-primary"
+                                            required
+                                        />
+                                        <span className="ml-4 text-base">
+                                            You agree to allow FurryFediverse to
+                                            scape your instance's endpoint
+                                            "/api/v1/instance" for up to date
+                                            information on your instance. We
+                                            will not collect any other data from
+                                            your instance.
+                                        </span>
+                                    </label>
                                 </div>
                                 <br />
                                 <div className="flex items-center gap-x-4">
-                                    <input
-                                        type="checkbox"
-                                        name="notify"
-                                        className="checkbox checkbox-primary"
-                                        required
-                                    />
-                                    <span className="text-base">
-                                        You promise to notify your users if you
-                                        plan to shutdown or can no longer
-                                        operate your instance with a 30 day
-                                        notice so they can migrate elsewhere.
-                                    </span>
+                                    <label className="label cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            name="notify"
+                                            className="checkbox checkbox-primary"
+                                            required
+                                        />
+                                        <span className="ml-4 text-base">
+                                            You promise to notify your users if
+                                            you plan to shutdown or can no
+                                            longer operate your instance with a
+                                            30 day notice so they can migrate
+                                            elsewhere.
+                                        </span>
+                                    </label>
                                 </div>
                                 <br />
 
                                 <div className="flex items-center gap-x-4">
-                                    <input
-                                        type="checkbox"
-                                        name="safety"
-                                        className="checkbox checkbox-primary"
-                                        required
-                                    />
-                                    <span className="text-base">
-                                        Your instance actively moderates against
-                                        hate speech, racism, homophobia, and
-                                        cultures a safe community.
-                                    </span>
+                                    <label className="label cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            name="safety"
+                                            className="checkbox checkbox-primary"
+                                            required
+                                        />
+                                        <span className="ml-4 text-base">
+                                            Your instance actively moderates
+                                            against hate speech, racism,
+                                            homophobia, and cultures a safe
+                                            community.
+                                        </span>
+                                    </label>
                                 </div>
                             </div>
                             <button
