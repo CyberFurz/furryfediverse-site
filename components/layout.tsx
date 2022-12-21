@@ -8,7 +8,7 @@ const maintainers = [
 
     {
         user: 'brodokk',
-        domain: 'cyberfurz.social',
+        domain: 'furry.engineer',
     },
 
     {
