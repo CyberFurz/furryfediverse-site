@@ -1,8 +1,18 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import prismac from '../lib/prisma'
+import React from 'react'
+import { motion } from 'framer-motion'
+import { useState } from 'react'
+
+const variants = {
+    initial: { x: '0%' },
+    animate: { x: '-50%' },
+}
 
 const Home: NextPage = ({ general, niche }: any) => {
+    const [active, setActive] = useState(0)
+
     console.log(niche)
     return (
         <div className="p-2 md:p-5 lg:px-6 2xl:px-80">
@@ -69,58 +79,62 @@ const Home: NextPage = ({ general, niche }: any) => {
                     <div className="px-2 flex flex-wrap gap-2">
                         <a
                             href="https://fedifinder-backup.glitch.me"
-                            className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500"
+                            className="btn btn-primary normal-case text-lg"
                             target="_blank"
                             rel="noreferrer"
                         >
                             <i className="fa-brands fa-twitter"></i>
-                            <i className="fa-solid fa-arrow-right"></i>{' '}
-                            <i className="fa-brands fa-mastodon"></i> Fedifinder
+                            <i className="ml-2 fa-solid fa-arrow-right"></i>{' '}
+                            <i className="ml-2 fa-brands fa-mastodon"></i>
+                            <span className="ml-2">Fedifinder</span>
                         </a>
                         <a
                             href="https://twitodon.com"
-                            className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500"
+                            className="btn btn-primary normal-case text-lg"
                             target="_blank"
                             rel="noreferrer"
                         >
                             <i className="fa-brands fa-twitter"></i>
-                            <i className="fa-solid fa-arrow-right"></i>{' '}
-                            <i className="fa-brands fa-mastodon"></i> Twitodon
+                            <i className="ml-2 fa-solid fa-arrow-right"></i>{' '}
+                            <i className="ml-2 fa-brands fa-mastodon"></i>
+                            <span className="ml-2">Twitodon</span>
                         </a>
                     </div>
                     <p className="font-bold py-4">Recomended Apps</p>
                     <div className="px-2 flex flex-wrap gap-2">
                         <a
                             href="https://apps.apple.com/us/app/toot/id1229021451"
-                            className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500"
+                            className="btn btn-primary normal-case text-lg"
                             target="_blank"
                             rel="noreferrer"
                         >
-                            <i className="fa-brands fa-apple"></i> Toot! (Paid)
+                            <i className="fa-brands fa-apple mr-2"></i> Toot!
+                            (Paid)
                         </a>
                         <a
                             href="https://apps.apple.com/us/app/metatext/id1523996615?mt=8"
-                            className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500"
+                            className="btn btn-primary normal-case text-lg"
                             target="_blank"
                             rel="noreferrer"
                         >
-                            <i className="fa-brands fa-apple"></i> Metatext
+                            <i className="fa-brands fa-apple mr-2"></i> Metatext
                         </a>
                         <a
                             href="https://fedilab.app"
-                            className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500"
+                            className="btn btn-primary normal-case text-lg"
                             target="_blank"
                             rel="noreferrer"
                         >
-                            <i className="fa-brands fa-android"></i> Fedilab
+                            <i className="fa-brands fa-android mr-2"></i>{' '}
+                            Fedilab
                         </a>
                         <a
                             href="https://tusky.app"
-                            className="bg-sky-600 p-3 text-slate-200 rounded-md hover:bg-sky-500"
+                            className="btn btn-primary normal-case text-lg"
                             target="_blank"
                             rel="noreferrer"
                         >
-                            <i className="fa-brands fa-android"></i> Tusky
+                            <i className="fa-brands fa-android mr-2"></i> Tusky
                         </a>
                     </div>
                     <br />
@@ -139,178 +153,214 @@ const Home: NextPage = ({ general, niche }: any) => {
                         </a>
                     </p>
                     <br />
-                    <p className="text-2xl">General Instances</p>
+                    <ul className="tabs w-full grid grid-cols-2">
+                        <li
+                            key={0}
+                            className={`text-2xl tab tab-bordered h-fit ${
+                                0 === active && 'tab-active'
+                            }`}
+                            onClick={() => setActive(0)}
+                        >
+                            General Instances
+                        </li>
+                        <li
+                            key={1}
+                            className={`text-2xl tab tab-bordered h-fit ${
+                                1 === active && 'tab-active'
+                            }`}
+                            onClick={() => setActive(1)}
+                        >
+                            Focused Instances
+                        </li>
+                    </ul>
                     <br />
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {general.map(
-                            (data: {
-                                id: string
-                                title: any
-                                thumbnail: any
-                                description: any
-                                short_description: any
-                                registrations: any
-                                approval_required: any
-                                uri: any
-                                user_count: any
-                                nsfwflag: any
-                            }) => (
-                                <div
-                                    key={data.id}
-                                    className="bg-slate-600 text-zinc-200 p-1 flex flex-col rounded-md border-4 border-solid border-slate-600 space-y-2"
-                                >
-                                    <div>
-                                        <picture>
-                                            <img
-                                                src={data.thumbnail}
-                                                className="max-h-52 w-full object-cover rounded-md"
-                                                height="630"
-                                                alt={data.title}
-                                            />
-                                        </picture>
-                                    </div>
-                                    <div className="flex flex-col justify-between space-y-4 h-full">
-                                        <div className="flex flex-col space-y-2">
-                                            <p className="font-bold text-2xl mx-4">
-                                                {data.title}
-                                            </p>
-                                            <p className="mx-4">
-                                                {data.short_description !=
-                                                    'null' &&
-                                                data.short_description.length >
-                                                    0
-                                                    ? data.short_description.replace(
-                                                          /(<([^>]+)>)/gi,
-                                                          ''
-                                                      )
-                                                    : data.description.replace(
-                                                          /(<([^>]+)>)/gi,
-                                                          ''
-                                                      )}
-                                            </p>
+                    <div className="overflow-clip">
+                        <motion.div
+                            key={0}
+                            variants={variants}
+                            initial="initial"
+                            animate={1 === active ? 'animate' : 'initial'}
+                            className="grid grid-cols-2 w-[200%]"
+                        >
+                            <div
+                                className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-fit`}
+                            >
+                                {general.map(
+                                    (data: {
+                                        id: string
+                                        title: any
+                                        thumbnail: any
+                                        description: any
+                                        short_description: any
+                                        registrations: any
+                                        approval_required: any
+                                        uri: any
+                                        user_count: any
+                                        nsfwflag: any
+                                    }) => (
+                                        <div
+                                            key={data.id}
+                                            className="bg-slate-600 text-zinc-200 p-1 flex flex-col rounded-md border-4 border-solid border-slate-600 space-y-2"
+                                        >
+                                            <div>
+                                                <picture>
+                                                    <img
+                                                        src={data.thumbnail}
+                                                        className="max-h-52 w-full object-cover rounded-md"
+                                                        height="630"
+                                                        alt={data.title}
+                                                    />
+                                                </picture>
+                                            </div>
+                                            <div className="flex flex-col justify-between space-y-4 h-full">
+                                                <div className="flex flex-col space-y-2">
+                                                    <p className="font-bold text-2xl mx-4">
+                                                        {data.title}
+                                                    </p>
+                                                    <p className="mx-4">
+                                                        {data.short_description !=
+                                                            'null' &&
+                                                        data.short_description
+                                                            .length > 0
+                                                            ? data.short_description.replace(
+                                                                  /(<([^>]+)>)/gi,
+                                                                  ''
+                                                              )
+                                                            : data.description.replace(
+                                                                  /(<([^>]+)>)/gi,
+                                                                  ''
+                                                              )}
+                                                    </p>
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <p className="mx-4 py-1 text-lg italic">
+                                                        <i className="fa-solid fa-key"></i>{' '}
+                                                        {data.registrations
+                                                            ? 'Registrations Open'
+                                                            : 'Registrations Closed'}{' '}
+                                                        {data.approval_required
+                                                            ? 'With Approval Required'
+                                                            : ''}
+                                                    </p>
+                                                    <p className="mx-4 py-1 text-lg">
+                                                        <i className="fa-solid fa-users"></i>{' '}
+                                                        {data.user_count}
+                                                    </p>
+                                                    <p className="mx-4 py-1 text-lg">
+                                                        <i className="fa-solid fa-user-shield"></i>{' '}
+                                                        {data.nsfwflag}
+                                                    </p>
+                                                    <a
+                                                        href={
+                                                            data.uri.includes(
+                                                                'https'
+                                                            )
+                                                                ? data.uri
+                                                                : 'https://' +
+                                                                  data.uri
+                                                        }
+                                                        className="btn btn-primary normal-case text-xl"
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                    >
+                                                        Visit Instance
+                                                    </a>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="flex flex-col">
-                                            <p className="mx-4 py-1 text-lg italic">
-                                                <i className="fa-solid fa-key"></i>{' '}
-                                                {data.registrations
-                                                    ? 'Registrations Open'
-                                                    : 'Registrations Closed'}{' '}
-                                                {data.approval_required
-                                                    ? 'With Approval Required'
-                                                    : ''}
-                                            </p>
-                                            <p className="mx-4 py-1 text-lg">
-                                                <i className="fa-solid fa-users"></i>{' '}
-                                                {data.user_count}
-                                            </p>
-                                            <p className="mx-4 py-1 text-lg">
-                                                <i className="fa-solid fa-user-shield"></i>{' '}
-                                                {data.nsfwflag}
-                                            </p>
-                                            <a
-                                                href={
-                                                    data.uri.includes('https')
-                                                        ? data.uri
-                                                        : 'https://' + data.uri
-                                                }
-                                                className="p-3 mt-3 bg-sky-500 text-gray-100 rounded-md font-bold"
-                                                target="_blank"
-                                                rel="noreferrer"
-                                            >
-                                                Visit Instance
-                                            </a>
+                                    )
+                                )}
+                            </div>
+                            <div
+                                className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-fit`}
+                            >
+                                {niche.map(
+                                    (data: {
+                                        id: string
+                                        title: any
+                                        thumbnail: any
+                                        description: any
+                                        short_description: any
+                                        registrations: any
+                                        approval_required: any
+                                        uri: any
+                                        user_count: any
+                                        nsfwflag: any
+                                    }) => (
+                                        <div
+                                            key={data.id}
+                                            className="bg-slate-600 text-zinc-200 p-1 flex flex-col rounded-md border-4 border-solid border-slate-600 space-y-2"
+                                        >
+                                            <div>
+                                                <picture>
+                                                    <img
+                                                        src={data.thumbnail}
+                                                        className="max-h-52 w-full object-cover rounded-md"
+                                                        height="630"
+                                                        alt={data.title}
+                                                    />
+                                                </picture>
+                                            </div>
+                                            <div className="flex flex-col justify-between space-y-4 h-full">
+                                                <div className="flex flex-col space-y-2">
+                                                    <p className="font-bold text-2xl mx-4">
+                                                        {data.title}
+                                                    </p>
+                                                    <p className="mx-4">
+                                                        {data.short_description !=
+                                                            'null' &&
+                                                        data.short_description
+                                                            .length > 0
+                                                            ? data.short_description.replace(
+                                                                  /(<([^>]+)>)/gi,
+                                                                  ''
+                                                              )
+                                                            : data.description.replace(
+                                                                  /(<([^>]+)>)/gi,
+                                                                  ''
+                                                              )}
+                                                    </p>
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <p className="mx-4 py-1 text-lg italic">
+                                                        <i className="fa-solid fa-key"></i>{' '}
+                                                        {data.registrations
+                                                            ? 'Registrations Open'
+                                                            : 'Registrations Closed'}{' '}
+                                                        {data.approval_required
+                                                            ? 'With Approval Required'
+                                                            : ''}
+                                                    </p>
+                                                    <p className="mx-4 py-1 text-lg">
+                                                        <i className="fa-solid fa-users"></i>{' '}
+                                                        {data.user_count}
+                                                    </p>
+                                                    <p className="mx-4 py-1 text-lg">
+                                                        <i className="fa-solid fa-user-shield"></i>{' '}
+                                                        {data.nsfwflag}
+                                                    </p>
+                                                    <a
+                                                        href={
+                                                            data.uri.includes(
+                                                                'https'
+                                                            )
+                                                                ? data.uri
+                                                                : 'https://' +
+                                                                  data.uri
+                                                        }
+                                                        className="btn btn-primary normal-case text-xl"
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                    >
+                                                        Visit Instance
+                                                    </a>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            )
-                        )}
-                    </div>
-                    <br />
-                    <p className="text-2xl">Niche Instances</p>
-                    <br />
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {niche.map(
-                            (data: {
-                                id: string
-                                title: any
-                                thumbnail: any
-                                description: any
-                                short_description: any
-                                registrations: any
-                                approval_required: any
-                                uri: any
-                                user_count: any
-                                nsfwflag: any
-                            }) => (
-                                <div
-                                    key={data.id}
-                                    className="bg-slate-600 text-zinc-200 p-1 flex flex-col rounded-md border-4 border-solid border-slate-600 space-y-2"
-                                >
-                                    <div>
-                                        <picture>
-                                            <img
-                                                src={data.thumbnail}
-                                                className="max-h-52 w-full object-cover rounded-md"
-                                                height="630"
-                                                alt={data.title}
-                                            />
-                                        </picture>
-                                    </div>
-                                    <div className="flex flex-col justify-between space-y-4 h-full">
-                                        <div className="flex flex-col space-y-2">
-                                            <p className="font-bold text-2xl mx-4">
-                                                {data.title}
-                                            </p>
-                                            <p className="mx-4">
-                                                {data.short_description !=
-                                                    'null' &&
-                                                data.short_description.length >
-                                                    0
-                                                    ? data.short_description.replace(
-                                                          /(<([^>]+)>)/gi,
-                                                          ''
-                                                      )
-                                                    : data.description.replace(
-                                                          /(<([^>]+)>)/gi,
-                                                          ''
-                                                      )}
-                                            </p>
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <p className="mx-4 py-1 text-lg italic">
-                                                <i className="fa-solid fa-key"></i>{' '}
-                                                {data.registrations
-                                                    ? 'Registrations Open'
-                                                    : 'Registrations Closed'}{' '}
-                                                {data.approval_required
-                                                    ? 'With Approval Required'
-                                                    : ''}
-                                            </p>
-                                            <p className="mx-4 py-1 text-lg">
-                                                <i className="fa-solid fa-users"></i>{' '}
-                                                {data.user_count}
-                                            </p>
-                                            <p className="mx-4 py-1 text-lg">
-                                                <i className="fa-solid fa-user-shield"></i>{' '}
-                                                {data.nsfwflag}
-                                            </p>
-                                            <a
-                                                href={
-                                                    data.uri.includes('https')
-                                                        ? data.uri
-                                                        : 'https://' + data.uri
-                                                }
-                                                className="p-3 mt-3 bg-sky-500 text-gray-100 rounded-md font-bold"
-                                                target="_blank"
-                                                rel="noreferrer"
-                                            >
-                                                Visit Instance
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            )
-                        )}
+                                    )
+                                )}
+                            </div>
+                        </motion.div>
                     </div>
                 </div>
             </div>
