@@ -320,57 +320,70 @@ const Home: NextPage = ({ general, niche }: any) => {
                                         }) => (
                                             <div
                                                 key={data.id}
-                                                className="bg-slate-600 text-zinc-200 p-1 flex flex-col rounded-md border-4 border-solid border-slate-600 space-y-2"
+                                                className="card card-compact bg-base-300 shadow-xl"
                                             >
-                                                <div>
-                                                    <picture>
-                                                        <img
-                                                            src={data.thumbnail}
-                                                            className="max-h-52 w-full object-cover rounded-md"
-                                                            height="630"
-                                                            alt={data.title}
-                                                        />
-                                                    </picture>
-                                                </div>
-                                                <div className="flex flex-col justify-between space-y-4 h-full">
-                                                    <div className="flex flex-col space-y-2">
-                                                        <p className="font-bold text-2xl mx-4">
-                                                            {data.title}
-                                                        </p>
-                                                        <p className="mx-4">
-                                                            {data.short_description !=
-                                                                'null' &&
-                                                            data
-                                                                .short_description
-                                                                .length > 0
-                                                                ? data.short_description.replace(
-                                                                      /(<([^>]+)>)/gi,
-                                                                      ''
-                                                                  )
-                                                                : data.description.replace(
-                                                                      /(<([^>]+)>)/gi,
-                                                                      ''
-                                                                  )}
-                                                        </p>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <p className="mx-4 py-1 text-lg italic">
-                                                            <i className="fa-solid fa-key"></i>{' '}
-                                                            {data.registrations
-                                                                ? 'Registrations Open'
-                                                                : 'Registrations Closed'}{' '}
-                                                            {data.approval_required
-                                                                ? 'With Approval Required'
-                                                                : ''}
-                                                        </p>
-                                                        <p className="mx-4 py-1 text-lg">
+                                                <figure>
+                                                    <img
+                                                        src={data.thumbnail}
+                                                        className="max-h-52 w-full object-cover rounded-md pointer-events-none"
+                                                        alt={data.title}
+                                                    />
+                                                </figure>
+                                                <div className="card-body">
+                                                    <h2 className="card-title text-2xl text-center self-center">
+                                                        {data.title}
+                                                    </h2>
+                                                    <div className="divider my-0"></div>
+                                                    <p className="text-base">
+                                                        {data.short_description !=
+                                                            'null' &&
+                                                        data.short_description
+                                                            .length > 0
+                                                            ? data.short_description.replace(
+                                                                  /(<([^>]+)>)/gi,
+                                                                  ''
+                                                              )
+                                                            : data.description !=
+                                                                  'null' &&
+                                                              data.description
+                                                                  .length > 0
+                                                            ? data.description.replace(
+                                                                  /(<([^>]+)>)/gi,
+                                                                  ''
+                                                              )
+                                                            : 'No description'}
+                                                    </p>
+                                                    <div className="divider my-0"></div>
+                                                    <div className="card-actions justify-evenly">
+                                                        <div className="text-lg w-min italic basis-full flex flex-rows items-center justify-center">
+                                                            <i className="fa-solid fa-key mr-4"></i>
+                                                            <div className="flex flex-wrap flex-rows w-min justify-center">
+                                                                <span className="whitespace-nowrap w-min">
+                                                                    {data.registrations
+                                                                        ? 'Registrations Open'
+                                                                        : 'Registrations Closed'}
+                                                                </span>
+                                                                <span className="whitespace-nowrap w-min">
+                                                                    {data.approval_required
+                                                                        ? 'with Approval Required'
+                                                                        : ''}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div
+                                                            className="tooltip text-lg"
+                                                            data-tip="Members"
+                                                        >
                                                             <i className="fa-solid fa-users"></i>{' '}
                                                             {data.user_count}
-                                                        </p>
-                                                        <p className="mx-4 py-1 text-lg">
+                                                        </div>
+                                                        <div
+                                                            className="tooltip text-lg"
+                                                            data-tip="Content Rules"
+                                                        >
                                                             <i className="fa-solid fa-user-shield"></i>{' '}
                                                             {data.nsfwflag}
-                                                        </p>
+                                                        </div>
                                                         <a
                                                             href={
                                                                 data.uri.includes(
@@ -380,7 +393,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                                                                     : 'https://' +
                                                                       data.uri
                                                             }
-                                                            className="btn btn-primary normal-case text-xl"
+                                                            className="btn btn-primary normal-case text-xl w-full mt-2"
                                                             target="_blank"
                                                             rel="noreferrer"
                                                         >
