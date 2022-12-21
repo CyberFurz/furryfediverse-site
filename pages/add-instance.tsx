@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import type { NextPage } from 'next'
 import { useState } from 'react'
+import Link from 'next/link'
 
 interface FormData {
     type: string
@@ -51,7 +52,7 @@ const AddInstance: NextPage = () => {
     }
 
     return (
-        <main className="p-2 md:p-5 lg:px-60 2xl:px-80">
+        <main>
             <Head>
                 <title>The Furry Fediverse - Add Server</title>
                 <link
@@ -59,12 +60,19 @@ const AddInstance: NextPage = () => {
                     href="/favicon.ico"
                 />
             </Head>
-            <p className="text-4xl text-gray-300 dark:text-gray-200">
-                The Furry Fediverse
-            </p>
             <div className="flex flex-col">
-                <div className="py-4">
-                    <div className="bg-gray-400 text-slate-800 rounded-md p-3">
+                <div className="card bg-base-100 mt-4 overflow-clip">
+                    <div className="text-sm breadcrumbs absolute ml-4">
+                        <ul>
+                            <li>
+                                <Link href="/">Home</Link>
+                            </li>
+                            <li>
+                                <Link href="#">Add Instance</Link>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="card-body">
                         <div
                             className={`alert shadow-lg ${
                                 response.type == ''
