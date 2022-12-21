@@ -364,13 +364,22 @@ const Home: NextPage = ({ general, niche }: any) => {
                     </div>
                 </div>
             </div>
+            <div className="flex flex-row justify-center">
             <a
                 rel="me"
                 href="https://cyberfurz.social/@FurryFediverse"
-                className="text-gray-400"
+                className="grid card place-items-center hover:underline text-gray-400"
             >
-                Official Mastodon Account
+                Follow us on Mastodon
             </a>
+            <div className="divider divider-horizontal text-2xl text-gray-400">⁘</div>
+            <a
+                href="https://github.com/CyberFurz/furryfediverse-site"
+                className="grid card place-items-center hover:underline text-gray-400"
+            >
+                Contribute on Github
+            </a>
+            </div>
         </div>
     )
 }
