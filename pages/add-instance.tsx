@@ -204,8 +204,8 @@ const AddInstance: NextPage = () => {
                                         />
                                         <span className="ml-4 text-base">
                                             You agree to allow FurryFediverse to
-                                            scape your instance's endpoint
-                                            "/api/v1/instance" for up to date
+                                            scrape your instance's endpoint
+                                            "/api/v1/instance" for up-to-date
                                             information on your instance. We
                                             will not collect any other data from
                                             your instance.
@@ -223,9 +223,9 @@ const AddInstance: NextPage = () => {
                                         />
                                         <span className="ml-4 text-base">
                                             You promise to notify your users if
-                                            you plan to shutdown or can no
-                                            longer operate your instance with a
-                                            30 day notice so they can migrate
+                                            you plan to shut down or can no
+                                            longer operate your instance, with a
+                                            30-day notice, so they can migrate
                                             elsewhere.
                                         </span>
                                     </label>
