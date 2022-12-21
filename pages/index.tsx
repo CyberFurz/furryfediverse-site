@@ -152,7 +152,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                     <ul className="tabs w-full grid grid-cols-2">
                         <li
                             key={0}
-                            className={`text-2xl tab tab-bordered ${
+                            className={`text-2xl tab tab-bordered h-fit ${
                                 0 === active && 'tab-active'
                             }`}
                             onClick={() => setActive(0)}
@@ -161,7 +161,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                         </li>
                         <li
                             key={1}
-                            className={`text-2xl tab tab-bordered ${
+                            className={`text-2xl tab tab-bordered h-fit ${
                                 1 === active && 'tab-active'
                             }`}
                             onClick={() => setActive(1)}
