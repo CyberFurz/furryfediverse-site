@@ -1,8 +1,18 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import prismac from '../lib/prisma'
+import React from 'react'
+import { motion } from 'framer-motion'
+import { useState } from 'react'
+
+const variants = {
+    initial: { x: '0%' },
+    animate: { x: '-50%' },
+}
 
 const Home: NextPage = ({ general, niche }: any) => {
+    const [active, setActive] = useState(0)
+
     console.log(niche)
     return (
         <div className="p-2 md:p-5 lg:px-6 2xl:px-80">
@@ -139,178 +149,214 @@ const Home: NextPage = ({ general, niche }: any) => {
                         </a>
                     </p>
                     <br />
-                    <p className="text-2xl">General Instances</p>
+                    <ul className="tabs w-full grid grid-cols-2">
+                        <li
+                            key={0}
+                            className={`text-2xl tab tab-bordered ${
+                                0 === active && 'tab-active'
+                            }`}
+                            onClick={() => setActive(0)}
+                        >
+                            General Instances
+                        </li>
+                        <li
+                            key={1}
+                            className={`text-2xl tab tab-bordered ${
+                                1 === active && 'tab-active'
+                            }`}
+                            onClick={() => setActive(1)}
+                        >
+                            Focused Instances
+                        </li>
+                    </ul>
                     <br />
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {general.map(
-                            (data: {
-                                id: string
-                                title: any
-                                thumbnail: any
-                                description: any
-                                short_description: any
-                                registrations: any
-                                approval_required: any
-                                uri: any
-                                user_count: any
-                                nsfwflag: any
-                            }) => (
-                                <div
-                                    key={data.id}
-                                    className="bg-slate-600 text-zinc-200 p-1 flex flex-col rounded-md border-4 border-solid border-slate-600 space-y-2"
-                                >
-                                    <div>
-                                        <picture>
-                                            <img
-                                                src={data.thumbnail}
-                                                className="max-h-52 w-full object-cover rounded-md"
-                                                height="630"
-                                                alt={data.title}
-                                            />
-                                        </picture>
-                                    </div>
-                                    <div className="flex flex-col justify-between space-y-4 h-full">
-                                        <div className="flex flex-col space-y-2">
-                                            <p className="font-bold text-2xl mx-4">
-                                                {data.title}
-                                            </p>
-                                            <p className="mx-4">
-                                                {data.short_description !=
-                                                    'null' &&
-                                                data.short_description.length >
-                                                    0
-                                                    ? data.short_description.replace(
-                                                          /(<([^>]+)>)/gi,
-                                                          ''
-                                                      )
-                                                    : data.description.replace(
-                                                          /(<([^>]+)>)/gi,
-                                                          ''
-                                                      )}
-                                            </p>
+                    <div className="overflow-clip">
+                        <motion.div
+                            key={0}
+                            variants={variants}
+                            initial="initial"
+                            animate={1 === active ? 'animate' : 'initial'}
+                            className="grid grid-cols-2 w-[200%]"
+                        >
+                            <div
+                                className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-fit`}
+                            >
+                                {general.map(
+                                    (data: {
+                                        id: string
+                                        title: any
+                                        thumbnail: any
+                                        description: any
+                                        short_description: any
+                                        registrations: any
+                                        approval_required: any
+                                        uri: any
+                                        user_count: any
+                                        nsfwflag: any
+                                    }) => (
+                                        <div
+                                            key={data.id}
+                                            className="bg-slate-600 text-zinc-200 p-1 flex flex-col rounded-md border-4 border-solid border-slate-600 space-y-2"
+                                        >
+                                            <div>
+                                                <picture>
+                                                    <img
+                                                        src={data.thumbnail}
+                                                        className="max-h-52 w-full object-cover rounded-md"
+                                                        height="630"
+                                                        alt={data.title}
+                                                    />
+                                                </picture>
+                                            </div>
+                                            <div className="flex flex-col justify-between space-y-4 h-full">
+                                                <div className="flex flex-col space-y-2">
+                                                    <p className="font-bold text-2xl mx-4">
+                                                        {data.title}
+                                                    </p>
+                                                    <p className="mx-4">
+                                                        {data.short_description !=
+                                                            'null' &&
+                                                        data.short_description
+                                                            .length > 0
+                                                            ? data.short_description.replace(
+                                                                  /(<([^>]+)>)/gi,
+                                                                  ''
+                                                              )
+                                                            : data.description.replace(
+                                                                  /(<([^>]+)>)/gi,
+                                                                  ''
+                                                              )}
+                                                    </p>
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <p className="mx-4 py-1 text-lg italic">
+                                                        <i className="fa-solid fa-key"></i>{' '}
+                                                        {data.registrations
+                                                            ? 'Registrations Open'
+                                                            : 'Registrations Closed'}{' '}
+                                                        {data.approval_required
+                                                            ? 'With Approval Required'
+                                                            : ''}
+                                                    </p>
+                                                    <p className="mx-4 py-1 text-lg">
+                                                        <i className="fa-solid fa-users"></i>{' '}
+                                                        {data.user_count}
+                                                    </p>
+                                                    <p className="mx-4 py-1 text-lg">
+                                                        <i className="fa-solid fa-user-shield"></i>{' '}
+                                                        {data.nsfwflag}
+                                                    </p>
+                                                    <a
+                                                        href={
+                                                            data.uri.includes(
+                                                                'https'
+                                                            )
+                                                                ? data.uri
+                                                                : 'https://' +
+                                                                  data.uri
+                                                        }
+                                                        className="p-3 mt-3 bg-sky-500 text-gray-100 rounded-md font-bold"
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                    >
+                                                        Visit Instance
+                                                    </a>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="flex flex-col">
-                                            <p className="mx-4 py-1 text-lg italic">
-                                                <i className="fa-solid fa-key"></i>{' '}
-                                                {data.registrations
-                                                    ? 'Registrations Open'
-                                                    : 'Registrations Closed'}{' '}
-                                                {data.approval_required
-                                                    ? 'With Approval Required'
-                                                    : ''}
-                                            </p>
-                                            <p className="mx-4 py-1 text-lg">
-                                                <i className="fa-solid fa-users"></i>{' '}
-                                                {data.user_count}
-                                            </p>
-                                            <p className="mx-4 py-1 text-lg">
-                                                <i className="fa-solid fa-user-shield"></i>{' '}
-                                                {data.nsfwflag}
-                                            </p>
-                                            <a
-                                                href={
-                                                    data.uri.includes('https')
-                                                        ? data.uri
-                                                        : 'https://' + data.uri
-                                                }
-                                                className="p-3 mt-3 bg-sky-500 text-gray-100 rounded-md font-bold"
-                                                target="_blank"
-                                                rel="noreferrer"
-                                            >
-                                                Visit Instance
-                                            </a>
+                                    )
+                                )}
+                            </div>
+                            <div
+                                className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-fit`}
+                            >
+                                {niche.map(
+                                    (data: {
+                                        id: string
+                                        title: any
+                                        thumbnail: any
+                                        description: any
+                                        short_description: any
+                                        registrations: any
+                                        approval_required: any
+                                        uri: any
+                                        user_count: any
+                                        nsfwflag: any
+                                    }) => (
+                                        <div
+                                            key={data.id}
+                                            className="bg-slate-600 text-zinc-200 p-1 flex flex-col rounded-md border-4 border-solid border-slate-600 space-y-2"
+                                        >
+                                            <div>
+                                                <picture>
+                                                    <img
+                                                        src={data.thumbnail}
+                                                        className="max-h-52 w-full object-cover rounded-md"
+                                                        height="630"
+                                                        alt={data.title}
+                                                    />
+                                                </picture>
+                                            </div>
+                                            <div className="flex flex-col justify-between space-y-4 h-full">
+                                                <div className="flex flex-col space-y-2">
+                                                    <p className="font-bold text-2xl mx-4">
+                                                        {data.title}
+                                                    </p>
+                                                    <p className="mx-4">
+                                                        {data.short_description !=
+                                                            'null' &&
+                                                        data.short_description
+                                                            .length > 0
+                                                            ? data.short_description.replace(
+                                                                  /(<([^>]+)>)/gi,
+                                                                  ''
+                                                              )
+                                                            : data.description.replace(
+                                                                  /(<([^>]+)>)/gi,
+                                                                  ''
+                                                              )}
+                                                    </p>
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <p className="mx-4 py-1 text-lg italic">
+                                                        <i className="fa-solid fa-key"></i>{' '}
+                                                        {data.registrations
+                                                            ? 'Registrations Open'
+                                                            : 'Registrations Closed'}{' '}
+                                                        {data.approval_required
+                                                            ? 'With Approval Required'
+                                                            : ''}
+                                                    </p>
+                                                    <p className="mx-4 py-1 text-lg">
+                                                        <i className="fa-solid fa-users"></i>{' '}
+                                                        {data.user_count}
+                                                    </p>
+                                                    <p className="mx-4 py-1 text-lg">
+                                                        <i className="fa-solid fa-user-shield"></i>{' '}
+                                                        {data.nsfwflag}
+                                                    </p>
+                                                    <a
+                                                        href={
+                                                            data.uri.includes(
+                                                                'https'
+                                                            )
+                                                                ? data.uri
+                                                                : 'https://' +
+                                                                  data.uri
+                                                        }
+                                                        className="p-3 mt-3 bg-sky-500 text-gray-100 rounded-md font-bold"
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                    >
+                                                        Visit Instance
+                                                    </a>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            )
-                        )}
-                    </div>
-                    <br />
-                    <p className="text-2xl">Niche Instances</p>
-                    <br />
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {niche.map(
-                            (data: {
-                                id: string
-                                title: any
-                                thumbnail: any
-                                description: any
-                                short_description: any
-                                registrations: any
-                                approval_required: any
-                                uri: any
-                                user_count: any
-                                nsfwflag: any
-                            }) => (
-                                <div
-                                    key={data.id}
-                                    className="bg-slate-600 text-zinc-200 p-1 flex flex-col rounded-md border-4 border-solid border-slate-600 space-y-2"
-                                >
-                                    <div>
-                                        <picture>
-                                            <img
-                                                src={data.thumbnail}
-                                                className="max-h-52 w-full object-cover rounded-md"
-                                                height="630"
-                                                alt={data.title}
-                                            />
-                                        </picture>
-                                    </div>
-                                    <div className="flex flex-col justify-between space-y-4 h-full">
-                                        <div className="flex flex-col space-y-2">
-                                            <p className="font-bold text-2xl mx-4">
-                                                {data.title}
-                                            </p>
-                                            <p className="mx-4">
-                                                {data.short_description !=
-                                                    'null' &&
-                                                data.short_description.length >
-                                                    0
-                                                    ? data.short_description.replace(
-                                                          /(<([^>]+)>)/gi,
-                                                          ''
-                                                      )
-                                                    : data.description.replace(
-                                                          /(<([^>]+)>)/gi,
-                                                          ''
-                                                      )}
-                                            </p>
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <p className="mx-4 py-1 text-lg italic">
-                                                <i className="fa-solid fa-key"></i>{' '}
-                                                {data.registrations
-                                                    ? 'Registrations Open'
-                                                    : 'Registrations Closed'}{' '}
-                                                {data.approval_required
-                                                    ? 'With Approval Required'
-                                                    : ''}
-                                            </p>
-                                            <p className="mx-4 py-1 text-lg">
-                                                <i className="fa-solid fa-users"></i>{' '}
-                                                {data.user_count}
-                                            </p>
-                                            <p className="mx-4 py-1 text-lg">
-                                                <i className="fa-solid fa-user-shield"></i>{' '}
-                                                {data.nsfwflag}
-                                            </p>
-                                            <a
-                                                href={
-                                                    data.uri.includes('https')
-                                                        ? data.uri
-                                                        : 'https://' + data.uri
-                                                }
-                                                className="p-3 mt-3 bg-sky-500 text-gray-100 rounded-md font-bold"
-                                                target="_blank"
-                                                rel="noreferrer"
-                                            >
-                                                Visit Instance
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            )
-                        )}
+                                    )
+                                )}
+                            </div>
+                        </motion.div>
                     </div>
                 </div>
             </div>
