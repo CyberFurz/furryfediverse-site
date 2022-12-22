@@ -5,6 +5,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import Link from 'next/link'
+import ReactImageFallback from 'react-image-fallback'
 
 const variants = {
     initial: { x: '0%' },
@@ -220,8 +221,9 @@ const Home: NextPage = ({ general, niche }: any) => {
                                                 className="card card-compact bg-base-300 shadow-xl"
                                             >
                                                 <figure>
-                                                    <img
+                                                    <ReactImageFallback
                                                         src={data.thumbnail}
+                                                        fallbackImage="./img/fedi_placeholder.png"
                                                         className="max-h-52 w-full object-cover rounded-md pointer-events-none"
                                                         alt={data.title}
                                                     />

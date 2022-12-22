@@ -51,7 +51,7 @@ export default function Layout({ children }: any) {
                         <div></div>
                         {maintainers.map(
                             (data: { user: string; domain: string }) => (
-                                <div>
+                                <div key={data.user + data.domain}>
                                     <a
                                         rel="me noreferrer"
                                         href={`https://${data.domain}/@${data.user}`}
