@@ -360,10 +360,14 @@ const Home: NextPage = ({ general, niche }: any) => {
                                                 className="card card-compact bg-base-300 shadow-xl"
                                             >
                                                 <figure>
-                                                    <img
+                                                    <ReactImageFallback
                                                         src={data.thumbnail}
+                                                        fallbackImage="./img/fedi_placeholder.png"
                                                         className="max-h-52 w-full object-cover rounded-md pointer-events-none"
                                                         alt={data.title}
+                                                        onLoad={() =>
+                                                            updateVariants()
+                                                        }
                                                     />
                                                 </figure>
                                                 <div className="card-body">
