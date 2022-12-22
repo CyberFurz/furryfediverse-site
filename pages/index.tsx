@@ -3,17 +3,46 @@ import Head from 'next/head'
 import prismac from '../lib/prisma'
 import React from 'react'
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import ReactImageFallback from 'react-image-fallback'
 
-const variants = {
-    initial: { x: '0%' },
-    animate: { x: '-55%' },
-}
-
 const Home: NextPage = ({ general, niche }: any) => {
     const [active, setActive] = useState(0)
+    const [variants, setVariants] = useState({
+        initial: { x: '0%', '--divHeight': `0px` },
+        animate: { x: '-55%', '--divHeight': `0px` },
+    })
+
+    const generalDiv = React.useRef<HTMLDivElement>()
+    const nicheDiv = React.useRef<HTMLDivElement>()
+
+    useEffect(() => {
+        setVariants({
+            initial: {
+                x: '0%',
+                '--divHeight': `${generalDiv.current.offsetHeight}px`,
+            },
+            animate: {
+                x: '-55%',
+                '--divHeight': `${nicheDiv.current.offsetHeight}px`,
+            },
+        })
+
+        window.addEventListener('resize', () => {
+            setVariants({
+                initial: {
+                    x: '0%',
+                    '--divHeight': `${generalDiv.current.offsetHeight}px`,
+                },
+                animate: {
+                    x: '-55%',
+                    '--divHeight': `${nicheDiv.current.offsetHeight}px`,
+                },
+            })
+        })
+    }, [])
+
     return (
         <div>
             <Head>
@@ -146,7 +175,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                         </div>
                     </div>
                 </div>
-                <div className="card bg-base-100 shadow-xl overflow-x-clip">
+                <div className="card bg-base-100 shadow-xl overflow-x-clip h-max">
                     <div className="card-body">
                         <h2 className="text-2xl card-title">
                             Fediverse Instances
@@ -199,9 +228,11 @@ const Home: NextPage = ({ general, niche }: any) => {
                                 initial="initial"
                                 animate={1 === active ? 'animate' : 'initial'}
                                 className="grid grid-cols-2 gap-[10%] w-[220%]"
+                                style={{ height: 'var(--divHeight)' }}
                             >
                                 <div
-                                    className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-fit`}
+                                    className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-min`}
+                                    ref={generalDiv}
                                 >
                                     {general.map(
                                         (data: {
@@ -226,6 +257,9 @@ const Home: NextPage = ({ general, niche }: any) => {
                                                         fallbackImage="./img/fedi_placeholder.png"
                                                         className="max-h-52 w-full object-cover rounded-md pointer-events-none"
                                                         alt={data.title}
+                                                        onLoad={() =>
+                                                            updateVariants()
+                                                        }
                                                     />
                                                 </figure>
                                                 <div className="card-body">
@@ -305,7 +339,8 @@ const Home: NextPage = ({ general, niche }: any) => {
                                     )}
                                 </div>
                                 <div
-                                    className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-fit`}
+                                    className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-min`}
+                                    ref={nicheDiv}
                                 >
                                     {niche.map(
                                         (data: {
@@ -325,10 +360,14 @@ const Home: NextPage = ({ general, niche }: any) => {
                                                 className="card card-compact bg-base-300 shadow-xl"
                                             >
                                                 <figure>
-                                                    <img
+                                                    <ReactImageFallback
                                                         src={data.thumbnail}
+                                                        fallbackImage="./img/fedi_placeholder.png"
                                                         className="max-h-52 w-full object-cover rounded-md pointer-events-none"
                                                         alt={data.title}
+                                                        onLoad={() =>
+                                                            updateVariants()
+                                                        }
                                                     />
                                                 </figure>
                                                 <div className="card-body">
@@ -414,6 +453,19 @@ const Home: NextPage = ({ general, niche }: any) => {
             </div>
         </div>
     )
+
+    function updateVariants() {
+        setVariants({
+            initial: {
+                x: '0%',
+                '--divHeight': `${generalDiv.current.offsetHeight}px`,
+            },
+            animate: {
+                x: '-55%',
+                '--divHeight': `${nicheDiv.current.offsetHeight}px`,
+            },
+        })
+    }
 }
 
 // This gets called on every request
