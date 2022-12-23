@@ -41,6 +41,9 @@ const Home: NextPage = ({ general, niche }: any) => {
                 },
             })
         })
+
+        shuffleArray(general)
+        shuffleArray(niche)
     }, [])
 
     return (
@@ -255,6 +258,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                                                     <ReactImageFallback
                                                         src={data.thumbnail}
                                                         fallbackImage="./img/fedi_placeholder.png"
+                                                        initialImage="./img/fedi_placeholder.png"
                                                         className="max-h-52 w-full object-cover rounded-md pointer-events-none"
                                                         alt={data.title}
                                                         onLoad={() =>
@@ -363,6 +367,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                                                     <ReactImageFallback
                                                         src={data.thumbnail}
                                                         fallbackImage="./img/fedi_placeholder.png"
+                                                        initialImage="./img/fedi_placeholder.png"
                                                         className="max-h-52 w-full object-cover rounded-md pointer-events-none"
                                                         alt={data.title}
                                                         onLoad={() =>
@@ -531,9 +536,6 @@ export async function getStaticProps() {
         })
     }
 
-    generalInstances.sort(compareInstance)
-    nichelInstances.sort(compareInstance)
-
     // Pass data to the page via props
     return {
         props: {
@@ -550,6 +552,13 @@ function compareInstance(a: any, b: any) {
         : a.title.toLowerCase() < b.title.toLowerCase()
         ? -1
         : 0
+}
+
+function shuffleArray(array: Array<any>) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1))
+        ;[array[i], array[j]] = [array[j], array[i]]
+    }
 }
 
 export default Home
