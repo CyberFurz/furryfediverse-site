@@ -9,7 +9,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
     
     // Function to parse through the URI and check if it's valid and return the data
-    async function testURI(instanceURI: string, instanceType: string) {
+    async function buildCache(instanceURI: string, instanceType: string) {
         if (instanceType == 'mastodon') {
             let init = { headers: { 'Content-Type': 'application/json;charset=UTF-8' } }
             let verifyURI = 'https://' + instanceURI + '/api/v1/instance'
@@ -59,7 +59,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const allInstances = await prismac.instances.findMany()
     for (let i = 0; i < allInstances.length; i++) {
         try {
-            let updateInstance = await testURI(allInstances[i].uri, allInstances[i].api_mode)
+            let updateInstance = await buildCache(allInstances[i].uri, allInstances[i].api_mode)
             if (updateInstance != false) {
                 await prismac.instanceData.update({
                     where: { instance_id: allInstances[i].id },
