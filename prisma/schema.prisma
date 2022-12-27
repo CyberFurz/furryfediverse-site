@@ -15,15 +15,29 @@ model Instances {
   name         String
   type         String
   nsfwflag     String
+  api_mode     String
   uri          String        @unique
-  api_key      String        @default(uuid())
   verified     Boolean       @default(false)
   InstanceData InstanceData?
+  ApiKeys      ApiKeys?
 }
 
 model InstanceData {
+  id           String    @id @default(cuid())
+  instance     Instances @relation(fields: [instance_id], references: [id])
+  instance_id  String    @unique
+  cache        String // Keeping for now, will be removed in the future
+  title        String
+  description  String
+  thumbnail    String
+  user_count   Int
+  status_count Int
+}
+
+model ApiKeys {
   id          String    @id @default(cuid())
   instance    Instances @relation(fields: [instance_id], references: [id])
   instance_id String    @unique
-  cache       String
+  api_key     String    @unique @default(uuid())
+  used        Boolean   @default(false)
 }

@@ -8,13 +8,50 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(405).json({ message: 'Invalid API Method'})
     }
     
-    async function testURI(instanceURI: string) {
-        const init = {headers: { 'Content-Type': 'application/json' }}
-        const verifyURI = "https://" + instanceURI + "/api/v1/instance"
-        try {
-            const fetchingData = await fetch(verifyURI, init)
-            return await fetchingData.json()
-        }catch (err){
+    // Function to parse through the URI and check if it's valid and return the data
+    async function testURI(instanceURI: string, instanceType: string) {
+        if (instanceType == 'mastodon') {
+            let init = { headers: { 'Content-Type': 'application/json;charset=UTF-8' } }
+            let verifyURI = 'https://' + instanceURI + '/api/v1/instance'
+            try {
+                const fetchingData = await fetch(verifyURI, init)
+                const mastodonData = await fetchingData.json()
+                const parsedMasterData = {
+                    title: mastodonData.title,
+                    description: mastodonData.short_description !== undefined ? mastodonData.short_description : mastodonData.description, // Pleroma instances don't have a short_description field, so we use the description field instead
+                    thumbnail: mastodonData.thumbnail,
+                    user_count: mastodonData.stats.user_count,
+                    status_count: mastodonData.stats.status_count
+                }
+                return parsedMasterData
+            } catch (err) {
+                return false
+            }
+        } else if (instanceType == 'misskey') {
+            let init = { 
+                headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+                body: JSON.stringify("{ 'details': true }"),
+                method: 'POST'
+            }
+            let metaURI = 'https://' + instanceURI + '/api/meta'
+            let statsURI = 'https://' + instanceURI + '/api/stats'
+            try {
+                const fetchingData = await fetch(metaURI, init)
+                const fetchingData2 = await fetch(statsURI, init)
+                const misskeyMetaData = await fetchingData.json()
+                const misskeyStatsData = await fetchingData2.json()
+                const parsedMasterData = {
+                    title: misskeyMetaData.name,
+                    description: misskeyMetaData.description,
+                    thumbnail: misskeyMetaData.bannerUrl,
+                    user_count: misskeyStatsData.usersCount,
+                    status_count: misskeyStatsData.notesCount
+                }
+                return parsedMasterData
+            } catch (err) {
+                return false
+            }
+        } else {
             return false
         }
     }
@@ -22,10 +59,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const allInstances = await prismac.instances.findMany()
     for (let i = 0; i < allInstances.length; i++) {
         try {
-            await prismac.instanceData.update({
-                where: { instance_id: allInstances[i].id },
-                data: { cache: JSON.stringify(await testURI(allInstances[i].uri)) }
-            })
+            let updateInstance = await testURI(allInstances[i].uri, allInstances[i].api_mode)
+            if (updateInstance != false) {
+                await prismac.instanceData.update({
+                    where: { instance_id: allInstances[i].id },
+                    data: updateInstance
+                })
+            }else{
+                continue
+            }
         } catch (err) {
             if (err instanceof Prisma.PrismaClientKnownRequestError){
                 res.status(400).json({"message": err.message })
