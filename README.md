@@ -16,3 +16,12 @@ DATABASE_URL=file://`pwd`/db.sqlite3 npm run dev
 ```
 
 And then just go on http://localhost:3000 with your webbrowser.
+
+## Env file
+
+It's possible to use an `.env` file instead for setup all the env vars.
+
+```
+DATABASE_URL=file:/${PWD}/db.sqlite3 # This is an example please check prisma documentation for what you need https://www.prisma.io/docs/reference/database-reference/connection-urls
+# ACCESS_TOKEN = # Add here your mastodon token for being able to receive send verification toots
+```
