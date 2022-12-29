@@ -2,16 +2,14 @@ import { PrismaClient } from "@prisma/client"
 import { IncomingHttpHeaders } from "http"
 
 export const maintainers = [
-    // {
-    //     user: 'hack13',
-    //     domain: 'cyberfurz.social',
-    // },
-    //
-    // {
-    //     user: 'brodokk',
-    //     domain: 'furry.engineer',
-    // },
-    
+    {
+        user: 'hack13',
+        domain: 'cyberfurz.social',
+    },
+    {
+        user: 'brodokk',
+        domain: 'furry.engineer',
+    },
     {
         user: 'oric',
         domain: 'macrofurs.social',
