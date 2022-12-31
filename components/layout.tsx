@@ -10,7 +10,7 @@ export default function Layout({ children }: any) {
             className='flex flex-col bg-base-300 min-h-screen gap-8'
             data-theme={ theme }
         >
-            <div className='grow'>
+            <div className='grow overflow-y-clip'>
                 <div className='p-2 md:p-5 lg:px-6 2xl:px-80'>
                     <div className='flex justify-between items-center'>
                         <Link href='/'>
