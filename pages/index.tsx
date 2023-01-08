@@ -18,7 +18,7 @@ const Home: NextPage = ({ general, niche }: any) => {
     const nicheDiv = React.useRef<HTMLDivElement>()
     
     useEffect(() => {
-        setVariants({
+        let variantUpdate = () => setVariants({
             initial: {
                 x: '0%',
                 '--divHeight': `${ generalDiv.current.offsetHeight }px`,
@@ -30,18 +30,10 @@ const Home: NextPage = ({ general, niche }: any) => {
         })
         
         window.addEventListener('resize', () => {
-            setVariants({
-                initial: {
-                    x: '0%',
-                    '--divHeight': `${ generalDiv.current.offsetHeight }px`,
-                },
-                animate: {
-                    x: '-55%',
-                    '--divHeight': `${ nicheDiv.current.offsetHeight }px`,
-                },
-            })
+            variantUpdate()
         })
         
+        variantUpdate()
         shuffleArray(general)
         shuffleArray(niche)
     }, [])
@@ -183,6 +175,10 @@ const Home: NextPage = ({ general, niche }: any) => {
                         <h2 className='text-2xl card-title'>
                             Fediverse Instances
                         </h2>
+                        <p>
+                            <strong>Note:</strong> The order of instances is randomized each time you
+                                                   reload the page, we do not endorse any instance over any other.
+                        </p>
                         <p className='italic text-sm'>
                             To Opt-In To Being Displayed Here, please fill out{ ' ' }
                             <Link
