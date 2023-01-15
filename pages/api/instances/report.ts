@@ -12,70 +12,81 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
         const reportData: { contact: string; uri: string; report: string } =
             req.body
-        
-        try {
-            const savedReport = await prismac.reports.create({
-                data: {
-                    reporter: reportData.contact,
-                    uri: reportData.uri,
-                    reason: reportData.report
-                },
-            })
-            
-            const mastoClient = generator(
-                'mastodon',
-                BASE_URL,
-                ACCESS_TOKEN
-            )
-            
-            
-            let maintainerMentions = ''
-            
-            maintainers.forEach((item) => {
-                maintainerMentions += '@' + item.user + '@' + item.domain + ' '
-            })
-            
-            const toot =
-                maintainerMentions +
-                reportData.uri + ' has been reported by ' + reportData.contact.split('@').join('[at]')
-            
-            res.status(200).json({
-                message:
-                    'Report received!' + JSON.stringify(toot),
-                type: 'success',
-            })
-            mastoClient
-                .postStatus(toot, { visibility: 'direct' })
-                .then((res: Response<Entity.Status>) => {
-                    console.log(res.data)
+
+        const instance = await prismac.instances.findFirst({
+            where: { uri: reportData.uri }
+        })
+
+        if (!!instance && instance.uri.toLowerCase() === reportData.uri.toLowerCase()) {
+            try {
+                const savedReport = await prismac.reports.create({
+                    data: {
+                        reporter: reportData.contact,
+                        uri: reportData.uri,
+                        reason: reportData.report
+                    },
                 })
-        } catch (err) {
-            if (err instanceof Prisma.PrismaClientKnownRequestError) {
-                if (err.code === 'P2002') {
-                    res.status(400).json({
-                        message: 'Instance has already been reported! Please be patient while site operators review this report.',
-                        type: 'error',
+
+                const mastoClient = generator(
+                    'mastodon',
+                    BASE_URL,
+                    ACCESS_TOKEN
+                )
+
+
+                let maintainerMentions = ''
+
+                maintainers.forEach((item) => {
+                    maintainerMentions += '@' + item.user + '@' + item.domain + ' '
+                })
+
+                const toot =
+                    maintainerMentions +
+                    reportData.uri + ' has been reported by ' + reportData.contact.split('@').join('[at]')
+
+                res.status(200).json({
+                    message:
+                        'Report received!' + JSON.stringify(toot),
+                    type: 'success',
+                })
+                mastoClient
+                    .postStatus(toot, { visibility: 'direct' })
+                    .then((res: Response<Entity.Status>) => {
+                        console.log(res.data)
                     })
-                } else {
-                    res.status(400).json({
-                        message: err.message,
-                        type: 'error',
-                    })
+            } catch (err) {
+                if (err instanceof Prisma.PrismaClientKnownRequestError) {
+                    if (err.code === 'P2002') {
+                        res.status(400).json({
+                            message: 'Instance has already been reported! Please be patient while site operators review this report.',
+                            type: 'error',
+                        })
+                    } else {
+                        res.status(400).json({
+                            message: err.message,
+                            type: 'error',
+                        })
+                    }
+                } else if (err instanceof Prisma.PrismaClientValidationError) {
+                    res.status(400).json({ message: err.message, type: 'error' })
                 }
-            } else if (err instanceof Prisma.PrismaClientValidationError) {
-                res.status(400).json({ message: err.message, type: 'error' })
             }
+        } else {
+            return res.status(400).json({
+                message: 'Instance not in our database!',
+                type: 'error',
+            })
         }
     } else if (req.method === 'GET') {
-        
+
         if (await verifyToken(prismac, bearerTokenFromHeaders(req.headers))) {
             const reports = await prismac.reports.findMany()
-            
+
             return res.status(200).json(reports)
         }
-        
+
     }
-    
+
     return res
         .status(405)
         .json({ message: 'Invalid API Method', type: 'error' })
