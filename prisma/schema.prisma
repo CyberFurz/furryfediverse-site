@@ -18,6 +18,8 @@ model Instances {
   uri          String        @unique
   api_key      String        @default(uuid())
   verified     Boolean       @default(false)
+  banned       Boolean       @default(false)
+  ban_reason   String        @default("")
   InstanceData InstanceData?
 }
 
@@ -26,4 +28,17 @@ model InstanceData {
   instance    Instances @relation(fields: [instance_id], references: [id])
   instance_id String    @unique
   cache       String
+}
+
+model Reports {
+  id       String @id @default(cuid())
+  reporter String
+  uri      String @unique
+  reason   String
+}
+
+model Tokens {
+  token    String   @id @default(cuid())
+  user     String   @unique
+  valid_to DateTime
 }
