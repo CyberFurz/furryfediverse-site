@@ -141,13 +141,22 @@ const Home: NextPage = ({ general, niche }: any) => {
                                 Toot! (Paid)
                             </a>
                             <a
-                                href='https://apps.apple.com/us/app/metatext/id1523996615?mt=8'
+                                href='https://apps.apple.com/us/app/ivory-for-mastodon-by-tapbots/id6444602274'
                                 className='btn btn-primary normal-case text-lg'
                                 target='_blank'
                                 rel='noreferrer'
                             >
                                 <i className='fa-brands fa-apple mr-2'></i>{ ' ' }
-                                Metatext
+                                Ivory
+                            </a>
+                            <a
+                                href='https://apps.apple.com/gb/app/ice-cubes-for-mastodon/id6444915884'
+                                className='btn btn-primary normal-case text-lg'
+                                target='_blank'
+                                rel='noreferrer'
+                            >
+                                <i className='fa-brands fa-apple mr-2'></i>{ ' ' }
+                                Ice Cubes
                             </a>
                             <a
                                 href='https://fedilab.app'
@@ -166,6 +175,15 @@ const Home: NextPage = ({ general, niche }: any) => {
                             >
                                 <i className='fa-brands fa-android mr-2'></i>{ ' ' }
                                 Tusky
+                            </a>
+                            <a
+                                href='https://sk22.github.io/megalodon/'
+                                className='btn btn-primary normal-case text-lg'
+                                target='_blank'
+                                rel='noreferrer'
+                            >
+                                <i className='fa-brands fa-android mr-2'></i>{ ' ' }
+                                Megalodon
                             </a>
                         </div>
                     </div>
