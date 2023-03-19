@@ -15,7 +15,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             const fetchingData = await fetch(verifyURI, init)
             return await fetchingData.json()
         }catch (err){
-            return false
+            return 'failed_to_load'
         }
     }
 
