@@ -508,7 +508,7 @@ export async function getStaticProps() {
     let generalInstances = []
     for (let i of generalInstance) {
         let serverQuery = await prismac.instanceData.findFirst({
-            where: { instance_id: i.id, NOT: { cache: { contains: 'failed_to_load' }} },
+            where: { OR: [ {instance_id: {contains: i.id } },], NOT: { cache: { contains: 'failed_to_load' }} },
         })
         let serverData = JSON.parse(serverQuery.cache)
         generalInstances.push({
@@ -532,7 +532,7 @@ export async function getStaticProps() {
     let nichelInstances = []
     for (let i of nicheInstance) {
         let serverQuery: ServerData = await prismac.instanceData.findFirst({
-            where: { instance_id: i.id, NOT: { cache: { contains: 'failed_to_load' }} },
+            where: { OR: [ {instance_id: {contains: i.id }},], NOT: { cache: { contains: 'failed_to_load' }} },
         })
         let serverData = JSON.parse(serverQuery.cache)
         nichelInstances.push({
