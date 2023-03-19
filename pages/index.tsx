@@ -112,9 +112,9 @@ const Home: NextPage = ({ general, niche }: any) => {
                                 target='_blank'
                                 rel='noreferrer'
                             >
-                                <i className='fa-brands fa-twitter'></i>
-                                <i className='ml-2 fa-solid fa-arrow-right'></i>{ ' ' }
-                                <i className='ml-2 fa-brands fa-mastodon'></i>
+                                <i className='fa-brands fa-twitter' aria-hidden="true"></i>
+                                <i className='ml-2 fa-solid fa-arrow-right' aria-hidden="true"></i>{ ' ' }
+                                <i className='ml-2 fa-brands fa-mastodon' aria-hidden="true"></i>
                                 <span className='ml-2'>Fedifinder</span>
                             </a>
                             <a
@@ -123,13 +123,13 @@ const Home: NextPage = ({ general, niche }: any) => {
                                 target='_blank'
                                 rel='noreferrer'
                             >
-                                <i className='fa-brands fa-twitter'></i>
-                                <i className='ml-2 fa-solid fa-arrow-right'></i>{ ' ' }
-                                <i className='ml-2 fa-brands fa-mastodon'></i>
+                                <i className='fa-brands fa-twitter' aria-hidden="true"></i>
+                                <i className='ml-2 fa-solid fa-arrow-right' aria-hidden="true"></i>{ ' ' }
+                                <i className='ml-2 fa-brands fa-mastodon' aria-hidden="true"></i>
                                 <span className='ml-2'>Twitodon</span>
                             </a>
                         </div>
-                        <p className='font-bold py-4'>Recomended Apps</p>
+                        <p className='font-bold py-4'>Recommended Apps</p>
                         <div className='px-2 flex flex-wrap gap-2'>
                             <a
                                 href='https://apps.apple.com/us/app/toot/id1229021451'
@@ -137,7 +137,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                                 target='_blank'
                                 rel='noreferrer'
                             >
-                                <i className='fa-brands fa-apple mr-2'></i>{ ' ' }
+                                <i className='fa-brands fa-apple mr-2' aria-hidden="true"></i>{ ' ' }
                                 Toot! (Paid)
                             </a>
                             <a
@@ -146,7 +146,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                                 target='_blank'
                                 rel='noreferrer'
                             >
-                                <i className='fa-brands fa-apple mr-2'></i>{ ' ' }
+                                <i className='fa-brands fa-apple mr-2' aria-hidden="true"></i>{ ' ' }
                                 Ivory
                             </a>
                             <a
@@ -155,7 +155,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                                 target='_blank'
                                 rel='noreferrer'
                             >
-                                <i className='fa-brands fa-apple mr-2'></i>{ ' ' }
+                                <i className='fa-brands fa-apple mr-2' aria-hidden="true"></i>{ ' ' }
                                 Ice Cubes
                             </a>
                             <a
@@ -164,7 +164,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                                 target='_blank'
                                 rel='noreferrer'
                             >
-                                <i className='fa-brands fa-android mr-2'></i>{ ' ' }
+                                <i className='fa-brands fa-android mr-2' aria-hidden="true"></i>{ ' ' }
                                 Fedilab
                             </a>
                             <a
@@ -173,7 +173,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                                 target='_blank'
                                 rel='noreferrer'
                             >
-                                <i className='fa-brands fa-android mr-2'></i>{ ' ' }
+                                <i className='fa-brands fa-android mr-2' aria-hidden="true"></i>{ ' ' }
                                 Tusky
                             </a>
                             <a
@@ -182,7 +182,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                                 target='_blank'
                                 rel='noreferrer'
                             >
-                                <i className='fa-brands fa-android mr-2'></i>{ ' ' }
+                                <i className='fa-brands fa-android mr-2' aria-hidden="true"></i>{ ' ' }
                                 Megalodon
                             </a>
                         </div>
@@ -208,34 +208,27 @@ const Home: NextPage = ({ general, niche }: any) => {
                         </p>
                         <br />
                         <ul className='tabs w-full grid grid-cols-2'>
-                            <div
-                                className='tooltip tooltip-primary w-full'
+                            <li
+                                key={ 0 }
                                 data-tip='Instances open to furries of any kind with no specific topic'
+
+                                className={ `text-2xl tab tab-bordered h-fit w-full tooltip tooltip-primary w-full ${
+                                    0 === active && 'tab-active'
+                                }` }
+                                onClick={ () => setActive(0) }
                             >
-                                <li
-                                    key={ 0 }
-                                    className={ `text-2xl tab tab-bordered h-fit w-full ${
-                                        0 === active && 'tab-active'
-                                    }` }
-                                    onClick={ () => setActive(0) }
-                                >
-                                    General Instances
-                                </li>
-                            </div>
-                            <div
-                                className='tooltip tooltip-primary w-full'
+                                General Instances
+                            </li>
+                            <li
+                                key={ 1 }
                                 data-tip='Furry friendly instances with a focus on one or more topics'
+                                className={ `text-2xl tab tab-bordered h-fit w-full tooltip tooltip-primary w-full ${
+                                    1 === active && 'tab-active'
+                                }` }
+                                onClick={ () => setActive(1) }
                             >
-                                <li
-                                    key={ 1 }
-                                    className={ `text-2xl tab tab-bordered h-fit w-full ${
-                                        1 === active && 'tab-active'
-                                    }` }
-                                    onClick={ () => setActive(1) }
-                                >
-                                    Focused Instances
-                                </li>
-                            </div>
+                                Focused Instances
+                            </li>
                         </ul>
                         <br />
                         <div className=''>
@@ -472,7 +465,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                                     href='/report-instance'
                                     className='underline'
                                 >
-                                    Report Instace
+                                    Report Instance
                                 </Link>
                             </p>
                         </div>
