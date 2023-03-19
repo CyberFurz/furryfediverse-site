@@ -46,7 +46,7 @@ export default function Layout({ children }: any) {
                                         target='_blank'
                                     >
                                         <div>
-                                            <i className='fa-brands fa-mastodon text-2xl'></i>
+                                            <i className='fa-brands fa-mastodon text-2xl' aria-hidden="true">&nbsp;</i>
                                         </div>
                                         <div>
                                             { data.user }@{ data.domain }
@@ -59,22 +59,24 @@ export default function Layout({ children }: any) {
                 </div>
                 <div>
                     Find us here:
-                    <div className='flex items-center flex-row gap-4'>
+                    <div className='flex items-start flex-col gap-4'>
                         <a
                             href='https://github.com/CyberFurz/furryfediverse-site'
-                            className='link text-6xl no-underline'
+                            className='link text-xl no-underline'
                             target='_blank'
                             rel='noreferrer'
                         >
-                            <i className='fa-brands fa-github'></i>
+                            <i className='fa-brands fa-github' aria-hidden="true">&nbsp;</i>
+                            GitHub
                         </a>
                         <a
                             rel='me noreferrer'
                             href='https://cyberfurz.social/@FurryFediverse'
-                            className='link text-6xl no-underline'
+                            className='link text-xl no-underline'
                             target='_blank'
                         >
-                            <i className='fa-brands fa-mastodon'></i>
+                            <i className='fa-brands fa-mastodon' aria-hidden="true">&nbsp;</i>
+                            Mastodon
                         </a>
                     </div>
                 </div>
