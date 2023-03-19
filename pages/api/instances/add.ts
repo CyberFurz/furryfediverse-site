@@ -67,11 +67,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 '@' +
                 instanceData.uri +
                 ' ' +
-                'Hi there someone is attempting to register your instance on FurryFediverse, if this is you. Please click this link to finish the registation: https://furryfediverse.org/api/instances/verify/' +
+                'Hi there someone is attempting to register your instance on FurryFediverse, if this is you. Please click this link to finish the registration: https://furryfediverse.org/api/instances/verify/' +
                 savedInstance.api_key
             res.status(200).json({
                 message:
-                    'Added instance successfully, your instance admin account needs to be verfied! Check your DMs!',
+                    'Added instance successfully, your instance admin account needs to be verified! Check your DMs!',
                 type: 'success',
             })
             mastoClient

@@ -129,7 +129,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                                 <span className='ml-2'>Twitodon</span>
                             </a>
                         </div>
-                        <p className='font-bold py-4'>Recomended Apps</p>
+                        <p className='font-bold py-4'>Recommended Apps</p>
                         <div className='px-2 flex flex-wrap gap-2'>
                             <a
                                 href='https://apps.apple.com/us/app/toot/id1229021451'
@@ -472,7 +472,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                                     href='/report-instance'
                                     className='underline'
                                 >
-                                    Report Instace
+                                    Report Instance
                                 </Link>
                             </p>
                         </div>
