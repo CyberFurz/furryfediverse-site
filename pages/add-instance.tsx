@@ -7,6 +7,7 @@ interface FormData {
     type: string
     uri: string
     nsfwflag: string
+    api_mode: string
 }
 
 interface Message {
@@ -19,6 +20,7 @@ const AddInstance: NextPage = () => {
         type: '',
         uri: '',
         nsfwflag: '',
+        api_mode: '',
     })
     const [response, setResponse] = useState<Message>({ message: '', type: '' })
 
@@ -190,6 +192,31 @@ const AddInstance: NextPage = () => {
                                         </option>
                                         <option value="nsfw-focus">
                                             NSFW Focus
+                                        </option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="label">
+                                        <span className="label-text text-2xl font-bold">
+                                            Software API
+                                        </span>
+                                    </label>
+                                    <select
+                                        id="type"
+                                        name="nsfwflag"
+                                        className="select select-bordered w-full max-w-xs"
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                api_mode: e.target.value,
+                                            })
+                                        }
+                                    >
+                                        <option value="mastodon">
+                                            Mastodon API
+                                        </option>
+                                        <option value="misskey">
+                                            Misskey API
                                         </option>
                                     </select>
                                 </div>

@@ -37,9 +37,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 return false
             }
         } else if (instanceType == 'misskey') {
+            let getDetails = { detail: true }
             let init = { 
                 headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-                body: JSON.stringify("{ 'details': true }"),
+                body: JSON.stringify(getDetails),
                 method: 'POST'
             }
             let metaURI = 'https://' + instanceURI + '/api/meta'
@@ -123,7 +124,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 // Check if the user is allowed to submit the isntance
                 if (instanceData.api_mode == 'mastodon') {
                     // Compose Toot
-                    const toot =
+                    let toot =
                         '@' +
                         instanceContact +
                         '@' +
@@ -140,47 +141,48 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                         .then((res: Response<Entity.Status>) => {
                             console.log(res.data)
                         })
-                     } else if (instanceData.api_mode == 'misskey') {
-                        // Check submitted user is admin
-                        let adminVerify = {
-                            query: instanceContact,
-                            limit: 1,
-                            origin: "local",
-                            detail: true
-                        }
-                        let init = { 
-                            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-                            body: JSON.stringify(adminVerify),
-                            method: 'POST'
-                        }
-                        let adminReq = await fetch('https://' + instanceData.uri + '/api/users/search', init)
-                        let adminRes = await adminReq.json()
-                        if (adminRes.isAdmin == true){
-                            // Compose Toot
-                            const toot =
-                                '@' +
-                                instanceContact +
-                                '@' +
-                                instanceData.uri +
-                                ' Hi there someone is attempting to register your instance on FurryFediverse, if this is you. Please click this link to finish the registation: https://furryfediverse.org/api/instances/verify/' +
-                                getAPIKey.api_key
-                            res.status(200).json({
-                                message:
-                                    'Added instance successfully, your instance admin account needs to be verfied! Check your DMs!',
-                                type: 'success',
+                } else if (instanceData.api_mode == 'misskey') {
+                    // Check submitted user is admin
+                    let adminVerify = {
+                        query: instanceContact,
+                        limit: 1,
+                        origin: "local",
+                        detail: true
+                    }
+                    let init = { 
+                        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+                        body: JSON.stringify(adminVerify),
+                        method: 'POST'
+                    }
+                    let adminReq = await fetch('https://' + instanceData.uri + '/api/users/search', init)
+                    let adminRes = await adminReq.json()
+                    if (adminRes[0].isAdmin == true){
+                        console.log('Admin verification passed')
+                        // Compose Toot
+                        let toot =
+                            '@' +
+                            instanceContact +
+                            '@' +
+                            instanceData.uri +
+                            ' Hi there someone is attempting to register your instance on FurryFediverse, if this is you. Please click this link to finish the registation: https://furryfediverse.org/api/instances/verify/' +
+                            getAPIKey.api_key
+                        res.status(200).json({
+                            message:
+                                'Added instance successfully, your instance admin account needs to be verfied! Check your DMs!',
+                            type: 'success',
+                        })
+                        client
+                            .postStatus(toot, { visibility: 'direct' })
+                            .then((res: Response<Entity.Status>) => {
+                                console.log(res.data)
                             })
-                            client
-                                .postStatus(toot, { visibility: 'direct' })
-                                .then((res: Response<Entity.Status>) => {
-                                    console.log(res.data)
-                                })
-                            }else{
-                                res.status(400).json({
-                                    message: 'Administator verification failed',
-                                    type: 'error',
-                                })
-                            }
-                        }
+                    }else{
+                        res.status(400).json({
+                            message: 'Administator verification failed',
+                            type: 'error',
+                        })
+                    }
+                }
 
             } catch (err) {
                 if (err instanceof Prisma.PrismaClientKnownRequestError) {
