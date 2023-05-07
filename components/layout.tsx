@@ -15,7 +15,7 @@ export default function Layout({ children }: any) {
                     <div className='flex justify-between items-center'>
                         <Link href='/'>
                             <p className='text-4xl place-self-center'>
-                                The Furry Fediverse
+                                <img src='img/FullColor.svg' alt='FurryFediverse' className='h-32' />
                             </p>
                         </Link>
                         <div className='flex flex-nowrap justify-evenly items-center gap-2'>

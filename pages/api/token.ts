@@ -54,12 +54,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         
         mastoClient
             .postStatus(toot, { visibility: 'direct' })
-            .then((res: Response<Entity.Status>) => {
-                console.log(res.data)
-            })
         
         return res.status(200).json({ message: 'Created token and sent to ' + user })
     }
     return res.status(404).json(null)
 }
-

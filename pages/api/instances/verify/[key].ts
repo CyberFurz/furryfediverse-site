@@ -13,12 +13,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const instanceData = req.body
 
   async function checkKey(instanceKey: string) {
-    const instanceEntry = await prismac.instances.findFirst({
-      where: { api_key: instanceKey },
-      select: { uri: true },
+    const instanceEntry = await prismac.apiKeys.findFirst({
+      where: { api_key: instanceKey }
     })
     if (instanceEntry) {
-      return instanceEntry.uri
+      await prismac.apiKeys.update({
+        where: { api_key: instanceKey },
+        data: { used: true }
+      })
+      return instanceEntry.instance_id
     } else {
       return "failed"
     }
@@ -30,7 +33,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       let check = await checkKey(apikey)
       const verifiedInstance = await prismac.instances.update({
-        where: { uri: check },
+        where: { id: check },
         data: { verified: true },
       })
       res.status(200).json({ message: "Instance added successfully" })

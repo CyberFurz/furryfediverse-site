@@ -51,9 +51,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 })
                 mastoClient
                     .postStatus(toot, { visibility: 'direct' })
-                    .then((res: Response<Entity.Status>) => {
-                        console.log(res.data)
-                    })
             } catch (err) {
                 if (err instanceof Prisma.PrismaClientKnownRequestError) {
                     if (err.code === 'P2002') {

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import ReactImageFallback from 'react-image-fallback'
-import { shuffleArray } from "../lib/instance-array-tools"
+import { shuffleArray } from '../lib/instance-array-tools'
 
 const Home: NextPage = ({ general, niche }: any) => {
     const [active, setActive] = useState(0)
@@ -117,21 +117,11 @@ const Home: NextPage = ({ general, niche }: any) => {
                                 <i className='ml-2 fa-brands fa-mastodon' aria-hidden="true"></i>
                                 <span className='ml-2'>Fedifinder</span>
                             </a>
-                            <a
-                                href='https://twitodon.com'
-                                className='btn btn-primary normal-case text-lg'
-                                target='_blank'
-                                rel='noreferrer'
-                            >
-                                <i className='fa-brands fa-twitter' aria-hidden="true"></i>
-                                <i className='ml-2 fa-solid fa-arrow-right' aria-hidden="true"></i>{ ' ' }
-                                <i className='ml-2 fa-brands fa-mastodon' aria-hidden="true"></i>
-                                <span className='ml-2'>Twitodon</span>
-                            </a>
                         </div>
                         <p className='font-bold py-4'>Recommended Apps</p>
                         <div className='px-2 flex flex-wrap gap-2'>
                             <a
+
                                 href='https://apps.apple.com/us/app/toot/id1229021451'
                                 className='btn btn-primary normal-case text-lg'
                                 target='_blank'
@@ -277,25 +267,9 @@ const Home: NextPage = ({ general, niche }: any) => {
                                                     <h2 className='card-title text-2xl text-center self-center'>
                                                         { data.title }
                                                     </h2>
-                                                    <div className='divider my-0'></div>
-                                                    <p className='text-base'>
-                                                        { data.short_description !=
-                                                        'null' &&
-                                                        data.short_description
-                                                            .length > 0
-                                                            ? data.short_description.replace(
-                                                                /(<([^>]+)>)/gi,
-                                                                ''
-                                                            )
-                                                            : data.description !=
-                                                            'null' &&
-                                                            data.description
-                                                                .length > 0
-                                                                ? data.description.replace(
-                                                                    /(<([^>]+)>)/gi,
-                                                                    ''
-                                                                )
-                                                                : 'No description' }
+                                                    <div className="divider my-0"></div>
+                                                    <p className="text-base">
+                                                        {data.description}
                                                     </p>
                                                     <div className='divider my-0'></div>
                                                     <div className='card-actions justify-evenly'>
@@ -386,25 +360,9 @@ const Home: NextPage = ({ general, niche }: any) => {
                                                     <h2 className='card-title text-2xl text-center self-center'>
                                                         { data.title }
                                                     </h2>
-                                                    <div className='divider my-0'></div>
-                                                    <p className='text-base'>
-                                                        { data.short_description !=
-                                                        'null' &&
-                                                        data.short_description
-                                                            .length > 0
-                                                            ? data.short_description.replace(
-                                                                /(<([^>]+)>)/gi,
-                                                                ''
-                                                            )
-                                                            : data.description !=
-                                                            'null' &&
-                                                            data.description
-                                                                .length > 0
-                                                                ? data.description.replace(
-                                                                    /(<([^>]+)>)/gi,
-                                                                    ''
-                                                                )
-                                                                : 'No description' }
+                                                    <div className="divider my-0"></div>
+                                                    <p className="text-base">
+                                                        {data.description}
                                                     </p>
                                                     <div className='divider my-0'></div>
                                                     <div className='card-actions justify-evenly'>
@@ -507,22 +465,17 @@ export async function getStaticProps() {
     // Build the array from the list of servers
     let generalInstances = []
     for (let i of generalInstance) {
-        let serverQuery = await prismac.instanceData.findFirst({
-            where: { OR: [ {instance_id: {contains: i.id } },], NOT: { cache: { contains: 'failed_to_load' }} },
+        let serverData = await prismac.instanceData.findFirst({
+            where: { instance_id: i.id },
         })
-        let serverData = JSON.parse(serverQuery.cache)
         generalInstances.push({
             id: i.id,
             title: serverData.title,
             thumbnail: serverData.thumbnail,
-            short_description:
-                serverData.short_description !== undefined
-                    ? serverData.short_description
-                    : 'null',
             description: serverData.description,
             registrations: serverData.registrations,
             approval_required: serverData.approval_required,
-            user_count: serverData.stats.user_count,
+            user_count: serverData.user_count,
             nsfwflag: i.nsfwflag,
             uri: i.uri,
         })
@@ -531,22 +484,17 @@ export async function getStaticProps() {
     // Build the array from the list of servers
     let nichelInstances = []
     for (let i of nicheInstance) {
-        let serverQuery: ServerData = await prismac.instanceData.findFirst({
-            where: { OR: [ {instance_id: {contains: i.id }},], NOT: { cache: { contains: 'failed_to_load' }} },
+        let serverData = await prismac.instanceData.findFirst({
+            where: { instance_id: i.id },
         })
-        let serverData = JSON.parse(serverQuery.cache)
         nichelInstances.push({
             id: i.id,
             title: serverData.title,
             thumbnail: serverData.thumbnail,
-            short_description:
-                serverData.short_description !== undefined
-                    ? serverData.short_description
-                    : 'null',
             description: serverData.description,
             registrations: serverData.registrations,
             approval_required: serverData.approval_required,
-            user_count: serverData.stats.user_count,
+            user_count: serverData.user_count,
             nsfwflag: i.nsfwflag,
             uri: i.uri,
         })

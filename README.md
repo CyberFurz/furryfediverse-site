@@ -10,9 +10,9 @@ If you want to quickly start to contribute you can start the project with the
 following set of commands:
 
 ```
-npm install
-DATABASE_URL=file://`pwd`/db.sqlite3 npx prisma migrate dev
-DATABASE_URL=file://`pwd`/db.sqlite3 npm run dev
+npm install/
+cp .env.example .env
+npx prisma migrate dev
 ```
 
 And then just go on http://localhost:3000 with your webbrowser.

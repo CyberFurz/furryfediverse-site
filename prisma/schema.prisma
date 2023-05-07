@@ -15,30 +15,46 @@ model Instances {
   name         String
   type         String
   nsfwflag     String
+  api_mode     String
   uri          String        @unique
-  api_key      String        @default(uuid())
   verified     Boolean       @default(false)
   banned       Boolean       @default(false)
   ban_reason   String        @default("")
   InstanceData InstanceData?
+  ApiKeys      ApiKeys?
+  failed_checks Int          @default(0)
 }
 
 model InstanceData {
+  id           String    @id @default(cuid())
+  instance     Instances @relation(fields: [instance_id], references: [id])
+  instance_id  String    @unique
+  title        String    @default("")
+  description  String    @default("")
+  thumbnail    String    @default("")
+  registrations Boolean  @default(false)
+  approval_required Boolean @default(false)
+  user_count   Int     @default(0)
+  status_count Int     @default(0)
+}
+
+model ApiKeys {
   id          String    @id @default(cuid())
   instance    Instances @relation(fields: [instance_id], references: [id])
   instance_id String    @unique
-  cache       String
+  api_key     String    @unique @default(uuid())
+  used        Boolean   @default(false)
 }
 
 model Reports {
-  id       String @id @default(cuid())
-  reporter String
-  uri      String @unique
-  reason   String
+  id           String    @id @default(cuid())
+  reporter     String
+  uri          String    @unique
+  reason       String
 }
 
 model Tokens {
-  token    String   @id @default(cuid())
-  user     String   @unique
-  valid_to DateTime
+  token        String    @id @default(cuid())
+  user         String    @unique
+  valid_to     DateTime
 }
