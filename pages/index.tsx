@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import ReactImageFallback from 'react-image-fallback'
+import { shuffleArray } from '../lib/instance-array-tools'
 
 const Home: NextPage = ({ general, niche }: any) => {
     const [active, setActive] = useState(0)
@@ -18,29 +19,24 @@ const Home: NextPage = ({ general, niche }: any) => {
     const nicheDiv = React.useRef<HTMLDivElement>()
 
     useEffect(() => {
-        setVariants({
+        let variantUpdate = () => setVariants({
             initial: {
                 x: '0%',
-                '--divHeight': `${generalDiv.current.offsetHeight}px`,
+                '--divHeight': `${ generalDiv.current.offsetHeight }px`,
             },
             animate: {
                 x: '-55%',
-                '--divHeight': `${nicheDiv.current.offsetHeight}px`,
+                '--divHeight': `${ nicheDiv.current.offsetHeight }px`,
             },
         })
-
+        
         window.addEventListener('resize', () => {
-            setVariants({
-                initial: {
-                    x: '0%',
-                    '--divHeight': `${generalDiv.current.offsetHeight}px`,
-                },
-                animate: {
-                    x: '-55%',
-                    '--divHeight': `${nicheDiv.current.offsetHeight}px`,
-                },
-            })
+            variantUpdate()
         })
+        
+        variantUpdate()
+        shuffleArray(general)
+        shuffleArray(niche)
     }, [])
 
     return (
@@ -53,10 +49,10 @@ const Home: NextPage = ({ general, niche }: any) => {
                 />
             </Head>
             <br />
-            <div className="flex flex-col space-y-4">
-                <div className="card bg-base-100 shadow-xl">
-                    <div className="card-body">
-                        <h2 className="text-2xl card-title">
+            <div className='flex flex-col space-y-4'>
+                <div className='card bg-base-100 shadow-xl'>
+                    <div className='card-body'>
+                        <h2 className='text-2xl card-title'>
                             What is the Furry Fediverse?
                         </h2>
                         <p>
@@ -82,9 +78,9 @@ const Home: NextPage = ({ general, niche }: any) => {
                         </p>
                     </div>
                 </div>
-                <div className="card bg-base-100 shadow-xl">
-                    <div className="card-body">
-                        <h2 className="text-2xl card-title">Getting Started</h2>
+                <div className='card bg-base-100 shadow-xl'>
+                    <div className='card-body'>
+                        <h2 className='text-2xl card-title'>Getting Started</h2>
                         <p>
                             Joining is simple and easy, just pick a server from
                             below to get started. Or if you are nerdy like
@@ -95,82 +91,89 @@ const Home: NextPage = ({ general, niche }: any) => {
                         </p>
                         <p>
                             <strong>Note:</strong> You may feel like you should
-                            join a LARGE instance, but you should keep in mind
-                            the larger the instance, the most costly it is on
-                            your instance owner. Also, it doesn&apos;t matter
-                            what instance you are on, as you can follow and
-                            people can follow you, no matter which instance you
-                            join. We are all interconnected!
+                                                   join a LARGE instance, but you should keep in mind
+                                                   the larger the instance, the most costly it is on
+                                                   your instance owner. Also, it doesn&apos;t matter
+                                                   what instance you are on, as you can follow and
+                                                   people can follow you, no matter which instance you
+                                                   join. We are all interconnected!
                         </p>
                     </div>
                 </div>
-                <div className="card bg-base-100 shadow-xl">
-                    <div className="card-body">
-                        <p className="text-2xl">Tools To Get You Going!</p>
-                        <p className="font-bold py-4">
+                <div className='card bg-base-100 shadow-xl'>
+                    <div className='card-body'>
+                        <p className='text-2xl'>Tools To Get You Going!</p>
+                        <p className='font-bold py-4'>
                             Find Your Friends on the Fediverse
                         </p>
-                        <div className="px-2 flex flex-wrap gap-2">
+                        <div className='px-2 flex flex-wrap gap-2'>
                             <a
-                                href="https://fedifinder-backup.glitch.me"
-                                className="btn btn-primary normal-case text-lg"
-                                target="_blank"
-                                rel="noreferrer"
+                                href='https://fedifinder-backup.glitch.me'
+                                className='btn btn-primary normal-case text-lg'
+                                target='_blank'
+                                rel='noreferrer'
                             >
-                                <i className="fa-brands fa-twitter"></i>
-                                <i className="ml-2 fa-solid fa-arrow-right"></i>{' '}
-                                <i className="ml-2 fa-brands fa-mastodon"></i>
-                                <span className="ml-2">Fedifinder</span>
-                            </a>
-                            <a
-                                href="https://twitodon.com"
-                                className="btn btn-primary normal-case text-lg"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                <i className="fa-brands fa-twitter"></i>
-                                <i className="ml-2 fa-solid fa-arrow-right"></i>{' '}
-                                <i className="ml-2 fa-brands fa-mastodon"></i>
-                                <span className="ml-2">Twitodon</span>
+                                <i className='fa-brands fa-twitter' aria-hidden="true"></i>
+                                <i className='ml-2 fa-solid fa-arrow-right' aria-hidden="true"></i>{ ' ' }
+                                <i className='ml-2 fa-brands fa-mastodon' aria-hidden="true"></i>
+                                <span className='ml-2'>Fedifinder</span>
                             </a>
                         </div>
-                        <p className="font-bold py-4">Recomended Apps</p>
-                        <div className="px-2 flex flex-wrap gap-2">
+                        <p className='font-bold py-4'>Recommended Apps</p>
+                        <div className='px-2 flex flex-wrap gap-2'>
                             <a
-                                href="https://apps.apple.com/us/app/toot/id1229021451"
-                                className="btn btn-primary normal-case text-lg"
-                                target="_blank"
-                                rel="noreferrer"
+                                href='https://apps.apple.com/us/app/toot/id1229021451'
+                                className='btn btn-primary normal-case text-lg'
+                                target='_blank'
+                                rel='noreferrer'
                             >
-                                <i className="fa-brands fa-apple mr-2"></i>{' '}
+                                <i className='fa-brands fa-apple mr-2' aria-hidden="true"></i>{ ' ' }
                                 Toot! (Paid)
                             </a>
                             <a
-                                href="https://apps.apple.com/us/app/metatext/id1523996615?mt=8"
-                                className="btn btn-primary normal-case text-lg"
-                                target="_blank"
-                                rel="noreferrer"
+                                href='https://apps.apple.com/us/app/ivory-for-mastodon-by-tapbots/id6444602274'
+                                className='btn btn-primary normal-case text-lg'
+                                target='_blank'
+                                rel='noreferrer'
                             >
-                                <i className="fa-brands fa-apple mr-2"></i>{' '}
-                                Metatext
+                                <i className='fa-brands fa-apple mr-2' aria-hidden="true"></i>{ ' ' }
+                                Ivory
                             </a>
                             <a
-                                href="https://fedilab.app"
-                                className="btn btn-primary normal-case text-lg"
-                                target="_blank"
-                                rel="noreferrer"
+                                href='https://apps.apple.com/gb/app/ice-cubes-for-mastodon/id6444915884'
+                                className='btn btn-primary normal-case text-lg'
+                                target='_blank'
+                                rel='noreferrer'
                             >
-                                <i className="fa-brands fa-android mr-2"></i>{' '}
+                                <i className='fa-brands fa-apple mr-2' aria-hidden="true"></i>{ ' ' }
+                                Ice Cubes
+                            </a>
+                            <a
+                                href='https://fedilab.app'
+                                className='btn btn-primary normal-case text-lg'
+                                target='_blank'
+                                rel='noreferrer'
+                            >
+                                <i className='fa-brands fa-android mr-2' aria-hidden="true"></i>{ ' ' }
                                 Fedilab
                             </a>
                             <a
-                                href="https://tusky.app"
-                                className="btn btn-primary normal-case text-lg"
-                                target="_blank"
-                                rel="noreferrer"
+                                href='https://tusky.app'
+                                className='btn btn-primary normal-case text-lg'
+                                target='_blank'
+                                rel='noreferrer'
                             >
-                                <i className="fa-brands fa-android mr-2"></i>{' '}
+                                <i className='fa-brands fa-android mr-2' aria-hidden="true"></i>{ ' ' }
                                 Tusky
+                            </a>
+                            <a
+                                href='https://sk22.github.io/megalodon/'
+                                className='btn btn-primary normal-case text-lg'
+                                target='_blank'
+                                rel='noreferrer'
+                            >
+                                <i className='fa-brands fa-android mr-2' aria-hidden="true"></i>{ ' ' }
+                                Megalodon
                             </a>
                         </div>
                     </div>
@@ -223,12 +226,12 @@ const Home: NextPage = ({ general, niche }: any) => {
                         <br />
                         <div className="">
                             <motion.div
-                                key={0}
-                                variants={variants}
-                                initial="initial"
-                                animate={1 === active ? 'animate' : 'initial'}
-                                className="grid grid-cols-2 gap-[10%] w-[220%]"
-                                style={{ height: 'var(--divHeight)' }}
+                                key={ 0 }
+                                variants={ variants }
+                                initial='initial'
+                                animate={ 1 === active ? 'animate' : 'initial' }
+                                className='grid grid-cols-2 gap-[10%] w-[220%]'
+                                style={ { height: 'var(--divHeight)' } }
                             >
                                 <div
                                     className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-min`}
@@ -268,23 +271,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                                                     </h2>
                                                     <div className="divider my-0"></div>
                                                     <p className="text-base">
-                                                        {data.short_description !=
-                                                            'null' &&
-                                                        data.short_description
-                                                            .length > 0
-                                                            ? data.short_description.replace(
-                                                                  /(<([^>]+)>)/gi,
-                                                                  ''
-                                                              )
-                                                            : data.description !=
-                                                                  'null' &&
-                                                              data.description
-                                                                  .length > 0
-                                                            ? data.description.replace(
-                                                                  /(<([^>]+)>)/gi,
-                                                                  ''
-                                                              )
-                                                            : 'No description'}
+                                                        {data.description}
                                                     </p>
                                                     <div className="divider my-0"></div>
                                                     <div className="card-actions justify-evenly">
@@ -376,23 +363,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                                                     </h2>
                                                     <div className="divider my-0"></div>
                                                     <p className="text-base">
-                                                        {data.short_description !=
-                                                            'null' &&
-                                                        data.short_description
-                                                            .length > 0
-                                                            ? data.short_description.replace(
-                                                                  /(<([^>]+)>)/gi,
-                                                                  ''
-                                                              )
-                                                            : data.description !=
-                                                                  'null' &&
-                                                              data.description
-                                                                  .length > 0
-                                                            ? data.description.replace(
-                                                                  /(<([^>]+)>)/gi,
-                                                                  ''
-                                                              )
-                                                            : 'No description'}
+                                                        {data.description}
                                                     </p>
                                                     <div className="divider my-0"></div>
                                                     <div className="card-actions justify-evenly">
@@ -447,6 +418,15 @@ const Home: NextPage = ({ general, niche }: any) => {
                                     )}
                                 </div>
                             </motion.div>
+                            <br />
+                            <p className='italic text-sm text-right'>
+                                <Link
+                                    href='/report-instance'
+                                    className='underline'
+                                >
+                                    Report Instance
+                                </Link>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -486,22 +466,17 @@ export async function getStaticProps() {
     // Build the array from the list of servers
     let generalInstances = []
     for (let i of generalInstance) {
-        let serverQuery = await prismac.instanceData.findFirst({
+        let serverData = await prismac.instanceData.findFirst({
             where: { instance_id: i.id },
         })
-        let serverData = JSON.parse(serverQuery.cache)
         generalInstances.push({
             id: i.id,
             title: serverData.title,
             thumbnail: serverData.thumbnail,
-            short_description:
-                serverData.short_description !== undefined
-                    ? serverData.short_description
-                    : 'null',
             description: serverData.description,
             registrations: serverData.registrations,
             approval_required: serverData.approval_required,
-            user_count: serverData.stats.user_count,
+            user_count: serverData.user_count,
             nsfwflag: i.nsfwflag,
             uri: i.uri,
         })
@@ -510,22 +485,17 @@ export async function getStaticProps() {
     // Build the array from the list of servers
     let nichelInstances = []
     for (let i of nicheInstance) {
-        let serverQuery: ServerData = await prismac.instanceData.findFirst({
+        let serverData = await prismac.instanceData.findFirst({
             where: { instance_id: i.id },
         })
-        let serverData = JSON.parse(serverQuery.cache)
         nichelInstances.push({
             id: i.id,
             title: serverData.title,
             thumbnail: serverData.thumbnail,
-            short_description:
-                serverData.short_description !== undefined
-                    ? serverData.short_description
-                    : 'null',
             description: serverData.description,
             registrations: serverData.registrations,
             approval_required: serverData.approval_required,
-            user_count: serverData.stats.user_count,
+            user_count: serverData.user_count,
             nsfwflag: i.nsfwflag,
             uri: i.uri,
         })

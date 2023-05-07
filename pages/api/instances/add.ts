@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import generator, { Entity, Response } from 'megalodon'
+import generator from 'megalodon'
 import { Prisma } from '@prisma/client'
 import prismac from '../../../lib/prisma'
 
@@ -26,11 +26,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 const mastodonData = await fetchingData.json()
                 const parsedMasterData = {
                     title: mastodonData.title,
-                    description: mastodonData.short_description !== undefined ? mastodonData.short_description : mastodonData.description,
+                    description: mastodonData.short_description !== undefined ? mastodonData.short_description : mastodonData.description, // Pleroma instances don't have a short_description field, so we use the description field instead
                     thumbnail: mastodonData.thumbnail,
                     user_count: mastodonData.stats.user_count,
                     status_count: mastodonData.stats.status_count,
                     instance_contact: mastodonData.contact_account.username,
+                    registrations: mastodonData.registrations,
+                    approval_required: mastodonData.approval_required,
                 }
                 return parsedMasterData
             } catch (err) {
@@ -56,7 +58,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     thumbnail: misskeyMetaData.bannerUrl,
                     user_count: misskeyStatsData.usersCount,
                     status_count: misskeyStatsData.notesCount,
-                    instance_contact: 'null'
+                    instance_contact: 'null',
+                    registrations: misskeyMetaData.disabledRegistration,
+                    approval_required: false,
                 }
                 return parsedMasterData
             } catch (err) {
@@ -88,11 +92,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                         InstanceData: {
                             create: {
                                 title: cachedata.title,
-                                cache: 'null',
                                 description: cachedata.description,
                                 thumbnail: cachedata.thumbnail,
                                 user_count: cachedata.user_count,
-                                status_count: cachedata.status_count
+                                status_count: cachedata.status_count,
+                                registrations: cachedata.registrations,
+                                approval_required: cachedata.approval_required,
                             },
                         },
                         ApiKeys: {
@@ -129,18 +134,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                         instanceContact +
                         '@' +
                         instanceData.uri +
-                        ' Hi there someone is attempting to register your instance on FurryFediverse, if this is you. Please click this link to finish the registation: https://furryfediverse.org/api/instances/verify/' +
+                        ' Hi there someone is attempting to register your instance on FurryFediverse, if this is you. Please click this link to finish the registration: https://furryfediverse.org/api/instances/verify/' +
                         getAPIKey.api_key
                     res.status(200).json({
                         message:
-                            'Added instance successfully, your instance admin account needs to be verfied! Check your DMs!',
+                            'Added instance successfully, your instance admin account needs to be verified! Check your DMs!',
                         type: 'success',
                     })
                     client
                         .postStatus(toot, { visibility: 'direct' })
-                        .then((res: Response<Entity.Status>) => {
-                            console.log(res.data)
-                        })
                 } else if (instanceData.api_mode == 'misskey') {
                     // Check submitted user is admin
                     let adminVerify = {
@@ -164,18 +166,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                             instanceContact +
                             '@' +
                             instanceData.uri +
-                            ' Hi there someone is attempting to register your instance on FurryFediverse, if this is you. Please click this link to finish the registation: https://furryfediverse.org/api/instances/verify/' +
+                            ' Hi there someone is attempting to register your instance on FurryFediverse, if this is you. Please click this link to finish the registration: https://furryfediverse.org/api/instances/verify/' +
                             getAPIKey.api_key
                         res.status(200).json({
                             message:
-                                'Added instance successfully, your instance admin account needs to be verfied! Check your DMs!',
+                                'Added instance successfully, your instance admin account needs to be verified! Check your DMs!',
                             type: 'success',
                         })
                         client
                             .postStatus(toot, { visibility: 'direct' })
-                            .then((res: Response<Entity.Status>) => {
-                                console.log(res.data)
-                            })
                     }else{
                         res.status(400).json({
                             message: 'Administator verification failed',

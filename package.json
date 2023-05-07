@@ -4,13 +4,13 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "migrate:localdb": "dotenv -e .env.local -- npx prisma migrate dev --name sqlite-init"
+        "migrate:localdb": "npx prisma migrate dev --name sqlite-init"
     },
     "dependencies": {
         "@prisma/client": "^4.8.0",
         "dotenv": "^16.0.3",
         "megalodon": "^5.0.1",
-        "next": "latest",
+        "next": "^13.4.1",
         "react": "^18.2.0",
         "react-dom": "18.2.0",
         "react-image-fallback": "8.0.0"

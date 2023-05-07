@@ -21,7 +21,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     description: mastodonData.short_description !== undefined ? mastodonData.short_description : mastodonData.description, // Pleroma instances don't have a short_description field, so we use the description field instead
                     thumbnail: mastodonData.thumbnail,
                     user_count: mastodonData.stats.user_count,
-                    status_count: mastodonData.stats.status_count
+                    status_count: mastodonData.stats.status_count,
+                    instance_contact: mastodonData.contact_account.username,
+                    registrations: mastodonData.registrations,
+                    approval_required: mastodonData.approval_required,
                 }
                 return parsedMasterData
             } catch (err) {
@@ -45,7 +48,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     description: misskeyMetaData.description,
                     thumbnail: misskeyMetaData.bannerUrl,
                     user_count: misskeyStatsData.usersCount,
-                    status_count: misskeyStatsData.notesCount
+                    status_count: misskeyStatsData.notesCount,
+                    instance_contact: 'null',
+                    registrations: misskeyMetaData.disabledRegistration,
+                    approval_required: false,
                 }
                 return parsedMasterData
             } catch (err) {
@@ -63,7 +69,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             if (updateInstance != false) {
                 await prismac.instanceData.update({
                     where: { instance_id: allInstances[i].id },
-                    data: updateInstance
+                    data: {
+                        title: updateInstance.title,
+                        description: updateInstance.description,
+                        thumbnail: updateInstance.thumbnail,
+                        user_count: updateInstance.user_count,
+                        status_count: updateInstance.status_count,
+                        registrations: updateInstance.registrations,
+                        approval_required: updateInstance.approval_required,
+                    },
                 })
             }else{
                 continue
