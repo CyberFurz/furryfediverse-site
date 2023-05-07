@@ -8,6 +8,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(405).json({ message: 'Invalid API Method'})
     }
     
+
     // Function to parse through the URI and check if it's valid and return the data
     async function buildCache(instanceURI: string, instanceType: string) {
         if (instanceType == 'mastodon') {

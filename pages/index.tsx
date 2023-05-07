@@ -1,9 +1,8 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import prismac from '../lib/prisma'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import ReactImageFallback from 'react-image-fallback'
 import { shuffleArray } from '../lib/instance-array-tools'
@@ -14,10 +13,10 @@ const Home: NextPage = ({ general, niche }: any) => {
         initial: { x: '0%', '--divHeight': `0px` },
         animate: { x: '-55%', '--divHeight': `0px` },
     })
-
+    
     const generalDiv = React.useRef<HTMLDivElement>()
     const nicheDiv = React.useRef<HTMLDivElement>()
-
+    
     useEffect(() => {
         let variantUpdate = () => setVariants({
             initial: {
@@ -38,14 +37,14 @@ const Home: NextPage = ({ general, niche }: any) => {
         shuffleArray(general)
         shuffleArray(niche)
     }, [])
-
+    
     return (
         <div>
             <Head>
                 <title>The Furry Fediverse</title>
                 <link
-                    rel="icon"
-                    href="/favicon.ico"
+                    rel='icon'
+                    href='/favicon.ico'
                 />
             </Head>
             <br />
@@ -122,6 +121,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                         <p className='font-bold py-4'>Recommended Apps</p>
                         <div className='px-2 flex flex-wrap gap-2'>
                             <a
+
                                 href='https://apps.apple.com/us/app/toot/id1229021451'
                                 className='btn btn-primary normal-case text-lg'
                                 target='_blank'
@@ -178,53 +178,50 @@ const Home: NextPage = ({ general, niche }: any) => {
                         </div>
                     </div>
                 </div>
-                <div className="card bg-base-100 shadow-xl overflow-x-clip h-max">
-                    <div className="card-body">
-                        <h2 className="text-2xl card-title">
+                <div className='card bg-base-100 shadow-xl overflow-x-clip h-max'>
+                    <div className='card-body'>
+                        <h2 className='text-2xl card-title'>
                             Fediverse Instances
                         </h2>
-                        <p className="italic text-sm">
-                            To Opt-In To Being Displayed Here, please fill out{' '}
+                        <p>
+                            <strong>Note:</strong> The order of instances is randomized each time you
+                                                   reload the page, we do not endorse any instance over any other.
+                        </p>
+                        <p className='italic text-sm'>
+                            To Opt-In To Being Displayed Here, please fill out{ ' ' }
                             <Link
-                                href="/add-instance"
-                                className="underline"
+                                href='/add-instance'
+                                className='underline'
                             >
                                 This Form
                             </Link>
                         </p>
                         <br />
-                        <ul className="tabs w-full grid grid-cols-2">
-                            <div
-                                className="tooltip tooltip-primary w-full"
-                                data-tip="Instances open to furries of any kind with no specific topic"
+                        <ul className='tabs w-full grid grid-cols-2'>
+                            <li
+                                key={ 0 }
+                                data-tip='Instances open to furries of any kind with no specific topic'
+
+                                className={ `text-2xl tab tab-bordered h-fit w-full tooltip tooltip-primary w-full ${
+                                    0 === active && 'tab-active'
+                                }` }
+                                onClick={ () => setActive(0) }
                             >
-                                <li
-                                    key={0}
-                                    className={`text-2xl tab tab-bordered h-fit w-full ${
-                                        0 === active && 'tab-active'
-                                    }`}
-                                    onClick={() => setActive(0)}
-                                >
-                                    General Instances
-                                </li>
-                            </div>
-                            <div
-                                className="tooltip tooltip-primary w-full"
-                                data-tip="Furry friendly instances with a focus on one or more topics"
+                                General Instances
+                            </li>
+                            <li
+                                key={ 1 }
+                                data-tip='Furry friendly instances with a focus on one or more topics'
+                                className={ `text-2xl tab tab-bordered h-fit w-full tooltip tooltip-primary w-full ${
+                                    1 === active && 'tab-active'
+                                }` }
+                                onClick={ () => setActive(1) }
                             >
-                                <li
-                                    key={1}
-                                    className={`text-2xl tab tab-bordered h-fit w-full ${
-                                        1 === active && 'tab-active'
-                                    }`}
-                                    onClick={() => setActive(1)}
-                                >
-                                    Focused Instances
-                                </li>
-                            </div>
+                                Focused Instances
+                            </li>
                         </ul>
                         <br />
-                        <div className="">
+                        <div className=''>
                             <motion.div
                                 key={ 0 }
                                 variants={ variants }
@@ -234,10 +231,10 @@ const Home: NextPage = ({ general, niche }: any) => {
                                 style={ { height: 'var(--divHeight)' } }
                             >
                                 <div
-                                    className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-min`}
-                                    ref={generalDiv}
+                                    className={ `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-min` }
+                                    ref={ generalDiv }
                                 >
-                                    {general.map(
+                                    { general.map(
                                         (data: {
                                             id: string
                                             title: any
@@ -251,58 +248,59 @@ const Home: NextPage = ({ general, niche }: any) => {
                                             nsfwflag: any
                                         }) => (
                                             <div
-                                                key={data.id}
-                                                className="card card-compact bg-base-300 shadow-xl"
+                                                key={ data.id }
+                                                className='card card-compact bg-base-300 shadow-xl'
                                             >
                                                 <figure>
                                                     <ReactImageFallback
-                                                        src={data.thumbnail}
-                                                        fallbackImage="./img/fedi_placeholder.png"
-                                                        className="max-h-52 w-full object-cover rounded-md pointer-events-none"
-                                                        alt={data.title}
-                                                        onLoad={() =>
+                                                        src={ data.thumbnail }
+                                                        fallbackImage='./img/fedi_placeholder.png'
+                                                        initialImage='./img/fedi_placeholder.png'
+                                                        className='max-h-52 w-full object-cover rounded-md pointer-events-none'
+                                                        alt={ data.title }
+                                                        onLoad={ () =>
                                                             updateVariants()
                                                         }
                                                     />
                                                 </figure>
-                                                <div className="card-body">
-                                                    <h2 className="card-title text-2xl text-center self-center">
-                                                        {data.title}
+                                                <div className='card-body'>
+                                                    <h2 className='card-title text-2xl text-center self-center'>
+                                                        { data.title }
                                                     </h2>
                                                     <div className="divider my-0"></div>
                                                     <p className="text-base">
                                                         {data.description}
                                                     </p>
-                                                    <div className="divider my-0"></div>
-                                                    <div className="card-actions justify-evenly">
-                                                        <div className="text-lg w-min italic basis-full flex flex-rows items-center justify-center">
-                                                            <i className="fa-solid fa-key mr-4"></i>
-                                                            <div className="flex flex-wrap flex-rows w-min justify-center">
-                                                                <span className="whitespace-nowrap w-min">
-                                                                    {data.registrations
+                                                    <div className='divider my-0'></div>
+                                                    <div className='card-actions justify-evenly'>
+                                                        <div className='text-lg w-min italic basis-full flex flex-rows items-center justify-center'>
+                                                            <i className='fa-solid fa-key mr-4'></i>
+                                                            <div className='flex flex-wrap flex-rows w-min justify-center'>
+                                                                <span className='whitespace-nowrap w-min'>
+                                                                    { data.registrations
                                                                         ? 'Registrations Open'
-                                                                        : 'Registrations Closed'}
+                                                                        : 'Registrations Closed' }
                                                                 </span>
-                                                                <span className="whitespace-nowrap w-min">
-                                                                    {data.approval_required
+                                                                <span className='whitespace-nowrap w-min'>
+                                                                    { data.approval_required
                                                                         ? 'with Approval Required'
-                                                                        : ''}
+                                                                        : '' }
                                                                 </span>
                                                             </div>
                                                         </div>
                                                         <div
-                                                            className="tooltip text-lg"
-                                                            data-tip="Members"
+                                                            className='tooltip text-lg'
+                                                            data-tip='Members'
                                                         >
-                                                            <i className="fa-solid fa-users"></i>{' '}
-                                                            {data.user_count}
+                                                            <i className='fa-solid fa-users'></i>{ ' ' }
+                                                            { data.user_count }
                                                         </div>
                                                         <div
-                                                            className="tooltip text-lg"
-                                                            data-tip="Content Rules"
+                                                            className='tooltip text-lg'
+                                                            data-tip='Content Rules'
                                                         >
-                                                            <i className="fa-solid fa-user-shield"></i>{' '}
-                                                            {data.nsfwflag}
+                                                            <i className='fa-solid fa-user-shield'></i>{ ' ' }
+                                                            { data.nsfwflag }
                                                         </div>
                                                         <a
                                                             href={
@@ -311,11 +309,11 @@ const Home: NextPage = ({ general, niche }: any) => {
                                                                 )
                                                                     ? data.uri
                                                                     : 'https://' +
-                                                                      data.uri
+                                                                    data.uri
                                                             }
-                                                            className="btn btn-primary normal-case text-xl w-full mt-2"
-                                                            target="_blank"
-                                                            rel="noreferrer"
+                                                            className='btn btn-primary normal-case text-xl w-full mt-2'
+                                                            target='_blank'
+                                                            rel='noreferrer'
                                                         >
                                                             Visit Instance
                                                         </a>
@@ -323,13 +321,13 @@ const Home: NextPage = ({ general, niche }: any) => {
                                                 </div>
                                             </div>
                                         )
-                                    )}
+                                    ) }
                                 </div>
                                 <div
-                                    className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-min`}
-                                    ref={nicheDiv}
+                                    className={ `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-min` }
+                                    ref={ nicheDiv }
                                 >
-                                    {niche.map(
+                                    { niche.map(
                                         (data: {
                                             id: string
                                             title: any
@@ -343,58 +341,59 @@ const Home: NextPage = ({ general, niche }: any) => {
                                             nsfwflag: any
                                         }) => (
                                             <div
-                                                key={data.id}
-                                                className="card card-compact bg-base-300 shadow-xl"
+                                                key={ data.id }
+                                                className='card card-compact bg-base-300 shadow-xl'
                                             >
                                                 <figure>
                                                     <ReactImageFallback
-                                                        src={data.thumbnail}
-                                                        fallbackImage="./img/fedi_placeholder.png"
-                                                        className="max-h-52 w-full object-cover rounded-md pointer-events-none"
-                                                        alt={data.title}
-                                                        onLoad={() =>
+                                                        src={ data.thumbnail }
+                                                        fallbackImage='./img/fedi_placeholder.png'
+                                                        initialImage='./img/fedi_placeholder.png'
+                                                        className='max-h-52 w-full object-cover rounded-md pointer-events-none'
+                                                        alt={ data.title }
+                                                        onLoad={ () =>
                                                             updateVariants()
                                                         }
                                                     />
                                                 </figure>
-                                                <div className="card-body">
-                                                    <h2 className="card-title text-2xl text-center self-center">
-                                                        {data.title}
+                                                <div className='card-body'>
+                                                    <h2 className='card-title text-2xl text-center self-center'>
+                                                        { data.title }
                                                     </h2>
                                                     <div className="divider my-0"></div>
                                                     <p className="text-base">
                                                         {data.description}
                                                     </p>
-                                                    <div className="divider my-0"></div>
-                                                    <div className="card-actions justify-evenly">
-                                                        <div className="text-lg w-min italic basis-full flex flex-rows items-center justify-center">
-                                                            <i className="fa-solid fa-key mr-4"></i>
-                                                            <div className="flex flex-wrap flex-rows w-min justify-center">
-                                                                <span className="whitespace-nowrap w-min">
-                                                                    {data.registrations
+                                                    <div className='divider my-0'></div>
+                                                    <div className='card-actions justify-evenly'>
+                                                        <div className='text-lg w-min italic basis-full flex flex-rows items-center justify-center'>
+                                                            <i className='fa-solid fa-key mr-4'></i>
+                                                            <div className='flex flex-wrap flex-rows w-min justify-center'>
+                                                                <span className='whitespace-nowrap w-min'>
+                                                                    { data.registrations
                                                                         ? 'Registrations Open'
-                                                                        : 'Registrations Closed'}
+                                                                        : 'Registrations Closed' }
                                                                 </span>
-                                                                <span className="whitespace-nowrap w-min">
-                                                                    {data.approval_required
+                                                                <span className='whitespace-nowrap w-min'>
+                                                                    { data.approval_required
                                                                         ? 'with Approval Required'
-                                                                        : ''}
+                                                                        : '' }
                                                                 </span>
                                                             </div>
                                                         </div>
                                                         <div
-                                                            className="tooltip text-lg"
-                                                            data-tip="Members"
+                                                            className='tooltip text-lg'
+                                                            data-tip='Members'
                                                         >
-                                                            <i className="fa-solid fa-users"></i>{' '}
-                                                            {data.user_count}
+                                                            <i className='fa-solid fa-users'></i>{ ' ' }
+                                                            { data.user_count }
                                                         </div>
                                                         <div
-                                                            className="tooltip text-lg"
-                                                            data-tip="Content Rules"
+                                                            className='tooltip text-lg'
+                                                            data-tip='Content Rules'
                                                         >
-                                                            <i className="fa-solid fa-user-shield"></i>{' '}
-                                                            {data.nsfwflag}
+                                                            <i className='fa-solid fa-user-shield'></i>{ ' ' }
+                                                            { data.nsfwflag }
                                                         </div>
                                                         <a
                                                             href={
@@ -403,11 +402,11 @@ const Home: NextPage = ({ general, niche }: any) => {
                                                                 )
                                                                     ? data.uri
                                                                     : 'https://' +
-                                                                      data.uri
+                                                                    data.uri
                                                             }
-                                                            className="btn btn-primary normal-case text-xl w-full mt-2"
-                                                            target="_blank"
-                                                            rel="noreferrer"
+                                                            className='btn btn-primary normal-case text-xl w-full mt-2'
+                                                            target='_blank'
+                                                            rel='noreferrer'
                                                         >
                                                             Visit Instance
                                                         </a>
@@ -415,7 +414,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                                                 </div>
                                             </div>
                                         )
-                                    )}
+                                    ) }
                                 </div>
                             </motion.div>
                             <br />
@@ -433,16 +432,16 @@ const Home: NextPage = ({ general, niche }: any) => {
             </div>
         </div>
     )
-
+    
     function updateVariants() {
         setVariants({
             initial: {
                 x: '0%',
-                '--divHeight': `${generalDiv.current.offsetHeight}px`,
+                '--divHeight': `${ generalDiv.current.offsetHeight }px`,
             },
             animate: {
                 x: '-55%',
-                '--divHeight': `${nicheDiv.current.offsetHeight}px`,
+                '--divHeight': `${ nicheDiv.current.offsetHeight }px`,
             },
         })
     }
@@ -454,15 +453,15 @@ export async function getStaticProps() {
     interface ServerData {
         cache: any
     }
-
+    
     // Fetch data from external API
     const generalInstance = await prismac.instances.findMany({
-        where: { type: 'general', verified: true },
+        where: { type: 'general', verified: true, banned: false },
     })
     const nicheInstance = await prismac.instances.findMany({
-        where: { type: 'niche', verified: true },
+        where: { type: 'niche', verified: true, banned: false },
     })
-
+    
     // Build the array from the list of servers
     let generalInstances = []
     for (let i of generalInstance) {
@@ -481,7 +480,7 @@ export async function getStaticProps() {
             uri: i.uri,
         })
     }
-
+    
     // Build the array from the list of servers
     let nichelInstances = []
     for (let i of nicheInstance) {
@@ -500,10 +499,7 @@ export async function getStaticProps() {
             uri: i.uri,
         })
     }
-
-    generalInstances.sort(compareInstance)
-    nichelInstances.sort(compareInstance)
-
+    
     // Pass data to the page via props
     return {
         props: {
@@ -512,14 +508,6 @@ export async function getStaticProps() {
         },
         revalidate: 60,
     }
-}
-
-function compareInstance(a: any, b: any) {
-    return a.title.toLowerCase() > b.title.toLowerCase()
-        ? 1
-        : a.title.toLowerCase() < b.title.toLowerCase()
-        ? -1
-        : 0
 }
 
 export default Home

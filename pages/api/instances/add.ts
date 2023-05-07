@@ -3,6 +3,10 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import generator from 'megalodon'
 import { Prisma } from '@prisma/client'
 import prismac from '../../../lib/prisma'
+import { ACCESS_TOKEN, BASE_URL } from "../../../lib/config"
+
+const dotenv = require('dotenv')
+dotenv.config()
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     // Only allow POST Requests
@@ -67,10 +71,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 return false
             }
         } else {
+
             return false
         }
     }
     
+
     // Run through the URI test and collect the data
     // Then create the instance in the database
     if ((await testURI(instanceData.uri, instanceData.api_mode)) == false) {
@@ -104,6 +110,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                             create: {}
                         }
                     },
+
                 })
 
                 // Absolutely force the value to be false after creation!
@@ -140,6 +147,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                         message:
                             'Added instance successfully, your instance admin account needs to be verified! Check your DMs!',
                         type: 'success',
+
                     })
                     client
                         .postStatus(toot, { visibility: 'direct' })
