@@ -31,9 +31,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 return false
             }
         } else if (instanceType == 'misskey') {
+            let getDetails = { detail: true }
             let init = { 
                 headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-                body: JSON.stringify("{ 'details': true }"),
+                body: JSON.stringify(getDetails),
                 method: 'POST'
             }
             let metaURI = 'https://' + instanceURI + '/api/meta'
@@ -47,7 +48,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     title: misskeyMetaData.name,
                     description: misskeyMetaData.description,
                     thumbnail: misskeyMetaData.bannerUrl,
-                    user_count: misskeyStatsData.usersCount,
+                    user_count: misskeyStatsData.originalUsersCount,
                     status_count: misskeyStatsData.notesCount,
                     instance_contact: 'null',
                     registrations: misskeyMetaData.disabledRegistration,
@@ -79,8 +80,29 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                         approval_required: updateInstance.approval_required,
                     },
                 })
+                await prismac.instances.update({
+                    where: { id: allInstances[i].id },
+                    data: {
+                        failed_checks: 0,
+                    },
+                })
             }else{
-                continue
+                if (allInstances[i].failed_checks >= 5) {
+                    await prismac.instances.update({
+                        where: { id: allInstances[i].id },
+                        data: {
+                            banned: true,
+                            ban_reason: 'Instance failed 5 checks in a row',
+                        },
+                    })
+                } else {
+                    await prismac.instances.update({
+                        where: { id: allInstances[i].id },
+                        data: {
+                            failed_checks: allInstances[i].failed_checks + 1,
+                        },
+                    })
+                }
             }
         } catch (err) {
             if (err instanceof Prisma.PrismaClientKnownRequestError){

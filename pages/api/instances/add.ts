@@ -56,7 +56,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     title: misskeyMetaData.name,
                     description: misskeyMetaData.description,
                     thumbnail: misskeyMetaData.bannerUrl,
-                    user_count: misskeyStatsData.usersCount,
+                    user_count: misskeyStatsData.originalUsersCount,
                     status_count: misskeyStatsData.notesCount,
                     instance_contact: 'null',
                     registrations: misskeyMetaData.disabledRegistration,
