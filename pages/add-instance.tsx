@@ -8,6 +8,7 @@ interface FormData {
     uri: string
     nsfwflag: string
     api_mode: string
+    username?: string
 }
 
 interface Message {
@@ -15,12 +16,15 @@ interface Message {
     type: string
 }
 
+
+
 const AddInstance: NextPage = () => {
     const [form, setForm] = useState<FormData>({
         type: '',
         uri: '',
         nsfwflag: '',
         api_mode: '',
+        username: '',
     })
     const [response, setResponse] = useState<Message>({ message: '', type: '' })
 
@@ -220,7 +224,36 @@ const AddInstance: NextPage = () => {
                                         </option>
                                     </select>
                                 </div>
+                                
+                                <div>
+                                    <label className="label">
+                                        <span className="label-text text-2xl font-bold">
+                                            Admin (Misskey API Only)
+                                        </span>
+                                    </label>
+                                    <label className="input-group">
+                                        <span>@</span>
+                                        <input
+                                            type="text"
+                                            name="misskeyadmin"
+                                            placeholder="admin"
+                                            className="input input-bordered"
+                                            value={form.uri}
+                                            onChange={(e) =>
+                                                setForm({
+                                                    ...form,
+                                                    username: e.target.value,
+                                                })
+                                            }
+                                        />
+                                        <span>
+                                            @instance.social
+                                        </span>
+                                    </label>
+                                </div>
                             </div>
+
+
 
                             <div className="divider"></div>
                             <div className="px-8 mb-8">

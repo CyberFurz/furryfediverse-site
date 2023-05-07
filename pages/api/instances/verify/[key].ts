@@ -21,7 +21,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         where: { api_key: instanceKey },
         data: { used: true }
       })
-      console.log(instanceEntry.instance_id)
       return instanceEntry.instance_id
     } else {
       return "failed"
