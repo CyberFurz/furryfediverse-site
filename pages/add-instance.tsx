@@ -238,7 +238,7 @@ const AddInstance: NextPage = () => {
                                             name="misskeyadmin"
                                             placeholder="admin"
                                             className="input input-bordered"
-                                            value={form.uri}
+                                            value={form.username}
                                             onChange={(e) =>
                                                 setForm({
                                                     ...form,
