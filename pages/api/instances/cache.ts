@@ -64,7 +64,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         }
     }
 
-    const allInstances = await prismac.instances.findMany()
+    const allInstances = await prismac.instances.findMany({ where: { banned: false } })
     for (let i = 0; i < allInstances.length; i++) {
         try {
             let updateInstance = await buildCache(allInstances[i].uri, allInstances[i].api_mode)
