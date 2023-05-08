@@ -8,7 +8,7 @@ interface FormData {
     uri: string
     nsfwflag: string
     api_mode: string
-    username?: string
+    instance_contact?: string
 }
 
 interface Message {
@@ -24,7 +24,7 @@ const AddInstance: NextPage = () => {
         uri: '',
         nsfwflag: '',
         api_mode: '',
-        username: '',
+        instance_contact: '',
     })
     const [response, setResponse] = useState<Message>({ message: '', type: '' })
 
@@ -238,11 +238,11 @@ const AddInstance: NextPage = () => {
                                             name="misskeyadmin"
                                             placeholder="admin"
                                             className="input input-bordered"
-                                            value={form.username}
+                                            value={form.instance_contact}
                                             onChange={(e) =>
                                                 setForm({
                                                     ...form,
-                                                    username: e.target.value,
+                                                    instance_contact: e.target.value,
                                                 })
                                             }
                                         />
