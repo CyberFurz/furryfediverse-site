@@ -185,7 +185,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                             .postStatus(toot, { visibility: 'direct' })
                     }else{
                         res.status(400).json({
-                            message: 'Administator verification failed',
+                            message: 'Administrator verification failed',
                             type: 'error',
                         })
                     }
