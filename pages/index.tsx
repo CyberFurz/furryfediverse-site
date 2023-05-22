@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import prismac from '../lib/prisma'
+import { prisma } from '../lib/prisma'
 import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
@@ -455,17 +455,17 @@ export async function getStaticProps() {
     }
     
     // Fetch data from external API
-    const generalInstance = await prismac.instances.findMany({
+    const generalInstance = await prisma.instances.findMany({
         where: { type: 'general', verified: true, banned: false },
     })
-    const nicheInstance = await prismac.instances.findMany({
+    const nicheInstance = await prisma.instances.findMany({
         where: { type: 'niche', verified: true, banned: false },
     })
     
     // Build the array from the list of servers
     let generalInstances = []
     for (let i of generalInstance) {
-        let serverData = await prismac.instanceData.findFirst({
+        let serverData = await prisma.instanceData.findFirst({
             where: { instance_id: i.id },
         })
         generalInstances.push({
@@ -484,7 +484,7 @@ export async function getStaticProps() {
     // Build the array from the list of servers
     let nichelInstances = []
     for (let i of nicheInstance) {
-        let serverData = await prismac.instanceData.findFirst({
+        let serverData = await prisma.instanceData.findFirst({
             where: { instance_id: i.id },
         })
         nichelInstances.push({

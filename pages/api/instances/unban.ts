@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { bearerTokenFromHeaders, verifyToken } from "../../../lib/config"
-import prismac from "../../../lib/prisma"
+import { prisma } from "../../../lib/prisma"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-    if (req.method !== 'POST' || !await verifyToken(prismac, bearerTokenFromHeaders(req.headers))) {
+    if (req.method !== 'POST' || !await verifyToken(prisma, bearerTokenFromHeaders(req.headers))) {
         return res
             .status(405)
             .json({ message: 'Invalid API Method', type: 'error' })
@@ -12,12 +12,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const unbanInstance: { uri: string } =
         req.body
     
-    const instance = await prismac.instances.findFirst({
+    const instance = await prisma.instances.findFirst({
         where: { uri: unbanInstance.uri }
     })
     
     if (!!instance && instance.uri.toLowerCase() === unbanInstance.uri.toLowerCase()) {
-        await prismac.instances.update({
+        await prisma.instances.update({
             data: {
                 banned: false
             },

@@ -2,7 +2,7 @@ import Head from 'next/head'
 import type { NextPage } from 'next'
 import { useState } from 'react'
 import Link from 'next/link'
-import prismac from "../lib/prisma"
+import { prisma } from "../lib/prisma"
 import { sortInstances } from "../lib/instance-array-tools"
 
 interface FormData {
@@ -247,7 +247,7 @@ export async function getStaticProps() {
     // Interface pre-requisites
     
     // Fetch data from external API
-    const instances = await prismac.instances.findMany({
+    const instances = await prisma.instances.findMany({
         where: { verified: true },
     })
     

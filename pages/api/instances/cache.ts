@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Prisma } from '@prisma/client'
-import prismac from '../../../lib/prisma'
+import { prisma } from '../../../lib/prisma'
+import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== 'GET') {
@@ -64,12 +64,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         }
     }
 
-    const allInstances = await prismac.instances.findMany({ where: { banned: false } })
+    const allInstances = await prisma.instances.findMany({ where: { banned: false } })
     for (let i = 0; i < allInstances.length; i++) {
         try {
             let updateInstance = await buildCache(allInstances[i].uri, allInstances[i].api_mode)
             if (updateInstance != false) {
-                await prismac.instanceData.update({
+                await prisma.instanceData.update({
                     where: { instance_id: allInstances[i].id },
                     data: {
                         title: updateInstance.title,
@@ -81,7 +81,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                         approval_required: updateInstance.approval_required,
                     },
                 })
-                await prismac.instances.update({
+                await prisma.instances.update({
                     where: { id: allInstances[i].id },
                     data: {
                         failed_checks: 0,
@@ -89,7 +89,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 })
             }else{
                 if (allInstances[i].failed_checks >= 5) {
-                    await prismac.instances.update({
+                    await prisma.instances.update({
                         where: { id: allInstances[i].id },
                         data: {
                             banned: true,
@@ -97,7 +97,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                         },
                     })
                 } else {
-                    await prismac.instances.update({
+                    await prisma.instances.update({
                         where: { id: allInstances[i].id },
                         data: {
                             failed_checks: allInstances[i].failed_checks + 1,
@@ -106,9 +106,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 }
             }
         } catch (err) {
-            if (err instanceof Prisma.PrismaClientKnownRequestError){
+            if (err instanceof PrismaClientKnownRequestError){
                 res.status(400).json({"message": err.message })
-            } else if (err instanceof Prisma.PrismaClientValidationError){
+            } else if (err instanceof PrismaClientValidationError){
                 res.status(400).json({"message": err.message })
             }
         }

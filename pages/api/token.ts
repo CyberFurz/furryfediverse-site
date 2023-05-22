@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { ACCESS_TOKEN, BASE_URL, maintainers, verifyToken } from "../../lib/config"
 import generator, { Entity, Response } from 'megalodon'
-import prismac from "../../lib/prisma"
+import { prisma } from "../../lib/prisma"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
@@ -24,10 +24,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         if ((domain + user).length < 2) {
             return res.status(404).json(null)
         } else {
-            const dbToken = await prismac.tokens.findFirst({
+            const dbToken = await prisma.tokens.findFirst({
                 where: { user: '@' + user + '@' + domain },
             })
-            if (dbToken != null && await verifyToken(prismac, dbToken.token)) {
+            if (dbToken != null && await verifyToken(prisma, dbToken.token)) {
                 return res.status(200).json({ message: 'Token for this user already exists, please check your inbox' })
             }
         }
@@ -35,7 +35,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         let valid_to = new Date()
         valid_to.setHours(valid_to.getHours() + 1)
         
-        const newToken = await prismac.tokens.create({
+        const newToken = await prisma.tokens.create({
             data: {
                 valid_to: valid_to,
                 user: '@' + user + '@' + domain

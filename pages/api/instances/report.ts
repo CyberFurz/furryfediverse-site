@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Prisma } from "@prisma/client"
-import prismac from "../../../lib/prisma"
+import { prisma } from "../../../lib/prisma"
+import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime';
 import { ACCESS_TOKEN, BASE_URL, bearerTokenFromHeaders, maintainers, verifyToken } from "../../../lib/config"
 import generator, { Entity, Response } from "megalodon"
 
@@ -13,13 +13,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         const reportData: { contact: string; uri: string; report: string } =
             req.body
 
-        const instance = await prismac.instances.findFirst({
+        const instance = await prisma.instances.findFirst({
             where: { uri: reportData.uri }
         })
 
         if (!!instance && instance.uri.toLowerCase() === reportData.uri.toLowerCase()) {
             try {
-                const savedReport = await prismac.reports.create({
+                const savedReport = await prisma.reports.create({
                     data: {
                         reporter: reportData.contact,
                         uri: reportData.uri,
@@ -52,7 +52,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 mastoClient
                     .postStatus(toot, { visibility: 'direct' })
             } catch (err) {
-                if (err instanceof Prisma.PrismaClientKnownRequestError) {
+                if (err instanceof PrismaClientKnownRequestError) {
                     if (err.code === 'P2002') {
                         res.status(400).json({
                             message: 'Instance has already been reported! Please be patient while site operators review this report.',
@@ -64,7 +64,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                             type: 'error',
                         })
                     }
-                } else if (err instanceof Prisma.PrismaClientValidationError) {
+                } else if (err instanceof PrismaClientValidationError) {
                     res.status(400).json({ message: err.message, type: 'error' })
                 }
             }
@@ -76,8 +76,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         }
     } else if (req.method === 'GET') {
 
-        if (await verifyToken(prismac, bearerTokenFromHeaders(req.headers))) {
-            const reports = await prismac.reports.findMany()
+        if (await verifyToken(prisma, bearerTokenFromHeaders(req.headers))) {
+            const reports = await prisma.reports.findMany()
 
             return res.status(200).json(reports)
         }

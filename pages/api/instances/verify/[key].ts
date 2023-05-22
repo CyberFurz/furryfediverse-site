@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next"
-import { Prisma } from "@prisma/client"
-import prismac from "../../../../lib/prisma"
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime"
+import { prisma } from "../../../../lib/prisma"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { key } = req.query
@@ -13,11 +13,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const instanceData = req.body
 
   async function checkKey(instanceKey: string) {
-    const instanceEntry = await prismac.apiKeys.findFirst({
+    const instanceEntry = await prisma.apiKeys.findFirst({
       where: { api_key: instanceKey }
     })
     if (instanceEntry) {
-      await prismac.apiKeys.update({
+      await prisma.apiKeys.update({
         where: { api_key: instanceKey },
         data: { used: true }
       })
@@ -32,13 +32,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   } else {
     try {
       let check = await checkKey(apikey)
-      const verifiedInstance = await prismac.instances.update({
+      const verifiedInstance = await prisma.instances.update({
         where: { id: check },
         data: { verified: true },
       })
       res.status(200).json({ message: "Instance added successfully" })
     } catch (err) {
-      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err instanceof PrismaClientKnownRequestError) {
         if (err.code === "P2025") {
           res.status(400).json({ message: "instance not in database" })
         } else {
