@@ -108,7 +108,7 @@ const Home: NextPage = ({ general, niche, ios, android }: any) => {
                         </p>
                         <div className='px-2 flex flex-wrap justify-center w-full sm:w-fit gap-2'>
                             <a
-                                href='https://fedifinder-backup.glitch.me'
+                                href='https://fedifinder-v1.glitch.me/'
                                 className='btn btn-primary normal-case text-lg'
                                 target='_blank'
                                 rel='noreferrer'
