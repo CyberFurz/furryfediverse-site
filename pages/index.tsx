@@ -6,8 +6,9 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import ReactImageFallback from 'react-image-fallback'
 import { shuffleArray } from '../lib/instance-array-tools'
+import AppButton from '../components/AppButton'
 
-const Home: NextPage = ({ general, niche }: any) => {
+const Home: NextPage = ({ general, niche, ios, android }: any) => {
     const [active, setActive] = useState(0)
     const [variants, setVariants] = useState({
         initial: { x: '0%', '--divHeight': `0px` },
@@ -16,7 +17,7 @@ const Home: NextPage = ({ general, niche }: any) => {
     
     const generalDiv = React.useRef<HTMLDivElement>()
     const nicheDiv = React.useRef<HTMLDivElement>()
-    
+
     useEffect(() => {
         let variantUpdate = () => setVariants({
             initial: {
@@ -105,9 +106,9 @@ const Home: NextPage = ({ general, niche }: any) => {
                         <p className='font-bold py-4'>
                             Find Your Friends on the Fediverse
                         </p>
-                        <div className='px-2 flex flex-wrap gap-2'>
+                        <div className='px-2 flex flex-wrap justify-center w-full sm:w-fit gap-2'>
                             <a
-                                href='https://fedifinder-backup.glitch.me'
+                                href='https://fedifinder-v1.glitch.me/'
                                 className='btn btn-primary normal-case text-lg'
                                 target='_blank'
                                 rel='noreferrer'
@@ -118,63 +119,38 @@ const Home: NextPage = ({ general, niche }: any) => {
                                 <span className='ml-2'>Fedifinder</span>
                             </a>
                         </div>
-                        <p className='font-bold py-4'>Recommended Apps</p>
-                        <div className='px-2 flex flex-wrap gap-2'>
-                            <a
-
-                                href='https://apps.apple.com/us/app/toot/id1229021451'
-                                className='btn btn-primary normal-case text-lg'
-                                target='_blank'
-                                rel='noreferrer'
-                            >
-                                <i className='fa-brands fa-apple mr-2' aria-hidden="true"></i>{ ' ' }
-                                Toot! (Paid)
-                            </a>
-                            <a
-                                href='https://apps.apple.com/us/app/ivory-for-mastodon-by-tapbots/id6444602274'
-                                className='btn btn-primary normal-case text-lg'
-                                target='_blank'
-                                rel='noreferrer'
-                            >
-                                <i className='fa-brands fa-apple mr-2' aria-hidden="true"></i>{ ' ' }
-                                Ivory
-                            </a>
-                            <a
-                                href='https://apps.apple.com/gb/app/ice-cubes-for-mastodon/id6444915884'
-                                className='btn btn-primary normal-case text-lg'
-                                target='_blank'
-                                rel='noreferrer'
-                            >
-                                <i className='fa-brands fa-apple mr-2' aria-hidden="true"></i>{ ' ' }
-                                Ice Cubes
-                            </a>
-                            <a
-                                href='https://fedilab.app'
-                                className='btn btn-primary normal-case text-lg'
-                                target='_blank'
-                                rel='noreferrer'
-                            >
-                                <i className='fa-brands fa-android mr-2' aria-hidden="true"></i>{ ' ' }
-                                Fedilab
-                            </a>
-                            <a
-                                href='https://tusky.app'
-                                className='btn btn-primary normal-case text-lg'
-                                target='_blank'
-                                rel='noreferrer'
-                            >
-                                <i className='fa-brands fa-android mr-2' aria-hidden="true"></i>{ ' ' }
-                                Tusky
-                            </a>
-                            <a
-                                href='https://sk22.github.io/megalodon/'
-                                className='btn btn-primary normal-case text-lg'
-                                target='_blank'
-                                rel='noreferrer'
-                            >
-                                <i className='fa-brands fa-android mr-2' aria-hidden="true"></i>{ ' ' }
-                                Megalodon
-                            </a>
+                        <p className='font-bold py-4'>Recommended Apps (in no particular order)</p>
+                        <div className='px-2 flex h-fit justify-center gap-x-8 gap-y-8 flex-wrap w-full sm:w-fit text-center'>
+                            <div className='grid grid-flow-row grid-cols-1 gap-y-3'>
+                                <p className='text-2xl'>IOS</p>
+                                {
+                                    ios.map((data: {
+                                        name: string
+                                        paid: boolean
+                                        href: string
+                                    }) => <AppButton
+                                    name={data.name}
+                                    paid={data.paid}
+                                    platform='ios'
+                                    href={data.href}
+                                ></AppButton>)
+                                }
+                            </div>
+                            <div className='grid grid-flow-row grid-cols-1 gap-y-3'>
+                                <p className='text-2xl'>Android</p>
+                                {
+                                    android.map((data: {
+                                        name: string
+                                        paid: boolean
+                                        href: string
+                                    }) => <AppButton
+                                    name={data.name}
+                                    paid={data.paid}
+                                    platform='android'
+                                    href={data.href}
+                                ></AppButton>)
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -202,7 +178,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                                 key={ 0 }
                                 data-tip='Instances open to furries of any kind with no specific topic'
 
-                                className={ `text-2xl tab tab-bordered h-fit w-full tooltip tooltip-primary w-full ${
+                                className={ `text-2xl tab tab-bordered h-fit tooltip tooltip-primary w-full ${
                                     0 === active && 'tab-active'
                                 }` }
                                 onClick={ () => setActive(0) }
@@ -212,7 +188,7 @@ const Home: NextPage = ({ general, niche }: any) => {
                             <li
                                 key={ 1 }
                                 data-tip='Furry friendly instances with a focus on one or more topics'
-                                className={ `text-2xl tab tab-bordered h-fit w-full tooltip tooltip-primary w-full ${
+                                className={ `text-2xl tab tab-bordered h-fit tooltip tooltip-primary w-full ${
                                     1 === active && 'tab-active'
                                 }` }
                                 onClick={ () => setActive(1) }
@@ -453,6 +429,52 @@ export async function getStaticProps() {
     interface ServerData {
         cache: any
     }
+
+    let iosApps = [
+        {
+            name:'Ice Cubes',
+            paid:false,
+            href:'https://apps.apple.com/gb/app/ice-cubes-for-mastodon/id6444915884'
+        },
+        {
+            name:'Ivory',
+            paid:true,
+            href:'https://apps.apple.com/us/app/ivory-for-mastodon-by-tapbots/id6444602274'
+        },
+        {
+            name:'Mammoth',
+            paid:false,
+            href:'https://apps.apple.com/us/app/mammoth-for-mastodon/id1667573899'
+        },
+        {
+            name:'Toot!',
+            paid:true,
+            href:'https://apps.apple.com/us/app/toot/id1229021451'
+        },
+    ]
+
+    let androidApps = [
+        {
+            name:'Megalodon',
+            paid:false,
+            href:'https://sk22.github.io/megalodon/'
+        },
+        {
+            name:'Tusky',
+            paid:false,
+            href:'https://tusky.app'
+        },
+        {
+            name:'Moshidon',
+            paid:false,
+            href:'https://lucasggamerm.github.io/moshidon/'
+        },
+        {
+            name:'Fedilab',
+            paid:false,
+            href:'https://fedilab.app'
+        },
+    ]
     
     // Fetch data from external API
     const generalInstance = await prisma.instances.findMany({
@@ -505,6 +527,8 @@ export async function getStaticProps() {
         props: {
             general: generalInstances,
             niche: nichelInstances,
+            ios: iosApps,
+            android: androidApps
         },
         revalidate: 60,
     }
