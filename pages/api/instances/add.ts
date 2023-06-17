@@ -1,9 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import generator from 'megalodon'
-import { Prisma } from '@prisma/client'
-import prismac from '../../../lib/prisma'
 import { ACCESS_TOKEN, BASE_URL } from "../../../lib/config"
+import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime';
+import { prisma } from '../../../lib/prisma'
 
 const dotenv = require('dotenv')
 dotenv.config()
@@ -87,7 +87,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         if (cachedata != false) {
             try {
                 // Prepare the data to be saved to the database
-                const savedInstance = await prismac.instances.create({
+                const savedInstance = await prisma.instances.create({
                     data: {
                         name: cachedata.title,
                         api_mode: instanceData.api_mode,
@@ -114,12 +114,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 })
 
                 // Absolutely force the value to be false after creation!
-                const unverifiedInstance = await prismac.instances.update({
+                const unverifiedInstance = await prisma.instances.update({
                     where: { uri: instanceData.uri },
                     data: { verified: false },
                 })
 
-                const getAPIKey = await prismac.apiKeys.findFirst({
+                const getAPIKey = await prisma.apiKeys.findFirst({
                     where: { instance_id: savedInstance.id }
                 })
 
@@ -192,7 +192,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 }
 
             } catch (err) {
-                if (err instanceof Prisma.PrismaClientKnownRequestError) {
+                if (err instanceof PrismaClientKnownRequestError) {
                     if (err.code === 'P2002') {
                         res.status(400).json({
                             message: 'Instance already exists',
@@ -204,7 +204,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                             type: 'error',
                         })
                     }
-                } else if (err instanceof Prisma.PrismaClientValidationError) {
+                } else if (err instanceof PrismaClientValidationError) {
                     res.status(400).json({ message: err.message, type: 'error' })
                 }
             }

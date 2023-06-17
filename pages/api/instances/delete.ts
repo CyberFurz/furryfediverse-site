@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Prisma } from '@prisma/client'
-import prismac from '../../../lib/prisma'
+import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime';
+import { prisma } from '../../../lib/prisma'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== 'POST') {
@@ -10,10 +10,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const instanceData = req.body
     
-    async function checkKey(instanceKey: string, instanceURI: string) {
-        const instanceEntry = await prismac.instances.findFirst({ where: { uri: instanceURI }, select: { api_key: true } })
+    /*async function checkKey(instanceKey: string, instanceURI: string) {
+        const instanceEntry = await prisma.instances.findFirst({ where: { uri: instanceURI }, select: { api_key: true } })
         if (instanceEntry) {
-            if (instanceEntry.api_key === instanceKey) {
+            if (instanceEntry.ApiKey === instanceKey) {
                 return true
             }else{
                 return false
@@ -25,12 +25,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         res.status(400).json({"message": "Incorrect API Key"})
     } else {
         try {
-            const savedInstance = await prismac.instances.delete({
+            const savedInstance = await prisma.instances.delete({
                 where: { uri: instanceData.uri }
             })
             res.status(200).json({"message": "Instance deleted successfully"})
         } catch (err) {
-            if (err instanceof Prisma.PrismaClientKnownRequestError){
+            if (err instanceof PrismaClientKnownRequestError){
                 if (err.code === 'P2025'){
                     res.status(400).json({"message": "instance not in database"})
                 }else{
@@ -38,6 +38,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 }
             }
         }
-    }
+    }*/
 
 }
