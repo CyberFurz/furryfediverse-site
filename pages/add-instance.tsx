@@ -51,6 +51,7 @@ const AddInstance: NextPage = () => {
             data.type = data.type != '' ? data.type : 'general'
             data.uri = data.uri.replace(/^https?:\/\//, '')
             data.nsfwflag = data.nsfwflag != '' ? data.nsfwflag : 'sfw'
+            data.api_mode = data.api_mode != '' ? data.api_mode : 'mastodon'
             create(data)
         } catch (err) {
             console.error(err)
@@ -207,7 +208,7 @@ const AddInstance: NextPage = () => {
                                     </label>
                                     <select
                                         id="type"
-                                        name="nsfwflag"
+                                        name="api_mode"
                                         className="select select-bordered w-full max-w-xs"
                                         onChange={(e) =>
                                             setForm({
