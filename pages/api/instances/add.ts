@@ -131,11 +131,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 )
 
                 // Set the instance contact
-                if (instanceData.api_mode = "mastodon") {
+                if (instanceData.api_mode == 'mastodon') {
                     let instanceContact = cachedata.instance_contact
-                } else if (instanceData.api_mode = "misskey") {
+                } else if (instanceData.api_mode == 'misskey') {
                     let instanceContact = instanceData.instance_contact
                 } else {
+                    let instanceContact = ''
                     res.status(400).json({
                         message: 'Administrator verification failed',
                         type: 'error',
