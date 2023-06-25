@@ -10,7 +10,8 @@ pipeline:
             image: plugins/ecr
             type: Plugin
             settings:
-              access_key: ${AWS_ACCESS_KEY}
-              secret_key: ${AWS_SECRET_KEY}
-              repo: ${ECR_REPO}
-              registry: {ECR_REGISTRY}
+              access_key: $AWS_ACCESS_KEY
+              secret_key: $AWS_SECRET_KEY
+              repo: $ECR_REPO
+              registry: $ECR_REGISTRY
+            secrets: [AWS_ACCESS_KEY, AWS_SECRET_KEY, ECR_REPO, ECR_REGISTRY]
