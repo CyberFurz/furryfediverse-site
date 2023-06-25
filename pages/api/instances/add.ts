@@ -131,7 +131,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 )
 
                 // Set the instance contact
-                let instanceContact = instanceData.instance_contact ?? cachedata.instance_contact
+                if (instanceData.api_mode = "mastodon") {
+                    let instanceContact = cachedata.instance_contact
+                } else if (instanceData.api_mode = "misskey") {
+                    let instanceContact = instanceData.instance_contact
+                } else {
+                    res.status(400).json({
+                        message: 'Administrator verification failed',
+                        type: 'error',
+                    })
+                }
+                
 
                 // Check if the user is allowed to submit the isntance
                 if (instanceData.api_mode == 'mastodon') {
