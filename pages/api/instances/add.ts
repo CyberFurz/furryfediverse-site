@@ -128,24 +128,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     'mastodon',
                     process.env.MASTODON_URL,
                     process.env.ACCESS_TOKEN
-                )
-
-                // Set the instance contact
-                if (instanceData.api_mode == 'mastodon') {
-                    let instanceContact = cachedata.instance_contact
-                } else if (instanceData.api_mode == 'misskey') {
-                    let instanceContact = instanceData.instance_contact
-                } else {
-                    let instanceContact = ''
-                    res.status(400).json({
-                        message: 'Administrator verification failed',
-                        type: 'error',
-                    })
-                }
-                
+                )              
 
                 // Check if the user is allowed to submit the isntance
                 if (instanceData.api_mode == 'mastodon') {
+                    // Set the instacne contact
+                    let instanceContact = cachedata.instance_contact
                     // Compose Toot
                     let toot =
                         '@' +
@@ -163,6 +151,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     client
                         .postStatus(toot, { visibility: 'direct' })
                 } else if (instanceData.api_mode == 'misskey') {
+                    // Set the instance contact
+                    let instanceContact = instanceData.instance_contact
                     // Check submitted user is admin
                     let adminVerify = {
                         query: instanceContact,
