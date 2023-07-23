@@ -195,6 +195,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 }
 
             } catch (err) {
+                console.log(err)
                 if (err instanceof PrismaClientKnownRequestError) {
                     if (err.code === 'P2002') {
                         res.status(400).json({
