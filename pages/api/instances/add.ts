@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import generator from 'megalodon'
 import { ACCESS_TOKEN, BASE_URL } from "../../../lib/config"
-import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime';
+import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime/library';
 import { prisma } from '../../../lib/prisma'
 
 const dotenv = require('dotenv')
