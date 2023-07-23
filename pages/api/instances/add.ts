@@ -196,7 +196,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
             } catch (err) {
                 console.log(err)
-                if (err instanceof PrismaClientKnownRequestError) {
+                if (err instanceof prisma.PrismaClientKnownRequestError) {
                     if (err.code === 'P2002') {
                         res.status(400).json({
                             message: 'Instance already exists',
@@ -208,7 +208,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                             type: 'error',
                         })
                     }
-                } else if (err instanceof PrismaClientValidationError) {
+                } else if (err instanceof prisma.PrismaClientValidationError) {
                     res.status(400).json({ message: err.message, type: 'error' })
                 }
             }
