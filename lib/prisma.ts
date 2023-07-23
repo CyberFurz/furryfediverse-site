@@ -1,4 +1,4 @@
-import { PrismaClient, PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client'
+import { PrismaClient, PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime'
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient & PrismaClientKnownRequestError & PrismaClientValidationError | undefined
