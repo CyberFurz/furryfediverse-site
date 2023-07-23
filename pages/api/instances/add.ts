@@ -113,6 +113,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
                 })
 
+                console.log(savedInstance)
+
                 // Absolutely force the value to be false after creation!
                 const unverifiedInstance = await prisma.instances.update({
                     where: { uri: instanceData.uri },
