@@ -52,7 +52,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     user_count: misskeyStatsData.originalUsersCount,
                     status_count: misskeyStatsData.notesCount,
                     instance_contact: 'null',
-                    registrations: misskeyMetaData.disableRegistration,
+                    registrations: misskeyMetaData.disableRegistration === false,
                     approval_required: false,
                 }
                 return parsedMasterData
