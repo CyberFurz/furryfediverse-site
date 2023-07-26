@@ -91,13 +91,14 @@ const Home: NextPage = ({ general, niche, ios, android }: any) => {
                         <h2 className='text-2xl card-title'>Getting Started</h2>
                         <p>
                             Joining is simple and easy, just pick a server from
-                            below to get started. Or if you are nerdy like
+                            below or click the button right below this paragraph
+                             to get started. Or if you are nerdy like
                             stated before set up your own server... but I still
                             think it is best to start out on an existing
                             instance first. You will be able to move easily with
                             all your followers if you want.
                         </p>
-                        <center><a href={randomInstance} className='btn btn-primary normal-case text-lg flex flex-nowrap justify-between w-full mx-auto'>Join A Recommended Instance Now!</a></center>
+                        <center><a href={randomInstance} className='btn btn-primary normal-case text-lg flex flex-nowrap justify-between'>Join A Recommended Instance Now!</a></center>
                         <p>
                             <strong>Note:</strong> You may feel like you should
                                                    join a LARGE instance, but you should keep in mind
