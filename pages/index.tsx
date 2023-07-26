@@ -14,6 +14,14 @@ const Home: NextPage = ({ general, niche, ios, android }: any) => {
         initial: { x: '0%', '--divHeight': `0px` },
         animate: { x: '-55%', '--divHeight': `0px` },
     })
+
+    function getRandomInstance(strings: string[]): string {
+        const randomIndex = Math.floor(Math.random() * strings.length);
+        return strings[randomIndex];
+    }
+
+    const suggestedInstances = ["https://floofy.tech/auth/sign_up", "https://bark.lgbt/auth/sign_up", "https://pawb.fun/auth/sign_up", "https://meemu.org/auth/sign_up"]
+    const randomInstance = getRandomInstance(suggestedInstances)
     
     const generalDiv = React.useRef<HTMLDivElement>()
     const nicheDiv = React.useRef<HTMLDivElement>()
@@ -89,6 +97,7 @@ const Home: NextPage = ({ general, niche, ios, android }: any) => {
                             instance first. You will be able to move easily with
                             all your followers if you want.
                         </p>
+                        <center><a href={randomInstance} className='btn btn-primary normal-case text-lg flex flex-nowrap justify-between w-full mx-auto'>Join A Recommended Instance Now!</a></center>
                         <p>
                             <strong>Note:</strong> You may feel like you should
                                                    join a LARGE instance, but you should keep in mind
