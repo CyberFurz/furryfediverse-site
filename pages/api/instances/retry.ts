@@ -84,6 +84,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     where: { id: allInstances[i].id },
                     data: {
                         failed_checks: 0,
+                        banned: false,
+                        ban_reason: ''
                     },
                 })
             }else{
