@@ -223,9 +223,12 @@ const AddInstance: NextPage = () => {
                                         <option value="misskey">
                                             Misskey API
                                         </option>
+                                        <option value="funkwhale">
+                                            Funkwhale API
+                                        </option>
                                     </select>
                                 </div>
-                                
+
                                 <div>
                                     <label className="label">
                                         <span className="label-text text-2xl font-bold">
