@@ -4,6 +4,7 @@ import generator from 'megalodon'
 import { ACCESS_TOKEN, BASE_URL } from "../../../lib/config"
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime/library';
 import { prisma } from '../../../lib/prisma'
+import {InstanceFetcher} from "../util";
 
 const dotenv = require('dotenv')
 dotenv.config()
@@ -21,69 +22,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         req.body
 
     // Function to parse through the URI and check if it's valid and return the data
-    async function testURI(instanceURI: string, instanceType: string) {
-        if (instanceType == 'mastodon') {
-            let init = { headers: { 'Content-Type': 'application/json;charset=UTF-8' } }
-            let verifyURI = 'https://' + instanceURI + '/api/v1/instance'
-            try {
-                const fetchingData = await fetch(verifyURI, init)
-                const mastodonData = await fetchingData.json()
-                const parsedMasterData = {
-                    title: mastodonData.title,
-                    description: mastodonData.short_description !== undefined ? mastodonData.short_description : mastodonData.description, // Pleroma instances don't have a short_description field, so we use the description field instead
-                    thumbnail: mastodonData.thumbnail,
-                    user_count: mastodonData.stats.user_count,
-                    status_count: mastodonData.stats.status_count,
-                    instance_contact: mastodonData.contact_account.username,
-                    registrations: mastodonData.registrations,
-                    approval_required: mastodonData.approval_required,
-                }
-                return parsedMasterData
-            } catch (err) {
-                return false
-            }
-        } else if (instanceType == 'misskey') {
-            let getDetails = { detail: true }
-            let init = { 
-                headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-                body: JSON.stringify(getDetails),
-                method: 'POST'
-            }
-            let metaURI = 'https://' + instanceURI + '/api/meta'
-            let statsURI = 'https://' + instanceURI + '/api/stats'
-            try {
-                const fetchingData = await fetch(metaURI, init)
-                const fetchingData2 = await fetch(statsURI, init)
-                const misskeyMetaData = await fetchingData.json()
-                const misskeyStatsData = await fetchingData2.json()
-                const parsedMasterData = {
-                    title: misskeyMetaData.name,
-                    description: misskeyMetaData.description,
-                    thumbnail: misskeyMetaData.bannerUrl,
-                    user_count: misskeyStatsData.originalUsersCount,
-                    status_count: misskeyStatsData.notesCount,
-                    instance_contact: 'null',
-                    registrations: misskeyMetaData.disableRegistration === false,
-                    approval_required: false,
-                }
-                return parsedMasterData
-            } catch (err) {
-                return false
-            }
-        } else {
 
-            return false
-        }
-    }
-    
+
 
     // Run through the URI test and collect the data
     // Then create the instance in the database
-    if ((await testURI(instanceData.uri, instanceData.api_mode)) == false) {
+    if ((await InstanceFetcher.checkAvailable(instanceData.uri, instanceData.api_mode)) == false) {
         // Return an error if the URI is invalid
         res.status(400).json({ message: 'failed to verify URI', type: 'error' })
     } else {
-        let cachedata = await testURI(instanceData.uri, instanceData.api_mode)
+        let cachedata = await InstanceFetcher.checkAvailable(instanceData.uri, instanceData.api_mode)
         if (cachedata != false) {
             try {
                 // Prepare the data to be saved to the database
@@ -130,7 +78,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     'mastodon',
                     process.env.MASTODON_URL,
                     process.env.ACCESS_TOKEN
-                )              
+                )
 
                 // Check if the user is allowed to submit the isntance
                 if (instanceData.api_mode == 'mastodon') {
@@ -162,7 +110,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                         origin: "local",
                         detail: true
                     }
-                    let init = { 
+                    let init = {
                         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
                         body: JSON.stringify(adminVerify),
                         method: 'POST'
