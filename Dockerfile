@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Install app dependencies
 COPY package*.json ./
-RUN pnpm install
+RUN npm install
 
 # Copy the rest of the application code
 COPY . .
@@ -15,12 +15,12 @@ COPY . .
 ENV DATABASE_URL="file:./temp.db"
 
 # Run any build scripts
-RUN yarn prisma generate
-RUN yarn prisma migrate deploy
-RUN yarn build
+RUN npx prisma generate
+RUN npx prisma migrate deploy
+RUN npx build
 
 # Expose the port that the app will run on
 EXPOSE 3000
 
 # Start the app
-CMD [ "yarn", "start" ]
+CMD [ "npx", "start" ]
