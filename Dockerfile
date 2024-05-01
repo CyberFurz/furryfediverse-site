@@ -17,10 +17,10 @@ ENV DATABASE_URL="file:./temp.db"
 # Run any build scripts
 RUN npx prisma generate
 RUN npx prisma migrate deploy
-RUN npx build
+RUN npm build
 
 # Expose the port that the app will run on
 EXPOSE 3000
 
 # Start the app
-CMD [ "npx", "start" ]
+CMD [ "npm", "start" ]
