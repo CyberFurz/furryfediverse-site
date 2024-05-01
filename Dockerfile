@@ -1,12 +1,12 @@
 # Use an official Node runtime as a parent image
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Set the working directory to /app
 WORKDIR /app
 
 # Install app dependencies
 COPY package*.json ./
-RUN yarn install
+RUN pnpm install
 
 # Copy the rest of the application code
 COPY . .
