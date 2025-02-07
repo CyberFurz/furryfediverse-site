@@ -12,6 +12,9 @@
 /.next/
 /out/
 
+# image cache
+/public/img/cache/
+
 # production
 /build
 
