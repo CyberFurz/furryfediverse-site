@@ -19,7 +19,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   });
   for (let i = 0; i < allInstances.length; i++) {
     try {
-      let updateInstance = await InstanceFetcher.checkAvailable(
+      const updateInstance = await InstanceFetcher.checkAvailable(
         allInstances[i].uri,
         allInstances[i].api_mode
       );

@@ -2,7 +2,13 @@ import fetch from "node-fetch";
 import fs from "fs";
 import path from "path";
 import { URL } from "url";
+import type {
+  FunkwhaleInstance,
+  MastodonInstance,
+  MisskeyInstance,
+} from "../../lib/types";
 
+// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 export class InstanceFetcher {
   public static async checkAvailable(
     instanceURI: string,
@@ -16,10 +22,11 @@ export class InstanceFetcher {
         init = {
           headers: { "Content-Type": "application/json;charset=UTF-8" },
         };
+        // biome-ignore lint/style/useTemplate: <explanation>
         metaURI = "https://" + instanceURI + "/api/v1/instance";
         try {
           const fetchingData = await fetch(metaURI, init);
-          const mastodonData = await fetchingData.json();
+          const mastodonData = (await fetchingData.json()) as MastodonInstance;
           parsedMasterData = {
             title: mastodonData.title,
             description:
@@ -38,19 +45,25 @@ export class InstanceFetcher {
         }
         break;
       case "misskey":
-        let getDetails = { detail: true };
+        // biome-ignore lint/correctness/noSwitchDeclarations: <explanation>
+        const getDetails = { detail: true };
         init = {
           headers: { "Content-Type": "application/json;charset=UTF-8" },
           body: JSON.stringify(getDetails),
           method: "POST",
         };
+        // biome-ignore lint/style/useTemplate: <explanation>
         metaURI = "https://" + instanceURI + "/api/meta";
-        let statsURI = "https://" + instanceURI + "/api/stats";
+        // biome-ignore lint/style/useTemplate: <explanation>
+        // biome-ignore lint/correctness/noSwitchDeclarations: <explanation>
+        const statsURI = "https://" + instanceURI + "/api/stats";
         try {
           const fetchingData = await fetch(metaURI, init);
           const fetchingData2 = await fetch(statsURI, init);
-          const misskeyMetaData = await fetchingData.json();
-          const misskeyStatsData = await fetchingData2.json();
+          const misskeyMetaData =
+            (await fetchingData.json()) as MisskeyInstance;
+          const misskeyStatsData =
+            (await fetchingData2.json()) as MisskeyInstance;
           parsedMasterData = {
             title: misskeyMetaData.name,
             description: misskeyMetaData.description,
@@ -72,7 +85,8 @@ export class InstanceFetcher {
         metaURI = `https://${instanceURI}/api/v1/instance/nodeinfo/2.0/`;
         try {
           const fetchingData = await fetch(metaURI);
-          const funkwhaleData = await fetchingData.json();
+          const funkwhaleData =
+            (await fetchingData.json()) as FunkwhaleInstance;
           parsedMasterData = {
             title: funkwhaleData.metadata.nodeName,
             description: funkwhaleData.metadata.shortDescription,
