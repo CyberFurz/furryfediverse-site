@@ -116,24 +116,19 @@ const Home: NextPage = ({ general, niche, ios, android }: any) => {
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
             <p className="text-2xl">Tools To Get You Going!</p>
-            <p className="font-bold py-4">Find Your Friends on the Fediverse</p>
+            <p className="font-bold py-4">Find Others on the Fediverse</p>
             <div className="px-2 flex flex-wrap justify-center w-full sm:w-fit gap-2">
               <a
-                href="https://fedifinder-v1.glitch.me/"
+                href="https://fediverse.info/explore/people?t=furry"
                 className="btn btn-primary normal-case text-lg"
                 target="_blank"
                 rel="noreferrer"
               >
-                <i className="fa-brands fa-twitter" aria-hidden="true"></i>
-                <i
-                  className="ml-2 fa-solid fa-arrow-right"
-                  aria-hidden="true"
-                ></i>{" "}
                 <i
                   className="ml-2 fa-brands fa-mastodon"
                   aria-hidden="true"
                 ></i>
-                <span className="ml-2">Fedifinder</span>
+                <span className="ml-2">Fediverse People Directory</span>
               </a>
             </div>
             <p className="font-bold py-4">
