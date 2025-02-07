@@ -429,9 +429,9 @@ export async function getStaticProps() {
       href: "https://apps.apple.com/us/app/ivory-for-mastodon-by-tapbots/id6444602274",
     },
     {
-      name: "Mammoth",
+      name: "Trunks",
       paid: false,
-      href: "https://apps.apple.com/us/app/mammoth-for-mastodon/id1667573899",
+      href: "https://apps.apple.com/us/app/trunks-for-mastodon/id6444749479",
     },
     {
       name: "Toot!",
@@ -442,19 +442,19 @@ export async function getStaticProps() {
 
   let androidApps = [
     {
-      name: "Megalodon",
-      paid: false,
-      href: "https://sk22.github.io/megalodon/",
-    },
-    {
-      name: "Tusky",
-      paid: false,
-      href: "https://tusky.app",
-    },
-    {
       name: "Moshidon",
       paid: false,
       href: "https://lucasggamerm.github.io/moshidon/",
+    },
+    {
+      name: "Rodent",
+      paid: false,
+      href: "https://mastodonrodent.app/",
+    },
+    {
+      name: "Trunks",
+      paid: false,
+      href: "https://play.google.com/store/apps/details?id=com.decad3nce.trunks&pcampaignid=web_share",
     },
     {
       name: "Fedilab",
