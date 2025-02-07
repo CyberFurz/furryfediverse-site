@@ -5,6 +5,7 @@ FROM node:22-alpine
 WORKDIR /app
 
 # Install app dependencies
+RUN apk add --no-cache openssl
 COPY package*.json ./
 RUN npm install
 
