@@ -25,6 +25,7 @@ const Home: NextPage = ({ general, niche, ios, android }: any) => {
     "https://bark.lgbt/auth/sign_up",
     "https://pawb.fun/auth/sign_up",
     "https://meemu.org/auth/sign_up",
+    "https://woof.tech/auth/sign_up",
   ];
   const randomInstance = getRandomInstance(suggestedInstances);
 
