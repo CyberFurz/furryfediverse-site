@@ -1,17 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../../lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "../../../../lib/prisma";
 import {
   PrismaClientKnownRequestError,
   PrismaClientValidationError,
 } from "@prisma/client/runtime/library";
-import { InstanceFetcher } from "../util";
+import { InstanceFetcher } from "../../util";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method !== "GET") {
-    return res.status(405).json({ message: "Invalid API Method" });
-  }
-
+export async function GET(request: NextRequest) {
   const allInstances = await prisma.instances.findMany({
     where: { banned: true, ban_reason: "Instance failed 5 checks in a row" },
   });
@@ -66,11 +62,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       }
     } catch (err) {
       if (err instanceof PrismaClientKnownRequestError) {
-        res.status(400).json({ message: err.message });
+        return NextResponse.json({ message: err.message }, { status: 400 });
       } else if (err instanceof PrismaClientValidationError) {
-        res.status(400).json({ message: err.message });
+        return NextResponse.json({ message: err.message }, { status: 400 });
       }
     }
   }
-  res.status(200).json({ message: "successfully updated instances" });
-};
+  return NextResponse.json({ message: "successfully updated instances" });
+} 

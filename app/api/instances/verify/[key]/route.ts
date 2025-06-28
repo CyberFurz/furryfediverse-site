@@ -1,16 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from "next"
+import { NextRequest, NextResponse } from "next/server"
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime"
-import { prisma } from "../../../../lib/prisma"
+import { prisma } from "../../../../../lib/prisma"
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { key } = req.query
-  const apikey = key as unknown as string
-  if (req.method !== "GET") {
-    return res.status(405).json({ message: "Invalid API Method" })
-  }
-
-  const instanceData = req.body
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ key: string }> }
+) {
+  const { key: apikey } = await params
 
   async function checkKey(instanceKey: string) {
     const instanceEntry = await prisma.apiKeys.findFirst({
@@ -28,7 +25,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   if ((await checkKey(apikey)) == "failed") {
-    res.status(400).json({ message: "Incorrect API Key" })
+    return NextResponse.json({ message: "Incorrect API Key" }, { status: 400 })
   } else {
     try {
       let check = await checkKey(apikey)
@@ -36,15 +33,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         where: { id: check },
         data: { verified: true },
       })
-      res.status(200).json({ message: "Instance added successfully" })
+      return NextResponse.json({ message: "Instance added successfully" })
     } catch (err) {
       if (err instanceof PrismaClientKnownRequestError) {
         if (err.code === "P2025") {
-          res.status(400).json({ message: "instance not in database" })
+          return NextResponse.json({ message: "instance not in database" }, { status: 400 })
         } else {
-          res.status(400).json({ message: err.message })
+          return NextResponse.json({ message: err.message }, { status: 400 })
         }
       }
     }
   }
-}
+} 

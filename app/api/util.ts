@@ -106,11 +106,18 @@ export class InstanceFetcher {
     }
 
     if (parsedMasterData.thumbnail) {
-      console.log("Caching thumbnail");
-      parsedMasterData.thumbnail = await this.cacheThumbnail(
-        parsedMasterData.thumbnail,
-        instanceURI
-      );
+      // Only cache if it's a remote URL, not a local path
+      if (
+        parsedMasterData.thumbnail.startsWith("http://") ||
+        parsedMasterData.thumbnail.startsWith("https://")
+      ) {
+        console.log("Caching thumbnail");
+        parsedMasterData.thumbnail = await this.cacheThumbnail(
+          parsedMasterData.thumbnail,
+          instanceURI
+        );
+      }
+      // If already a local path, leave as is
     }
     return parsedMasterData;
   }
@@ -119,6 +126,13 @@ export class InstanceFetcher {
     thumbnailUrl: string,
     instanceURI: string
   ): Promise<string> {
+    // Defensive: If already a local path, just return it
+    if (
+      thumbnailUrl.startsWith("/img/") ||
+      thumbnailUrl.startsWith("img/")
+    ) {
+      return thumbnailUrl;
+    }
     try {
       // Validate the thumbnail URL before attempting to fetch
       if (!thumbnailUrl || thumbnailUrl.includes('instance.ext') || thumbnailUrl.includes('instance.social')) {

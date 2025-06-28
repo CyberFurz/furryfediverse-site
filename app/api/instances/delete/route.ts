@@ -1,14 +1,10 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
+import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime/library';
-import { prisma } from '../../../lib/prisma'
+import { prisma } from '../../../../lib/prisma'
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-    if (req.method !== 'POST') {
-        return res.status(405).json({ message: 'Invalid API Method'})
-    }
-
-    const instanceData = req.body
+export async function POST(request: NextRequest) {
+    const instanceData = await request.json()
     
     /*async function checkKey(instanceKey: string, instanceURI: string) {
         const instanceEntry = await prisma.instances.findFirst({ where: { uri: instanceURI }, select: { api_key: true } })
@@ -22,22 +18,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
     
     if (await checkKey(instanceData.uri, instanceData.key) == false) {
-        res.status(400).json({"message": "Incorrect API Key"})
+        return NextResponse.json({"message": "Incorrect API Key"}, { status: 400 })
     } else {
         try {
             const savedInstance = await prisma.instances.delete({
                 where: { uri: instanceData.uri }
             })
-            res.status(200).json({"message": "Instance deleted successfully"})
+            return NextResponse.json({"message": "Instance deleted successfully"})
         } catch (err) {
             if (err instanceof PrismaClientKnownRequestError){
                 if (err.code === 'P2025'){
-                    res.status(400).json({"message": "instance not in database"})
+                    return NextResponse.json({"message": "instance not in database"}, { status: 400 })
                 }else{
-                    res.status(400).json({"message": err.message })
+                    return NextResponse.json({"message": err.message }, { status: 400 })
                 }
             }
         }
     }*/
 
-}
+} 

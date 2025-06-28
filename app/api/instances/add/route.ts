@@ -1,25 +1,18 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 import generator from "megalodon";
-import { ACCESS_TOKEN, BASE_URL } from "../../../lib/config";
+import { ACCESS_TOKEN, BASE_URL } from "../../../../lib/config";
 import {
   PrismaClientKnownRequestError,
   PrismaClientValidationError,
 } from "@prisma/client/runtime/library";
-import { prisma } from "../../../lib/prisma";
-import { InstanceFetcher } from "../util";
+import { prisma } from "../../../../lib/prisma";
+import { InstanceFetcher } from "../../util";
 
 const dotenv = require("dotenv");
 dotenv.config();
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  // Only allow POST Requests
-  if (req.method !== "POST") {
-    return res
-      .status(405)
-      .json({ message: "Invalid API Method", type: "error" });
-  }
-
+export async function POST(request: NextRequest) {
   // Define the incoming POST Data
   const instanceData: {
     uri: string;
@@ -27,7 +20,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     nsfwflag: string;
     api_mode: string;
     instance_contact?: string;
-  } = req.body;
+  } = await request.json();
 
   // Function to parse through the URI and check if it's valid and return the data
 
@@ -40,7 +33,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     )) == false
   ) {
     // Return an error if the URI is invalid
-    res.status(400).json({ message: "failed to verify URI", type: "error" });
+    return NextResponse.json({ message: "failed to verify URI", type: "error" }, { status: 400 });
   } else {
     let cachedata = await InstanceFetcher.checkAvailable(
       instanceData.uri,
@@ -105,12 +98,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           // Validate the instance contact before posting
           if (!instanceContact || instanceContact.includes('instance.ext') || instanceContact.includes('instance.social') || instanceContact === 'null') {
             console.log('Invalid instance contact detected, skipping status post:', instanceContact);
-            res.status(200).json({
+            return NextResponse.json({
               message:
                 "Added instance successfully, but could not send verification message due to invalid contact information.",
               type: "success",
             });
-            return;
           }
           
           // Compose Toot
@@ -121,12 +113,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             instanceData.uri +
             " Hi there someone is attempting to register your instance on FurryFediverse, if this is you. Please click this link to finish the registration: https://furryfediverse.org/api/instances/verify/" +
             getAPIKey.api_key;
-          res.status(200).json({
+          client.postStatus(toot, { visibility: "direct" });
+          return NextResponse.json({
             message:
               "Added instance successfully, your instance admin account needs to be verified! Check your DMs!",
             type: "success",
           });
-          client.postStatus(toot, { visibility: "direct" });
         } else if (instanceData.api_mode == "misskey") {
           // Set the instance contact
           let instanceContact = instanceData.instance_contact;
@@ -157,37 +149,37 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               instanceData.uri +
               " Hi there someone is attempting to register your instance on FurryFediverse, if this is you. Please click this link to finish the registration: https://furryfediverse.org/api/instances/verify/" +
               getAPIKey.api_key;
-            res.status(200).json({
+            client.postStatus(toot, { visibility: "direct" });
+            return NextResponse.json({
               message:
                 "Added instance successfully, your instance admin account needs to be verified! Check your DMs!",
               type: "success",
             });
-            client.postStatus(toot, { visibility: "direct" });
           } else {
-            res.status(400).json({
+            return NextResponse.json({
               message: "Administrator verification failed",
               type: "error",
-            });
+            }, { status: 400 });
           }
         }
       } catch (err) {
         console.log(err);
         if (err instanceof PrismaClientKnownRequestError) {
           if (err.code === "P2002") {
-            res.status(400).json({
+            return NextResponse.json({
               message: "Instance already exists",
               type: "error",
-            });
+            }, { status: 400 });
           } else {
-            res.status(400).json({
+            return NextResponse.json({
               message: err.message,
               type: "error",
-            });
+            }, { status: 400 });
           }
         } else if (err instanceof PrismaClientValidationError) {
-          res.status(400).json({ message: err.message, type: "error" });
+          return NextResponse.json({ message: err.message, type: "error" }, { status: 400 });
         }
       }
     }
   }
-};
+} 
