@@ -6,7 +6,7 @@ import {
   PrismaClientValidationError,
 } from "@prisma/client/runtime/library";
 import { InstanceFetcher } from "../../util";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export async function GET(request: NextRequest) {
   const allInstances = await prisma.instances.findMany({
@@ -68,8 +68,16 @@ export async function GET(request: NextRequest) {
     }
   }
   
-  // Revalidate the homepage to show updated data
-  revalidatePath('/');
+  // Revalidate the homepage using tag-based revalidation
+  revalidateTag('instances');
+  
+  // Also trigger revalidation via API endpoint as backup
+  try {
+    const baseUrl = process.env.VERCEL_URL || 'http://localhost:3000';
+    await fetch(`${baseUrl}/api/revalidate`, { method: 'POST' });
+  } catch (err) {
+    console.log('Revalidation API call failed:', err);
+  }
   
   return NextResponse.json({ message: "successfully updated instances" });
 } 

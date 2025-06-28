@@ -49,7 +49,7 @@ async function getData() {
     },
   ];
 
-  // Fetch data from external API
+  // Fetch data from external API with cache tag
   const generalInstance = await prisma.instances.findMany({
     where: { type: "general", verified: true, banned: false },
   });
