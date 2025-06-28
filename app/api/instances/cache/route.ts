@@ -6,6 +6,7 @@ import {
   PrismaClientValidationError,
 } from "@prisma/client/runtime/library";
 import { InstanceFetcher } from "../../util";
+import { revalidatePath } from "next/cache";
 
 export async function GET(request: NextRequest) {
   const allInstances = await prisma.instances.findMany({
@@ -66,5 +67,9 @@ export async function GET(request: NextRequest) {
       }
     }
   }
+  
+  // Revalidate the homepage to show updated data
+  revalidatePath('/');
+  
   return NextResponse.json({ message: "successfully updated instances" });
 } 

@@ -103,6 +103,9 @@ async function getData() {
   };
 }
 
+// Enable ISR - revalidate every 5 minutes (300 seconds)
+export const revalidate = 300;
+
 export default async function Home() {
   const data = await getData();
   
