@@ -1,8 +1,10 @@
+'use client'
+
 import { useState } from 'react'
 import { maintainers } from '../lib/config'
 import Link from "next/link"
 
-export default function Layout({ children }: any) {
+export default function ThemeLayout({ children }: any) {
     const [theme, setTheme] = useState('dark')
     
     return (
@@ -15,7 +17,11 @@ export default function Layout({ children }: any) {
                     <div className='flex justify-between items-center'>
                         <Link href='/'>
                             <p className='text-4xl place-self-center'>
-                                <img src='img/FullColor.svg' alt='FurryFediverse' className='h-32' />
+                                <img 
+                                    src={theme === 'dark' ? 'img/FullColor.svg' : 'img/FullColor-Light.svg'} 
+                                    alt='FurryFediverse' 
+                                    className='h-32' 
+                                />
                             </p>
                         </Link>
                         <div className='flex flex-nowrap justify-evenly items-center gap-2'>
@@ -91,4 +97,4 @@ export default function Layout({ children }: any) {
             setTheme('light')
         }
     }
-}
+} 

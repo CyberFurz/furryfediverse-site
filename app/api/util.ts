@@ -120,10 +120,17 @@ export class InstanceFetcher {
     instanceURI: string
   ): Promise<string> {
     try {
+      // Validate the thumbnail URL before attempting to fetch
+      if (!thumbnailUrl || thumbnailUrl.includes('instance.ext') || thumbnailUrl.includes('instance.social')) {
+        console.log('Invalid thumbnail URL detected, skipping cache:', thumbnailUrl);
+        return ''; // Return empty string for invalid URLs
+      }
+
       const response = await fetch(thumbnailUrl);
       if (!response.ok) throw new Error("Failed to fetch thumbnail");
 
-      const buffer = await response.buffer();
+      const arrayBuffer = await response.arrayBuffer();
+      const uint8Array = new Uint8Array(arrayBuffer);
       const cacheDir = path.resolve(
         process.cwd(),
         "public/img/cache",
@@ -138,12 +145,12 @@ export class InstanceFetcher {
       const ext = path.extname(url.pathname);
       const filePath = path.join(cacheDir, `thumbnail${ext}`);
       console.log(`Saving thumbnail to: ${filePath}`);
-      fs.writeFileSync(filePath, buffer);
+      fs.writeFileSync(filePath, uint8Array);
 
       return `/img/cache/${instanceURI}/thumbnail${ext}`;
     } catch (err) {
       console.error("Error caching thumbnail:", err);
-      return thumbnailUrl; // Fallback to original URL if caching fails
+      return ''; // Return empty string if caching fails
     }
   }
 }

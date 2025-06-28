@@ -1,5 +1,5 @@
-import Head from 'next/head'
-import type { NextPage } from 'next'
+'use client'
+
 import { useState } from 'react'
 import Link from 'next/link'
 
@@ -16,9 +16,7 @@ interface Message {
     type: string
 }
 
-
-
-const AddInstance: NextPage = () => {
+export default function AddInstance() {
     const [form, setForm] = useState<FormData>({
         type: '',
         uri: '',
@@ -60,13 +58,6 @@ const AddInstance: NextPage = () => {
 
     return (
         <main>
-            <Head>
-                <title>The Furry Fediverse - Add Server</title>
-                <link
-                    rel="icon"
-                    href="/favicon.ico"
-                />
-            </Head>
             <div className="flex flex-col">
                 <div className="card bg-base-100 mt-4 overflow-clip">
                     <div className="text-sm breadcrumbs absolute ml-4">
@@ -98,9 +89,9 @@ const AddInstance: NextPage = () => {
                                         viewBox="0 0 24 24"
                                     >
                                         <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
                                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                                         />
                                     </svg>
@@ -257,8 +248,6 @@ const AddInstance: NextPage = () => {
                                 </div>
                             </div>
 
-
-
                             <div className="divider"></div>
                             <div className="px-8 mb-8">
                                 <label className="label">
@@ -333,6 +322,4 @@ const AddInstance: NextPage = () => {
             </div>
         </main>
     )
-}
-
-export default AddInstance
+} 

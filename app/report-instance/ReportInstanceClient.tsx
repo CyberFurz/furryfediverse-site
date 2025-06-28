@@ -1,9 +1,7 @@
-import Head from 'next/head'
-import type { NextPage } from 'next'
+'use client'
+
 import { useState } from 'react'
 import Link from 'next/link'
-import { prisma } from "../lib/prisma"
-import { sortInstances } from "../lib/instance-array-tools"
 
 interface FormData {
     contact: string
@@ -16,7 +14,11 @@ interface Message {
     type: string
 }
 
-const ReportInstance: NextPage = ({ instances }: any) => {
+interface ReportInstanceClientProps {
+    instances: { uri: string }[]
+}
+
+export default function ReportInstanceClient({ instances }: ReportInstanceClientProps) {
     const [form, setForm] = useState<FormData>({
         contact: '',
         uri: '',
@@ -53,13 +55,6 @@ const ReportInstance: NextPage = ({ instances }: any) => {
     
     return (
         <main>
-            <Head>
-                <title>The Furry Fediverse - Add Server</title>
-                <link
-                    rel='icon'
-                    href='/favicon.ico'
-                />
-            </Head>
             <div className='flex flex-col'>
                 <div className='card bg-base-100 mt-4 overflow-clip'>
                     <div className='text-sm breadcrumbs absolute ml-4'>
@@ -91,9 +86,9 @@ const ReportInstance: NextPage = ({ instances }: any) => {
                                         viewBox='0 0 24 24'
                                     >
                                         <path
-                                            stroke-linecap='round'
-                                            stroke-linejoin='round'
-                                            stroke-width='2'
+                                            strokeLinecap='round'
+                                            strokeLinejoin='round'
+                                            strokeWidth='2'
                                             d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
                                         />
                                     </svg>
@@ -166,7 +161,7 @@ const ReportInstance: NextPage = ({ instances }: any) => {
                                             (data: {
                                                 uri: any
                                             }) => (
-                                                <option value={ data.uri }>{ data.uri }</option>
+                                                <option key={data.uri} value={ data.uri }>{ data.uri }</option>
                                             )
                                         ) }
                                     </select>
@@ -241,24 +236,4 @@ const ReportInstance: NextPage = ({ instances }: any) => {
             </div>
         </main>
     )
-}
-
-export async function getStaticProps() {
-    // Interface pre-requisites
-    
-    // Fetch data from external API
-    const instances = await prisma.instances.findMany({
-        where: { verified: true },
-    })
-    
-    sortInstances(instances)
-    
-    return {
-        props: {
-            instances: instances,
-        },
-        revalidate: 60,
-    }
-}
-
-export default ReportInstance
+} 

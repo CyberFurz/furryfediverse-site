@@ -101,6 +101,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         if (instanceData.api_mode == "mastodon") {
           // Set the instacne contact
           let instanceContact = cachedata.instance_contact;
+          
+          // Validate the instance contact before posting
+          if (!instanceContact || instanceContact.includes('instance.ext') || instanceContact.includes('instance.social') || instanceContact === 'null') {
+            console.log('Invalid instance contact detected, skipping status post:', instanceContact);
+            res.status(200).json({
+              message:
+                "Added instance successfully, but could not send verification message due to invalid contact information.",
+              type: "success",
+            });
+            return;
+          }
+          
           // Compose Toot
           let toot =
             "@" +
