@@ -6,7 +6,7 @@ import {
   PrismaClientValidationError,
 } from "@prisma/client/runtime/library";
 import { InstanceFetcher } from "../../util";
-import { revalidateTag } from "next/cache";
+import { revalidateTag, revalidatePath } from "next/cache";
 
 export async function GET(request: NextRequest) {
   const allInstances = await prisma.instances.findMany({
@@ -68,15 +68,32 @@ export async function GET(request: NextRequest) {
     }
   }
   
-  // Revalidate the homepage using tag-based revalidation
-  revalidateTag('instances');
-  
-  // Also trigger revalidation via API endpoint as backup
+  // Multiple revalidation methods for Docker compatibility
   try {
-    const baseUrl = process.env.VERCEL_URL || 'http://localhost:3000';
-    await fetch(`${baseUrl}/api/revalidate`, { method: 'POST' });
-  } catch (err) {
-    console.log('Revalidation API call failed:', err);
+    // Method 1: Tag-based revalidation
+    revalidateTag('instances');
+    
+    // Method 2: Path-based revalidation
+    revalidatePath('/');
+    
+    // Method 3: Direct API call (for Docker containers)
+    const host = request.headers.get('host') || 'localhost:3000';
+    const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
+    const baseUrl = `${protocol}://${host}`;
+    
+    try {
+      const response = await fetch(`${baseUrl}/api/revalidate`, { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log('Revalidation API response:', response.status);
+    } catch (apiErr) {
+      console.log('Revalidation API call failed:', apiErr);
+    }
+  } catch (revalErr) {
+    console.log('Revalidation failed:', revalErr);
   }
   
   return NextResponse.json({ message: "successfully updated instances" });
