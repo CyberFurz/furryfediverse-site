@@ -7,6 +7,41 @@ import {
 } from "@prisma/client/runtime/library";
 import { InstanceFetcher } from "../../util";
 import { revalidateTag, revalidatePath } from "next/cache";
+import fs from "fs";
+import path from "path";
+
+// Helper function to validate and fix thumbnail paths
+async function validateThumbnailPath(thumbnailPath: string): Promise<string> {
+  if (!thumbnailPath || thumbnailPath === '') {
+    return '/img/fedi_placeholder.png';
+  }
+  
+  // If it's already a runaway path (multiple /img/), fix it
+  if (thumbnailPath.includes('/img/img/')) {
+    console.log(`Fixing runaway thumbnail path: ${thumbnailPath}`);
+    return '/img/fedi_placeholder.png';
+  }
+  
+  // If it's a local path, check if file exists
+  if (thumbnailPath.startsWith('/img/')) {
+    try {
+      const relativePath = thumbnailPath.startsWith('/') ? thumbnailPath.slice(1) : thumbnailPath;
+      const fullPath = path.resolve(process.cwd(), 'public', relativePath);
+      
+      if (fs.existsSync(fullPath)) {
+        return thumbnailPath; // File exists, return as is
+      } else {
+        console.log(`Cached thumbnail not found: ${thumbnailPath}, using fallback`);
+        return '/img/fedi_placeholder.png';
+      }
+    } catch (err) {
+      console.error("Error validating cached thumbnail:", err);
+      return '/img/fedi_placeholder.png';
+    }
+  }
+  
+  return thumbnailPath; // Return as is if it's a remote URL or valid path
+}
 
 export async function GET(request: NextRequest) {
   const allInstances = await prisma.instances.findMany({
@@ -20,15 +55,18 @@ export async function GET(request: NextRequest) {
       );
       // Fix issues when the cachedata thumbnail is null
       if (updateInstance !== false && updateInstance.thumbnail == null) {
-        updateInstance.thumbnail = "";
+        updateInstance.thumbnail = "/img/fedi_placeholder.png";
       }
       if (updateInstance != false) {
+        // Validate and fix the thumbnail path before saving
+        const validatedThumbnail = await validateThumbnailPath(updateInstance.thumbnail);
+        
         await prisma.instanceData.update({
           where: { instance_id: allInstances[i].id },
           data: {
             title: updateInstance.title,
             description: updateInstance.description,
-            thumbnail: updateInstance.thumbnail,
+            thumbnail: validatedThumbnail,
             user_count: updateInstance.user_count,
             status_count: updateInstance.status_count,
             registrations: updateInstance.registrations,

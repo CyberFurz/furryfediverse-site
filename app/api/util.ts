@@ -54,7 +54,6 @@ export class InstanceFetcher {
         };
         // biome-ignore lint/style/useTemplate: <explanation>
         metaURI = "https://" + instanceURI + "/api/meta";
-        // biome-ignore lint/style/useTemplate: <explanation>
         // biome-ignore lint/correctness/noSwitchDeclarations: <explanation>
         const statsURI = "https://" + instanceURI + "/api/stats";
         try {
@@ -116,10 +115,32 @@ export class InstanceFetcher {
           parsedMasterData.thumbnail,
           instanceURI
         );
+      } else if (parsedMasterData.thumbnail.startsWith("/img/")) {
+        // Validate that cached thumbnails actually exist
+        parsedMasterData.thumbnail = await this.validateCachedThumbnail(
+          parsedMasterData.thumbnail
+        );
       }
-      // If already a local path, leave as is
     }
     return parsedMasterData;
+  }
+
+  private static async validateCachedThumbnail(thumbnailPath: string): Promise<string> {
+    try {
+      // Remove leading slash for file system check
+      const relativePath = thumbnailPath.startsWith('/') ? thumbnailPath.slice(1) : thumbnailPath;
+      const fullPath = path.resolve(process.cwd(), 'public', relativePath);
+      
+      if (fs.existsSync(fullPath)) {
+        return thumbnailPath; // File exists, return as is
+      } else {
+        console.log(`Cached thumbnail not found: ${thumbnailPath}, using fallback`);
+        return '/img/fedi_placeholder.png'; // Return placeholder image
+      }
+    } catch (err) {
+      console.error("Error validating cached thumbnail:", err);
+      return '/img/fedi_placeholder.png'; // Return placeholder on error
+    }
   }
 
   private static async cacheThumbnail(
@@ -137,7 +158,7 @@ export class InstanceFetcher {
       // Validate the thumbnail URL before attempting to fetch
       if (!thumbnailUrl || thumbnailUrl.includes('instance.ext') || thumbnailUrl.includes('instance.social')) {
         console.log('Invalid thumbnail URL detected, skipping cache:', thumbnailUrl);
-        return ''; // Return empty string for invalid URLs
+        return '/img/fedi_placeholder.png'; // Return placeholder for invalid URLs
       }
 
       const response = await fetch(thumbnailUrl);
@@ -164,7 +185,7 @@ export class InstanceFetcher {
       return `/img/cache/${instanceURI}/thumbnail${ext}`;
     } catch (err) {
       console.error("Error caching thumbnail:", err);
-      return ''; // Return empty string if caching fails
+      return '/img/fedi_placeholder.png'; // Return placeholder if caching fails
     }
   }
 }

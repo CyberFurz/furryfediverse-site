@@ -18,7 +18,7 @@ export default function ThemeLayout({ children }: any) {
                         <Link href='/'>
                             <p className='text-4xl place-self-center'>
                                 <img 
-                                    src={theme === 'dark' ? 'img/FullColor.svg' : 'img/FullColor-Light.svg'} 
+                                    src='/img/FullColor.svg'
                                     alt='FurryFediverse' 
                                     className='h-32' 
                                 />

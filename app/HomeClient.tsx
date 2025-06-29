@@ -212,12 +212,11 @@ export default function HomeClient({ general, niche, ios, android }: HomeClientP
                       className="card bg-base-300 shadow-xl"
                     >
                       <figure className="px-4 pt-4">
-                        <ReactImageFallback
+                        <img
                           src={data.thumbnail}
-                          fallbackImage="./img/fedi_placeholder.png"
-                          initialImage="./img/fedi_placeholder.png"
-                          className="max-h-52 w-full object-cover rounded-md pointer-events-none"
                           alt={data.title}
+                          className="max-h-52 w-full object-cover rounded-md pointer-events-none"
+                          onError={e => { e.currentTarget.src = '/img/fedi_placeholder.png'; }}
                         />
                       </figure>
                       <div className="card-body">
@@ -280,12 +279,11 @@ export default function HomeClient({ general, niche, ios, android }: HomeClientP
                       className="card bg-base-300 shadow-xl"
                     >
                       <figure className="px-4 pt-4">
-                        <ReactImageFallback
+                        <img
                           src={data.thumbnail}
-                          fallbackImage="./img/fedi_placeholder.png"
-                          initialImage="./img/fedi_placeholder.png"
-                          className="max-h-52 w-full object-cover rounded-md pointer-events-none"
                           alt={data.title}
+                          className="max-h-52 w-full object-cover rounded-md pointer-events-none"
+                          onError={e => { e.currentTarget.src = '/img/fedi_placeholder.png'; }}
                         />
                       </figure>
                       <div className="card-body">
