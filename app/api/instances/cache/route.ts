@@ -43,6 +43,40 @@ async function validateThumbnailPath(thumbnailPath: string): Promise<string> {
   return thumbnailPath; // Return as is if it's a remote URL or valid path
 }
 
+// Helper function to trigger revalidation
+async function triggerRevalidation(request: NextRequest) {
+  console.log('Starting revalidation after cache update...');
+  
+  try {
+    // Method 1: Tag-based revalidation
+    revalidateTag('instances');
+    console.log('Tag-based revalidation completed');
+    
+    // Method 2: Path-based revalidation
+    revalidatePath('/');
+    console.log('Path-based revalidation completed');
+    
+    // Method 3: Direct API call (for Docker containers)
+    const host = request.headers.get('host') || 'localhost:3000';
+    const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
+    const baseUrl = `${protocol}://${host}`;
+    
+    try {
+      const response = await fetch(`${baseUrl}/api/revalidate`, { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log('Revalidation API response:', response.status);
+    } catch (apiErr) {
+      console.log('Revalidation API call failed:', apiErr);
+    }
+  } catch (revalErr) {
+    console.log('Revalidation failed:', revalErr);
+  }
+}
+
 export async function GET(request: NextRequest) {
   const allInstances = await prisma.instances.findMany({
     where: { banned: false },
@@ -106,33 +140,73 @@ export async function GET(request: NextRequest) {
     }
   }
   
-  // Multiple revalidation methods for Docker compatibility
-  try {
-    // Method 1: Tag-based revalidation
-    revalidateTag('instances');
-    
-    // Method 2: Path-based revalidation
-    revalidatePath('/');
-    
-    // Method 3: Direct API call (for Docker containers)
-    const host = request.headers.get('host') || 'localhost:3000';
-    const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
-    const baseUrl = `${protocol}://${host}`;
-    
-    try {
-      const response = await fetch(`${baseUrl}/api/revalidate`, { 
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      console.log('Revalidation API response:', response.status);
-    } catch (apiErr) {
-      console.log('Revalidation API call failed:', apiErr);
-    }
-  } catch (revalErr) {
-    console.log('Revalidation failed:', revalErr);
-  }
+  // Trigger revalidation after cache update
+  await triggerRevalidation(request);
   
   return NextResponse.json({ message: "successfully updated instances" });
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const { uri } = await request.json()
+    
+    if (!uri) {
+      return NextResponse.json({ error: 'URI is required' }, { status: 400 })
+    }
+
+    // Find the instance
+    const instance = await prisma.instances.findUnique({
+      where: { uri }
+    })
+
+    if (!instance) {
+      return NextResponse.json({ error: 'Instance not found' }, { status: 404 })
+    }
+
+    // Get instance data
+    const instanceData = await prisma.instanceData.findUnique({
+      where: { instance_id: instance.id }
+    })
+
+    if (!instanceData) {
+      return NextResponse.json({ error: 'Instance data not found' }, { status: 404 })
+    }
+
+    // Validate thumbnail path to prevent runaway paths
+    if (instanceData.thumbnail && (
+      instanceData.thumbnail.startsWith('/img/img/') ||
+      instanceData.thumbnail.includes('//img/img/') ||
+      instanceData.thumbnail.startsWith('img/img/')
+    )) {
+      console.log('Skipping invalid thumbnail path:', instanceData.thumbnail)
+      return NextResponse.json({ 
+        error: 'Invalid thumbnail path detected',
+        thumbnail: instanceData.thumbnail
+      }, { status: 400 })
+    }
+
+    // Trigger revalidation
+    await triggerRevalidation(request);
+    
+    return NextResponse.json({ 
+      success: true, 
+      instance: {
+        id: instance.id,
+        uri: instance.uri,
+        title: instanceData.title,
+        thumbnail: instanceData.thumbnail,
+        description: instanceData.description,
+        registrations: instanceData.registrations,
+        approval_required: instanceData.approval_required,
+        user_count: instanceData.user_count,
+        nsfwflag: instance.nsfwflag
+      }
+    })
+  } catch (error) {
+    console.error('Cache route error:', error)
+    return NextResponse.json({ 
+      error: 'Internal server error',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }, { status: 500 })
+  }
 } 

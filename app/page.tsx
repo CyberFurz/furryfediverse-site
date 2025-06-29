@@ -1,8 +1,13 @@
-import { prisma } from "../lib/prisma";
-import HomeClient from "./HomeClient";
+import { Suspense } from 'react'
+import HomeClient from './HomeClient'
+import { prisma } from '@/lib/prisma'
 
-// This gets called on every request
+// Revalidate every 5 minutes
+export const revalidate = 300
+
 async function getData() {
+  console.log('Homepage getData called at:', new Date().toISOString());
+  
   let iosApps = [
     {
       name: "Ice Cubes",
@@ -49,13 +54,15 @@ async function getData() {
     },
   ];
 
-  // Fetch data from external API with cache tag
+  // Fetch data from database with cache tag
   const generalInstance = await prisma.instances.findMany({
     where: { type: "general", verified: true, banned: false },
   });
   const nicheInstance = await prisma.instances.findMany({
     where: { type: "niche", verified: true, banned: false },
   });
+
+  console.log(`Found ${generalInstance.length} general instances and ${nicheInstance.length} niche instances`);
 
   // Build the array from the list of servers
   let generalInstances = [];
@@ -65,12 +72,12 @@ async function getData() {
     });
     generalInstances.push({
       id: i.id,
-      title: serverData.title,
-      thumbnail: serverData.thumbnail,
-      description: serverData.description,
-      registrations: serverData.registrations,
-      approval_required: serverData.approval_required,
-      user_count: serverData.user_count,
+      title: serverData?.title || "",
+      thumbnail: serverData?.thumbnail || "",
+      description: serverData?.description || "",
+      registrations: serverData?.registrations || false,
+      approval_required: serverData?.approval_required || false,
+      user_count: serverData?.user_count || 0,
       nsfwflag: i.nsfwflag,
       uri: i.uri,
     });
@@ -84,16 +91,18 @@ async function getData() {
     });
     nichelInstances.push({
       id: i.id,
-      title: serverData.title,
-      thumbnail: serverData.thumbnail,
-      description: serverData.description,
-      registrations: serverData.registrations,
-      approval_required: serverData.approval_required,
-      user_count: serverData.user_count,
+      title: serverData?.title || "",
+      thumbnail: serverData?.thumbnail || "",
+      description: serverData?.description || "",
+      registrations: serverData?.registrations || false,
+      approval_required: serverData?.approval_required || false,
+      user_count: serverData?.user_count || 0,
       nsfwflag: i.nsfwflag,
       uri: i.uri,
     });
   }
+
+  console.log('Homepage data fetched successfully at:', new Date().toISOString());
 
   return {
     general: generalInstances,
@@ -103,11 +112,12 @@ async function getData() {
   };
 }
 
-// Enable ISR - revalidate every 5 minutes (300 seconds)
-export const revalidate = 300;
-
 export default async function Home() {
-  const data = await getData();
+  const data = await getData()
   
-  return <HomeClient {...data} />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomeClient {...data} />
+    </Suspense>
+  )
 } 
