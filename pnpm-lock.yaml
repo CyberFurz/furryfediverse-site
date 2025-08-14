@@ -30,7 +30,7 @@ importers:
         specifier: ^4.16.2
         version: 4.16.2
       react:
-        specifier: ^19.1.0
+        specifier: 19.1.0
         version: 19.1.0
       react-dom:
         specifier: 19.1.0
