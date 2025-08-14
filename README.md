@@ -1,6 +1,6 @@
 # Welcome to [FurryFediverse](https://furryfediverse.org)
 
-![Build](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
+![Build](https://github.com/CyberFurz/furryfediverse-site/actions/workflows/main.yml/badge.svg)
 
 This is the official repository of the site that is used to help promote the FurryFediverse.
 Please feel free to fork, and add your instance or help me clean up the site.
