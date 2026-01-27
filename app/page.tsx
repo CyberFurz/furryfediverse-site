@@ -33,9 +33,19 @@ async function getData() {
 
   let androidApps = [
     {
-      name: "Moshidon",
+      name: "Mastodon",
       paid: false,
-      href: "https://lucasggamerm.github.io/moshidon/",
+      href: "https://play.google.com/store/apps/details?id=org.joinmastodon.android",
+    },
+    {
+      name: "Tusky",
+      paid: false,
+      href: "https://tusky.app/",
+    },
+    {
+      name: "Fedilab",
+      paid: false,
+      href: "https://fedilab.app",
     },
     {
       name: "Rodent",
@@ -45,12 +55,7 @@ async function getData() {
     {
       name: "Trunks",
       paid: false,
-      href: "https://play.google.com/store/apps/details?id=com.decad3nce.trunks&pcampaignid=web_share",
-    },
-    {
-      name: "Fedilab",
-      paid: false,
-      href: "https://fedilab.app",
+      href: "https://play.google.com/store/apps/details?id=com.decad3nce.trunks",
     },
   ];
 
