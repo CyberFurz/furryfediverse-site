@@ -1,3 +1,7 @@
+# Project Migrated
+## Head over to [Codeberg](https://codeberg.org/CyberFurz/furryfediverse-v2) for new version of this project
+
+
 # Welcome to [FurryFediverse](https://furryfediverse.org)
 
 ![Build](https://github.com/CyberFurz/furryfediverse-site/actions/workflows/main.yml/badge.svg)
